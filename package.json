@@ -3,14 +3,15 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "engines":{
+  "engines": {
     "node": ">=23.7.0"
   },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "start:db": "surreal start --user root --pass root"
   },
   "dependencies": {
     "@react-three/fiber": "^8.17.13",
@@ -25,6 +26,7 @@
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.2",
     "typescript": "~5.6.2",
     "vite": "^6.0.3"
   }
