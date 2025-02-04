@@ -1,18 +1,48 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use std::env;
+use std::os::windows::process::CommandExt;
+use std::process::{Command, Stdio};
+use std::thread;
+use std::time::Duration;
+
 use surrealdb::engine::any;
 use surrealdb::engine::remote::ws::Ws;
 use surrealdb::opt::auth::Root;
 use surrealdb::Surreal;
 use dotenv::dotenv;
-use std::env;
+use winapi::um::winbase::CREATE_NO_WINDOW;
 
 #[tokio::main]
 async fn main() -> surrealdb::Result<()> {
     dotenv().ok();
 
-    println!("Starting");
+    println!("Starting local SurrealDB server");
+    thread::spawn(|| {
+        let mut _child = Command::new("surreal")
+            .args(&[
+                "start",
+                "--user", &env::var("LOCAL_USERNAME").expect("LOCAL_USERNAME not set"),
+                "--pass", &env::var("LOCAL_PASSWORD").expect("LOCAL_PASSWORD not set"),
+                "rocksdb:../db/test.db",
+                "--log", "debug",
+            ])
+            .stdout(Stdio::null()) // Redirect stdout to null
+            .stderr(Stdio::null()) // Redirect stderr to null
+            .creation_flags(CREATE_NO_WINDOW)
+            .spawn()
+            .expect("Failed to start SurrealDB local server");
+
+         let status = _child.wait().expect("Failed to wait on SurrealDB process");
+            println!("SurrealDB process exited with status: {:?}", status);
+    });
+
+    // Allow some time for the local SurrealDB process to start up.
+    thread::sleep(Duration::from_secs(2));
+    println!("Local SurrealDB server started");
+
+
     // Connect to the server
     let local_username = env::var("LOCAL_USERNAME").expect("LOCAL_USERNAME not set");
     let local_password = env::var("LOCAL_PASSWORD").expect("LOCAL_PASSWORD not set");

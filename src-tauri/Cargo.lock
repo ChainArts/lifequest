@@ -2876,6 +2876,7 @@ dependencies = [
  "tauri-build",
  "tauri-plugin-opener",
  "tokio",
+ "winapi",
 ]
 
 [[package]]
