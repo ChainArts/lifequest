@@ -17,14 +17,15 @@ static EXTERNAL_DB: LazyLock<Surreal<Client>> = LazyLock::new(Surreal::init);
 #[tokio::main]
 async fn main() -> surrealdb::Result<()> {
     dotenv().ok();
-    LOCAL_DB.connect::<RocksDb>("./db/test.db").await?;
+    LOCAL_DB.connect::<RocksDb>("../db/test.db").await?;
 
     println!("Connected to local db");
-
+    
+    let external_address = env::var("EXTERNAL_ADDRESS").expect("EXTERNAL_ADDRESS not set");
     let external_username = env::var("EXTERNAL_USERNAME").expect("EXTERNAL_USERNAME not set");
     let external_password = env::var("EXTERNAL_PASSWORD").expect("EXTERNAL_PASSWORD not set");
 
-    EXTERNAL_DB.connect::<Wss>("lifequest-db-06acp6cd6du4v8mbo26bhlv1fo.aws-euw1.surreal.cloud").await?;
+    EXTERNAL_DB.connect::<Wss>(&external_address).await?;
     println!("Connected to external db");
     EXTERNAL_DB.signin(Root {
         username: &external_username,
