@@ -1,77 +1,23 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use dotenv::dotenv;
 use std::env;
-use std::os::windows::process::CommandExt;
-use std::process::{Command,Child, Stdio};
-use std::thread;
-use std::time::Duration;
 use std::sync::LazyLock;
 
-use surrealdb::engine::remote::ws::{Client,Ws, Wss};
+use surrealdb::engine::remote::ws::{Client, Wss};
+use surrealdb::engine::local::{Db, RocksDb};
 use surrealdb::opt::auth::Root;
 use surrealdb::Surreal;
-use dotenv::dotenv;
-use winapi::um::winbase::CREATE_NO_WINDOW;
 
-static LOCAL_DB: LazyLock<Surreal<Client>> = LazyLock::new(Surreal::init);
+static LOCAL_DB: LazyLock<Surreal<Db>> = LazyLock::new(Surreal::init);
 static EXTERNAL_DB: LazyLock<Surreal<Client>> = LazyLock::new(Surreal::init);
-
-struct DatabaseProcess {
-    child: Child,
-}
-
-impl DatabaseProcess {
-    fn new() -> Self {
-        let child = Command::new("surreal")
-            .args(&[
-                "start",
-                "--user", &env::var("LOCAL_USERNAME").expect("LOCAL_USERNAME not set"),
-                "--pass", &env::var("LOCAL_PASSWORD").expect("LOCAL_PASSWORD not set"),
-                "rocksdb:../db/test.db",
-                "--log", "debug",
-            ])
-            .stdout(Stdio::null()) // Redirect stdout to null
-            .stderr(Stdio::null()) // Redirect stderr to null
-            .creation_flags(CREATE_NO_WINDOW) // Prevent shell window from opening
-            .spawn()
-            .expect("Failed to start SurrealDB local server");
-
-        DatabaseProcess { child }
-    }
-}
-
-impl Drop for DatabaseProcess {
-    fn drop(&mut self) {
-        self.child.kill().expect("Failed to kill SurrealDB process");
-        println!("SurrealDB process terminated");
-    }
-}
 
 
 #[tokio::main]
 async fn main() -> surrealdb::Result<()> {
     dotenv().ok();
-
-    println!("Starting local SurrealDB server");
-    let _db_process = DatabaseProcess::new();
-
-    // Allow some time for the local SurrealDB process to start up.
-    thread::sleep(Duration::from_millis(250));
-    println!("Local SurrealDB server started");
-
-
-    // Connect to the server
-    let local_username = env::var("LOCAL_USERNAME").expect("LOCAL_USERNAME not set");
-    let local_password = env::var("LOCAL_PASSWORD").expect("LOCAL_PASSWORD not set");
-    LOCAL_DB.connect::<Ws>("127.0.0.1:8000").await?;
-
-    // Signin as a namespace, database, or root user
-    LOCAL_DB.signin(Root {
-        username: &local_username,
-        password: &local_password,
-    })
-    .await?;
+    LOCAL_DB.connect::<RocksDb>("./db/test.db").await?;
 
     println!("Connected to local db");
 
