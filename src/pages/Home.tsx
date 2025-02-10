@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { motion } from "framer-motion";
+import DarkModeToggle from "../components/atoms/DarkModeToggle";
 
 const Home = () => {
     const [greetMsg, setGreetMsg] = useState("");
@@ -12,6 +13,7 @@ const Home = () => {
     }
     return (
         <motion.main className="container">
+            <DarkModeToggle />
             <form
                 className="row"
                 onSubmit={(e) => {
