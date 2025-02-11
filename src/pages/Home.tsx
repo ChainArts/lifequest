@@ -2,7 +2,7 @@
 // import { invoke } from "@tauri-apps/api/core";
 import { motion } from "framer-motion";
 import DarkModeToggle from "../components/atoms/DarkModeToggle/DarkModeToggle";
-import StatsTeaser from "../components/organisms/StatsTeaser";
+import StatsTeaser from "../components/organisms/StatsTeaser/StatsTeaser";
 
 const Home = () => {
     // const [greetMsg, setGreetMsg] = useState("");

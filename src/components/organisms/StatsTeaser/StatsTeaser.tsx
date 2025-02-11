@@ -1,5 +1,5 @@
-import Headline from "../atoms/Headline/Headline";
-import Card from "../molecules/Card/Card";
+import Headline from "../../atoms/Headline/Headline";
+import Card from "../../molecules/Card/Card";
 import "./StatsTeaser.scss";
 
 const StatsTeaser = () => {
