@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { motion } from "framer-motion";
-import DarkModeToggle from "../components/atoms/DarkModeToggle";
+import DarkModeToggle from "../components/atoms/DarkModeToggle/DarkModeToggle";
 import Box from "../components/molecules/Box/Box";
 
 const Home = () => {
