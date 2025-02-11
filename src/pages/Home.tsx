@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import DarkModeToggle from "../components/atoms/DarkModeToggle/DarkModeToggle";
 import StatsTeaser from "../components/organisms/StatsTeaser/StatsTeaser";
+import DailyHabits from "../components/organisms/DailyHabits/DailyHabits";
 
 const Home = () => {
     // const [greetMsg, setGreetMsg] = useState("");
@@ -16,6 +17,8 @@ const Home = () => {
         <motion.main>
             <DarkModeToggle />
             <StatsTeaser />
+            <DailyHabits />
+            
 
             {/* <form
                 className="row"

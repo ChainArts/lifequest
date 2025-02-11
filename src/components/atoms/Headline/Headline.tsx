@@ -8,7 +8,7 @@ interface HeadlineProps {
 
 const Headline = ({ children, level, style }: HeadlineProps) => {
     const Tag = `h${level}` as keyof JSX.IntrinsicElements;
-    return <Tag className={`headline fst-${style}-heading`}>{children}</Tag>;
+    return <Tag className={`headline fst--${style}-heading`}>{children}</Tag>;
 }
 
 export default Headline;
