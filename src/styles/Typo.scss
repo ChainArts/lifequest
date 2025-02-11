@@ -20,42 +20,42 @@
 }
 
 
-.fst-base {
-    color: var(--text);
-    font-size: 0.75rem;
+.fst--base {
+    color: inherit;
+    font-size: 1rem;
     font-weight: 400;
 }
 
-.fst-base-bold {
-    color: var(--text);
-    font-size: 0.75rem;
+.fst--base-bold {
+    color: inherit;
+    font-size: 1rem;
     font-weight: 700;
 }
 
-.fst-tag {
+.fst--tag {
     color: var(--purple-dark);
-    font-size: 0.75rem;
+    font-size: 1rem;
 }
 
-.fst-big-number{
+.fst--big-number{
     color: var(--text);
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-weight: 700;
 }
 
-.fst-page-heading {
+.fst--page-heading {
     color: var(--text-invert);
     font-size: 2rem;
     font-weight: 700;
 }
 
-.fst-section-heading {
-    color: var(--text-invert);
-    font-size: 1rem;
+.fst--section-heading {
+    color: inherit;
+    font-size: 1.2rem;
     font-weight: 700;
 }
 
-.fst-upper-heading {
+.fst--upper-heading {
     color: var(--text-invert);
     font-size: 0.75rem;
     font-weight: 400;

@@ -1,21 +1,23 @@
-import { useState } from "react";
-import { invoke } from "@tauri-apps/api/core";
+// import { useState } from "react";
+// import { invoke } from "@tauri-apps/api/core";
 import { motion } from "framer-motion";
 import DarkModeToggle from "../components/atoms/DarkModeToggle/DarkModeToggle";
-import Box from "../components/molecules/Box/Box";
+import StatsTeaser from "../components/organisms/StatsTeaser";
 
 const Home = () => {
-    const [greetMsg, setGreetMsg] = useState("");
-    const [name, setName] = useState("");
+    // const [greetMsg, setGreetMsg] = useState("");
+    // const [name, setName] = useState("");
 
-    async function greet() {
-        // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-        setGreetMsg(await invoke("greet", { name }));
-    }
+    // async function greet() {
+    //     // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
+    //     setGreetMsg(await invoke("greet", { name }));
+    // }
     return (
-        <motion.main className="container">
+        <motion.main>
             <DarkModeToggle />
-            <form
+            <StatsTeaser />
+
+            {/* <form
                 className="row"
                 onSubmit={(e) => {
                     e.preventDefault();
@@ -30,11 +32,7 @@ const Home = () => {
                 <button type="submit">Greet</button>
             
             </form>
-            <p>{greetMsg}</p>
-            <Box>
-                <h2>Box</h2>
-                <p>Box component</p>
-            </Box>
+            <p>{greetMsg}</p> */}
         </motion.main>
     );
 };
