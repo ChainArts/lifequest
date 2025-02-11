@@ -2,6 +2,7 @@ import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { motion } from "framer-motion";
 import DarkModeToggle from "../components/atoms/DarkModeToggle";
+import Box from "../components/molecules/Box/Box";
 
 const Home = () => {
     const [greetMsg, setGreetMsg] = useState("");
@@ -27,8 +28,13 @@ const Home = () => {
                     placeholder="Enter a name..."
                 />
                 <button type="submit">Greet</button>
+            
             </form>
             <p>{greetMsg}</p>
+            <Box>
+                <h2>Box</h2>
+                <p>Box component</p>
+            </Box>
         </motion.main>
     );
 };

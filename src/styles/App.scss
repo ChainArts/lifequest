@@ -13,7 +13,7 @@
     --blue-dark: #93CFF5;
     --blue-light: #bbe5ff;
 
-
+    --box-shadow: 0px 2px 8px 0px rgba(23, 28, 35, 0.25);
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -31,6 +31,8 @@
     --purple-light: #cabbfb;
     --blue-dark: #93CFF5;
     --blue-light: #bbe5ff;
+
+    --box-shadow:  0px 2px 8px 0px rgba(150, 149, 212, 0.25);
 }
 
 body{
@@ -48,4 +50,5 @@ body{
     flex-direction: column;
     justify-content: center;
     text-align: center;
+    padding: 0 0.5rem;
 }
