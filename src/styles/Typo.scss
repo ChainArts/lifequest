@@ -1,39 +1,44 @@
 @font-face {
-    font-family: 'Poppins';
+    font-family: "Poppins";
     font-style: normal;
     font-weight: 300;
-    src: url('../assets/fonts/Poppins-Light.ttf') format('truetype');
+    src: url("../assets/fonts/Poppins-Light.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 400;
-  src: url('../assets/fonts/Poppins-Regular.ttf') format('truetype');
+    font-family: "Poppins";
+    font-style: normal;
+    font-weight: 400;
+    src: url("../assets/fonts/Poppins-Regular.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Poppins';
+    font-family: "Poppins";
     font-style: normal;
     font-weight: 500;
-    src: url('../assets/fonts/Poppins-Medium.ttf') format('truetype');
+    src: url("../assets/fonts/Poppins-Medium.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 600;
-  src: url('../assets/fonts/Poppins-SemiBold.ttf') format('truetype');
+    font-family: "Poppins";
+    font-style: normal;
+    font-weight: 600;
+    src: url("../assets/fonts/Poppins-SemiBold.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 700;
-  src: url('../assets/fonts/Poppins-Bold.ttf') format('truetype');
+    font-family: "Poppins";
+    font-style: normal;
+    font-weight: 700;
+    src: url("../assets/fonts/Poppins-Bold.ttf") format("truetype");
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     margin: 0;
     padding: 0;
 }
@@ -51,20 +56,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .fst--tag {
-    color: var(--purple-dark);
+    color: var(--text-sec);
     font-size: 1rem;
 }
 
-.fst--big-number{
+.fst--big-number {
     color: var(--text);
     font-size: 3rem;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .fst--page-heading {
     color: var(--text-invert);
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .fst--section-heading {
@@ -80,7 +85,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .fst--upper-heading {
-    color: var(--purple-dark);
+    color: var(--text-sec);
     font-size: 0.75rem;
     font-weight: 400;
 }

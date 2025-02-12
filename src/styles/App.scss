@@ -1,22 +1,30 @@
 :root {
+    //font
+
     --font-family: "Poppins", sans-serif;
     font-size: 1rem;
     font-weight: 400;
     line-height: 1;
 
-
-    --background-base: #12151A;
-    --background-layer: #1C2028;
     --text: #ffffff;
     --text-invert: #ffffff;
+    --text-sec: #cabbfb;
+    --text-light: #b2c0cb;
+
+    // ui
+
+    --background-base: #12151a;
+    --background-layer: #1c2028;
+    --background-layer-sec: #455056;
+
     --purple-dark: #9a98ef;
     --purple-light: #cabbfb;
-    --blue-dark: #93CFF5;
+    --blue-dark: #93cff5;
     --blue-light: #bbe5ff;
     --box-shadow: 0px 2px 8px 0px rgba(23, 28, 35, 0.25);
-    --ease: cubic-bezier(.14,.8,.4,1);
+    --ease: cubic-bezier(0.14, 0.8, 0.4, 1);
     --radius: 0.5rem;
-    --progress-bg: #12151A;
+    --progress-bg: #12151a;
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -26,19 +34,27 @@
 }
 
 [data-theme="light"] {
-    --background-base: #f6f8ff;
-    --background-layer: #ffffff;
+    //text
     --text: #383838;
     --text-invert: #ffffff;
+    --text-sec: #9a98ef;
+    --text-light: #66747e;
+
+    // ui
+
+    --background-base: #f6f8ff;
+    --background-layer: #ffffff;
+    --background-layer-sec: #daeffd;
+
     --purple-dark: #9a98ef;
     --purple-light: #cabbfb;
-    --blue-dark: #93CFF5;
+    --blue-dark: #93cff5;
     --blue-light: #bbe5ff;
-    --box-shadow:  0px 2px 8px 0px hsla(241, 42%, 71%, 0.25);
-    --progress-bg: #EAEAF3;
+    --box-shadow: 0px 2px 8px 0px hsla(241, 42%, 71%, 0.25);
+    --progress-bg: #eaeaf3;
 }
 
-body{
+body {
     margin: 0;
     padding: 0;
     font-family: var(--font-family);
@@ -46,6 +62,7 @@ body{
     color: var(--text);
     min-height: 100svh;
     height: 100%;
+    user-select: none;
 
     transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
 }
@@ -67,7 +84,7 @@ p {
 }
 
 .bold {
-   font-weight: 700;
+    font-weight: 700;
 }
 
 .blue {
@@ -75,5 +92,5 @@ p {
 }
 
 .purple {
-    color: var(--purple-dark) !important;
+    color: var(--text-sec) !important;
 }

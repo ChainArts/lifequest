@@ -1,0 +1,60 @@
+.streak-day__flag {
+    position: relative;
+    height: 100%;
+    padding: 0.75rem 0.5rem;
+    border-radius: 0.25rem 0.25rem 0 0;
+    background: linear-gradient(
+        180deg,
+        var(--purple-light) 0%,
+        var(--purple-dark) 100%
+    );
+
+    .streak-day__name {
+        color: var(--text-invert);
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        height: 0.75rem;
+        background-color: var(--purple-dark);
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 25%, 0 100%);
+    }
+}
+
+.streak-day__wrapper {
+    position: relative;
+    z-index: 10;
+    padding: 0.75rem 0.25rem;
+}
+
+.streak-day__name {
+    margin-bottom: 0.75rem;
+    color: var(--text-light);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.streak-day__status {
+    height: 24px;
+    width: 24px;
+    background-color: var(--background-layer);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.streak-day--completed {
+    background-color: var(--purple-dark);
+}
+
+.streak-day__icon {
+    color: var(--text-invert);
+    font-size: 1.3rem;
+}
