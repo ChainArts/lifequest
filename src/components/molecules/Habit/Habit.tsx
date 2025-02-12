@@ -26,7 +26,7 @@ const Habit = ({
             <div className="habit__content">
                 <div className="habit__info">
                     <div className="habit__title">
-                        <span className="purple">
+                        <span className="purple fst--base">
                             {current}/{goal}
                         </span>
                         <span className="fst--section-heading">{habit}</span>
