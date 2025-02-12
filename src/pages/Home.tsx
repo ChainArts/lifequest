@@ -5,6 +5,7 @@ import DarkModeToggle from "../components/atoms/DarkModeToggle/DarkModeToggle";
 import StatsTeaser from "../components/organisms/StatsTeaser/StatsTeaser";
 import DailyHabits from "../components/organisms/DailyHabits/DailyHabits";
 import StreakProgress from "../components/organisms/StreakProgress/StreakProgress";
+import DailyProgress from "../components/organisms/DailyProgress/DailyProgress";
 
 const Home = () => {
     // const [greetMsg, setGreetMsg] = useState("");
@@ -17,6 +18,7 @@ const Home = () => {
     return (
         <motion.main>
             <DarkModeToggle />
+            <DailyProgress />
             <StreakProgress />
             <StatsTeaser />
             <DailyHabits />
