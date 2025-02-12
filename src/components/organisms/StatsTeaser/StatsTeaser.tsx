@@ -21,9 +21,9 @@ const StatsTeaser = () => {
                 </Card>
                 <div className="stats-teaser__list">
                     <Card className="stats-teaser__list-item">
-                        <div className="stats-teaser__list-item-title">
-                            <span className="fst--base-bold ">Longest</span>
-                            <span className="fst--section-heading">Streak</span>
+                        <div className="stats-teaser__list-item-title fst--card-title">
+                            <span>Longest</span>
+                            <span>Streak</span>
                         </div>
                         <div className="stats-teaser__list-item-value">
                             <span className="fst--big-number purple">
@@ -32,11 +32,9 @@ const StatsTeaser = () => {
                         </div>
                     </Card>
                     <Card className="stats-teaser__list-item">
-                        <div className="stats-teaser__list-item-title">
-                            <span className="fst--base-bold">Diary</span>
-                            <span className="fst--section-heading">
-                                Entries
-                            </span>
+                        <div className="stats-teaser__list-item-title fst--card-title">
+                            <span>Diary</span>
+                            <span>Entries</span>
                         </div>
                         <div className="stats-teaser__list-item-value">
                             <span className="fst--big-number blue">

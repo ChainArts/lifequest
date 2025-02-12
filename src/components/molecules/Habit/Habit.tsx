@@ -26,10 +26,10 @@ const Habit = ({
             <div className="habit__content">
                 <div className="habit__info">
                     <div className="habit__title">
-                        <span className="purple fst--base">
+                        <span className="fst--upper-heading">
                             {current}/{goal}
                         </span>
-                        <span className="fst--section-heading">{habit}</span>
+                        <span className="fst--card-title">{habit}</span>
                     </div>
                     <div className="habit__add">
                         <HiPlus />

@@ -47,7 +47,7 @@ h1, h2, h3, h4, h5, h6 {
 .fst--base-bold {
     color: inherit;
     font-size: 0.75rem;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .fst--tag {
@@ -70,11 +70,17 @@ h1, h2, h3, h4, h5, h6 {
 .fst--section-heading {
     color: inherit;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 600;
+}
+
+.fst--card-title {
+    color: inherit;
+    font-size: 1rem;
+    font-weight: 600;
 }
 
 .fst--upper-heading {
-    color: var(--text-invert);
+    color: var(--purple-dark);
     font-size: 0.75rem;
     font-weight: 400;
 }
