@@ -11,9 +11,7 @@ const CircularProgress = ({ progress }: CircularProgressProps) => {
 
     if (progress > 100) {
         progress = 100;
-    }
-
-    if (progress < 0) {
+    } else if (progress < 0) {
         progress = 0;
     }
 
@@ -101,7 +99,7 @@ const CircularProgress = ({ progress }: CircularProgressProps) => {
             >{`${animatedNumber}%`}</text>
             <text
                 x={size}
-                y={size + 20}
+                y={size + 22}
                 textAnchor="middle"
                 className="fst--upper-heading purple"
             >

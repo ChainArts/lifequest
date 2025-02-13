@@ -6,15 +6,16 @@ const DailyProgress = () => {
     const [progress, setProgress] = useState(0);
 
     return (
-        <div>
-            <h2>Daily Progress</h2>
+        <div className="daily-progress__container">
+            <div className="daily-progress__stats">
+                <p className="daily-progress__number purple">3</p>
+                <p className="fst--upper-heading purple">Habits</p>
+            </div>
             <CircularProgress progress={progress} />
-            <button onClick={() => setProgress(progress - 20)}>
-                Decrement
-            </button>
-            <button onClick={() => setProgress(progress + 20)}>
-                Increment
-            </button>
+            <div className="daily-progress__stats">
+                <p className="daily-progress__number purple">500</p>
+                <p className="fst--upper-heading purple">XP earned</p>
+            </div>
         </div>
     );
 };

@@ -1,0 +1,17 @@
+.daily-progress__container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    justify-items: center;
+    align-items: end;
+    text-align: center;
+}
+
+.daily-progress__number {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.daily-progress__stats {
+    padding-bottom: 1rem;
+}

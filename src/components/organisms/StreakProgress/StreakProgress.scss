@@ -1,8 +1,8 @@
 .streak-progress__container {
-    display: flex;
-    gap: 0.5rem;
+    display: grid;
+    grid-template-columns: repeat(7, 2.5rem);
     justify-content: space-around;
-    padding: 0 2rem;
+    padding: 0 1rem;
     background-color: var(--background-layer-sec);
     border-radius: 2rem;
 }
