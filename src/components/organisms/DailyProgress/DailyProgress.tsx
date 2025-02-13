@@ -1,19 +1,22 @@
 import "./DailyProgress.scss";
 import CircularProgress from "../../atoms/CircularProgress/CircularProgress";
-import { useState } from "react";
 
-const DailyProgress = () => {
-    const [progress, setProgress] = useState(30);
+type DailyProgressProps = {
+    habbits: number;
+    progress: number;
+    xp: number;
+};
 
+const DailyProgress = ({ progress, habbits, xp }: DailyProgressProps) => {
     return (
         <div className="daily-progress__container container">
             <div className="daily-progress__stats">
-                <p className="daily-progress__number purple">3</p>
+                <p className="daily-progress__number purple">{habbits}</p>
                 <p className="fst--upper-heading purple">Habits</p>
             </div>
             <CircularProgress progress={progress} />
             <div className="daily-progress__stats">
-                <p className="daily-progress__number purple">500</p>
+                <p className="daily-progress__number purple">{xp}</p>
                 <p className="fst--upper-heading purple">XP earned</p>
             </div>
         </div>

@@ -1,9 +1,14 @@
 import "./DailyHabits.scss";
-import Habit from "../../molecules/Habit/Habit";
+import Habit, { HabitProps } from "../../molecules/Habit/Habit";
 import Headline from "../../atoms/Headline/Headline";
 import { IconContext } from "react-icons";
 
-const DailyHabits = () => {
+type DailyHabitsProps = {
+    habits: HabitProps[];
+    setHabitDone: (id: number, add: number) => void;
+};
+
+const DailyHabits = ({ habits, setHabitDone }: DailyHabitsProps) => {
     return (
         <section className="container">
             <IconContext.Provider value={{ className: "daily-habits__icons" }}>
@@ -11,14 +16,17 @@ const DailyHabits = () => {
                     Daily Habits
                 </Headline>
                 <div className="daily-habits__list">
-                    <Habit habit="Drink water" goal={8} current={5} />
-                    <Habit habit="Read 20 pages" goal={20} current={10} />
-                    <Habit
-                        habit="Sex"
-                        goal={10}
-                        current={0}
-                        emoji="IconMBitingLip"
-                    />
+                    {habits.map((habit) => (
+                        <Habit
+                            key={habit.id}
+                            id={habit.id}
+                            name={habit.name}
+                            goal={habit.goal}
+                            done={habit.done}
+                            emoji={habit.emoji}
+                            setHabitDone={setHabitDone}
+                        />
+                    ))}
                 </div>
             </IconContext.Provider>
         </section>

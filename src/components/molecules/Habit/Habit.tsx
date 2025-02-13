@@ -3,19 +3,24 @@ import { Suspense, createElement } from "react";
 import * as Emojis from "react-fluentui-emoji/lib/modern";
 import { HiPlus } from "react-icons/hi";
 
-interface HabitProps {
-    habit: string;
+export interface HabitProps {
+    id: number;
+    name: string;
     goal: number;
-    current: number;
+    done: number;
     emoji?: string;
 }
 
 const Habit = ({
-    habit,
+    id,
+    name,
     goal,
-    current,
+    done,
     emoji = "IconMSlightlySmilingFace",
-}: HabitProps) => {
+    setHabitDone,
+}: HabitProps & {
+    setHabitDone: (id: number, add: number) => void;
+}) => {
     return (
         <div className="habit card">
             <div className="habit__icon">
@@ -27,18 +32,22 @@ const Habit = ({
                 <div className="habit__info">
                     <div className="habit__title">
                         <span className="fst--upper-heading">
-                            {current}/{goal}
+                            {done}/{goal}
                         </span>
-                        <span className="fst--card-title">{habit}</span>
+                        <span className="fst--card-title">{name}</span>
                     </div>
-                    <div className="habit__add">
+                    <button
+                        className="habit__add"
+                        onClick={() => setHabitDone(id, 1)}
+                    >
                         <HiPlus />
-                    </div>
+                    </button>
                 </div>
                 <div className="habit__progress">
-                    <div className="habit__progress-cover" style={
-                        { width: `${100 - (current / goal) * 100}%` }
-                    }></div>
+                    <div
+                        className="habit__progress-cover"
+                        style={{ width: `${100 - (done / goal) * 100}%` }}
+                    ></div>
                 </div>
             </div>
         </div>
