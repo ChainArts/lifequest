@@ -19,17 +19,18 @@
     );
     border-radius: var(--radius);
 
-    & svg{
+    & svg {
         height: 50% !important;
         width: 50% !important;
     }
 }
 
-.habit__content{
+.habit__content {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
     flex: 1;
+    padding-left: 0.25rem;
 }
 
 .habit__info {
@@ -38,7 +39,7 @@
     align-items: center;
     width: 100%;
 
-    .habit__add{
+    .habit__add {
         margin-right: 0.5rem;
     }
 }

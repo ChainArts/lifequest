@@ -20,7 +20,7 @@
     &::after {
         content: "";
         position: absolute;
-        top: 100%;
+        top: 99%;
         left: 50%;
         transform: translateX(-50%);
         width: 100%;
@@ -41,8 +41,6 @@
 
 .streak-day__name {
     margin-bottom: 0.75rem;
-    color: var(--text-light);
-    font-size: 0.75rem;
     font-weight: 600;
     text-align: center;
 }

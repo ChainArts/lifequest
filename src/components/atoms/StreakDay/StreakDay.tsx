@@ -11,7 +11,7 @@ const StreakDay = ({ day, isToday, isCompleted }: StreakDayProps) => {
     if (isToday) {
         return (
             <div className="streak-day__flag">
-                <p className="streak-day__name">{day}</p>
+                <p className="fst--upper-heading streak-day__name">{day}</p>
                 <div
                     className={`streak-day__status ${
                         isCompleted ? "streak-day--completed" : ""
@@ -28,7 +28,7 @@ const StreakDay = ({ day, isToday, isCompleted }: StreakDayProps) => {
     }
     return (
         <div className="streak-day__wrapper">
-            <p className="streak-day__name">{day}</p>
+            <p className="fst--upper-heading streak-day__name">{day}</p>
             <div
                 className={`streak-day__status ${
                     isCompleted ? "streak-day--completed" : ""
