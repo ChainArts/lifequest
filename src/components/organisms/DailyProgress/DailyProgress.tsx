@@ -3,10 +3,10 @@ import CircularProgress from "../../atoms/CircularProgress/CircularProgress";
 import { useState } from "react";
 
 const DailyProgress = () => {
-    const [progress, setProgress] = useState(0);
+    const [progress, setProgress] = useState(30);
 
     return (
-        <div className="daily-progress__container">
+        <div className="daily-progress__container container">
             <div className="daily-progress__stats">
                 <p className="daily-progress__number purple">3</p>
                 <p className="fst--upper-heading purple">Habits</p>

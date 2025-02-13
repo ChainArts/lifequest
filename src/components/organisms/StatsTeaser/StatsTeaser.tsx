@@ -13,10 +13,10 @@ const StatsTeaser = () => {
             </Headline>
             <div className="stats-teaser__grid">
                 <Card className="stats-teaser__streak">
-                    <span className="stats-teaser__streak-title">Current Streak</span>
-                    <span className="stats-teaser__streak-number">
-                        {streak}
+                    <span className="stats-teaser__streak-title">
+                        Current Streak
                     </span>
+                    <span className="fst--big-number">{streak}</span>
                     <span className="uppercase bold">days</span>
                 </Card>
                 <div className="stats-teaser__list">

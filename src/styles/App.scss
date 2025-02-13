@@ -54,6 +54,7 @@
     --blue-dark: #93cff5;
     --blue-light: #bbe5ff;
     --box-shadow: 0px 2px 8px 0px hsla(241, 42%, 71%, 0.25);
+
     --progress-bg: #eaeaf3;
     --progress-bg-round: #eaeaf3;
 }
@@ -97,4 +98,8 @@ p {
 .purple {
     color: var(--text-sec) !important;
     fill: var(--text-sec) !important;
+}
+
+.gray {
+    color: var(--text-light) !important;
 }
