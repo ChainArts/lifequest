@@ -1,6 +1,6 @@
 @keyframes wave {
     0%,
-    100% {
+    90% {
         clip-path: polygon(
             0% 100%,
             100% 100%,
@@ -37,6 +37,25 @@
             4% 94%
         );
     }
+
+    100% {
+        clip-path: polygon(
+            0% 100%,
+            100% 100%,
+            100% 0%,
+            34% 0%,
+            0 0,
+            0 3%,
+            0 12%,
+            0 21%,
+            0 32%,
+            0 44%,
+            0 56%,
+            0 66%,
+            0 76%,
+            0 88%
+        );
+    }
 }
 
 .habit {
@@ -70,7 +89,7 @@
         align-items: center;
 
         &::after {
-            animation: wave 2s;
+            animation: wave 1.4s;
             transform: translate(-20%, -50%);
         }
     }
@@ -112,13 +131,57 @@
 }
 
 .habit__info {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    transition: all 1s var(--ease);
 
     .habit__add {
         margin-right: 0.5rem;
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: -1;
+            border-radius: 50%;
+
+            width: 4px;
+            height: 4px;
+            transition: all 0.4s var(--ease);
+            background-color: var(--blue-light);
+            opacity: 0.8;
+        }
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: -1;
+            border-radius: 50%;
+
+            width: 4px;
+            height: 4px;
+            transition: all 0.8s var(--ease);
+            background-color: var(--blue-light);
+            opacity: 0.8;
+        }
+
+        &:hover {
+            &::before {
+                transform: scale(100);
+                opacity: 0;
+            }
+
+            &::after {
+                transform: scale(80);
+                opacity: 0;
+            }
+        }
     }
 
     .finished {
@@ -130,6 +193,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    transition: color 1s var(--ease);
 }
 
 .habit__progress {
@@ -154,5 +218,6 @@
         height: 100%;
         width: 0;
         background-color: var(--progress-bg);
+        transition: width 0.5s var(--ease);
     }
 }
