@@ -1,4 +1,7 @@
 :root {
+    //disable scrollbar
+    scrollbar-width: none;
+
     //font
 
     --font-family: "Poppins", sans-serif;
@@ -27,6 +30,8 @@
 
     --progress-bg: #12151a;
     --progress-bg-round: #2a2e38;
+
+    --navbar-height: 5rem;
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -72,6 +77,10 @@
     padding: 0;
 }
 
+li {
+    list-style: none;
+}
+
 body {
     font-family: var(--font-family);
     background-color: var(--background-base);
@@ -80,6 +89,25 @@ body {
     height: 100%;
 
     transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
+}
+
+main {
+    position: relative;
+    padding-bottom: var(--navbar-height);
+    min-height: 100svh;
+    height: 100%;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: calc(-2rem + 1px);
+        left: 0;
+        right: 0;
+        z-index: 1;
+        background-color: var(--background-base);
+        border-radius: 2rem 2rem 0 0;
+        padding: 1rem 0;
+    }
 }
 
 .container {
@@ -109,7 +137,6 @@ body {
 .gray {
     color: var(--text-light) !important;
 }
-
 
 @media screen and (min-width: 768px) {
     .container {

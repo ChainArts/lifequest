@@ -1,14 +1,10 @@
-// import { useState } from "react";
 // import { invoke } from "@tauri-apps/api/core";
 import { motion } from "motion/react";
-import DarkModeToggle from "../components/atoms/DarkModeToggle/DarkModeToggle";
 import StatsTeaser from "../components/organisms/StatsTeaser/StatsTeaser";
 import DailyHabits from "../components/organisms/DailyHabits/DailyHabits";
 import StreakProgress from "../components/organisms/StreakProgress/StreakProgress";
 import DailyProgress from "../components/organisms/DailyProgress/DailyProgress";
-import IslandHeader from "../components/organisms/IslandHeader/IslandHeader";
 import { useState } from "react";
-import PageCard from "../components/atoms/PageCard/PageCard";
 
 const Home = () => {
     const [habits, setHabits] = useState([
@@ -35,10 +31,7 @@ const Home = () => {
     const calculateProgress = () => {
         const totalHabits = habits.length;
 
-        const totalDone = habits.reduce(
-            (total, habit) => total + habit.done / habit.goal,
-            0
-        );
+        const totalDone = habits.reduce((total, habit) => total + habit.done / habit.goal, 0);
 
         return Math.round((totalDone / totalHabits) * 100);
     };
@@ -64,19 +57,11 @@ const Home = () => {
     // }
     return (
         <motion.main>
-            <IslandHeader />
-            <DarkModeToggle />
-            <PageCard>
-                <DailyProgress
-                    progress={calculateProgress()}
-                    habbits={habits.length}
-                    xp={500}
-                />
-                <StreakProgress />
+            <DailyProgress progress={calculateProgress()} habbits={habits.length} xp={500} />
+            <StreakProgress />
 
-                <DailyHabits habits={habits} setHabitDone={setHabitDone} />
-                <StatsTeaser />
-            </PageCard>
+            <DailyHabits habits={habits} setHabitDone={setHabitDone} />
+            <StatsTeaser />
 
             {/* <form
                 className="row"

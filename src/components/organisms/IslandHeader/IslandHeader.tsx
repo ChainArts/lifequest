@@ -1,6 +1,7 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Stats } from "@react-three/drei";
 import "./IslandHeader.scss";
+import * as THREE from "three";
 
 const Model = (props: any) => {
     const { scene } = useGLTF("/src/assets/models/island.glb"); // update the path to your GLB file
@@ -9,7 +10,9 @@ const Model = (props: any) => {
 
 const IslandHeader = () => {
     return (
-        <Canvas className="island-header">
+        <Canvas className="island-header" onCreated={({ scene }) =>
+            (scene.background = new THREE.Color("#9da8e6")) 
+        }>
             <Stats />
             <OrbitControls />
             <ambientLight intensity={Math.PI / 2} />
