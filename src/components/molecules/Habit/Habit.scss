@@ -125,7 +125,7 @@
     transition: gap 0.4s var(--ease);
     padding-top: 0.25rem;
 
-    &.finished {
+    .habit.finished & {
         gap: 0;
     }
 }
@@ -139,52 +139,34 @@
     transition: all 1s var(--ease);
 
     .habit__add {
-        margin-right: 0.5rem;
+        position: relative;
+        z-index: 4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        background-color: var(--background-base);
+        border-radius: 50%;
+        padding: 0.25rem;
 
-        &::before {
-            content: "";
+        .habit__add-pulse-circle {
+            z-index: 1;
             position: absolute;
-            top: 1rem;
-            right: 1rem;
-            z-index: -1;
             border-radius: 50%;
+            background-color: var(--blue-dark);
+            width: 2rem;
+            height: 2rem;
 
-            width: 4px;
-            height: 4px;
-            transition: all 0.4s var(--ease);
-            background-color: var(--blue-light);
-            opacity: 0.8;
-        }
-
-        &::after {
-            content: "";
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            z-index: -1;
-            border-radius: 50%;
-
-            width: 4px;
-            height: 4px;
-            transition: all 0.8s var(--ease);
-            background-color: var(--blue-light);
-            opacity: 0.8;
-        }
-
-        &:hover {
-            &::before {
-                transform: scale(100);
-                opacity: 0;
-            }
-
-            &::after {
-                transform: scale(80);
-                opacity: 0;
-            }
         }
     }
 
-    .finished {
+    .habit__done{
+        color: var(--text-invert);
+        margin-right: 0.25rem;
+        font-size: 1.5rem;
+    }
+
+    .habit.finished & .fst--upper-heading {
         color: var(--text-invert);
     }
 }
@@ -207,7 +189,7 @@
     );
     width: 100%;
 
-    &.finished {
+    .habit.finished & {
         height: 0;
     }
 

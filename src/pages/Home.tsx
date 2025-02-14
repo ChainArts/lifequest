@@ -1,6 +1,6 @@
 // import { useState } from "react";
 // import { invoke } from "@tauri-apps/api/core";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import DarkModeToggle from "../components/atoms/DarkModeToggle/DarkModeToggle";
 import StatsTeaser from "../components/organisms/StatsTeaser/StatsTeaser";
 import DailyHabits from "../components/organisms/DailyHabits/DailyHabits";
@@ -9,7 +9,6 @@ import DailyProgress from "../components/organisms/DailyProgress/DailyProgress";
 import IslandHeader from "../components/organisms/IslandHeader/IslandHeader";
 import { useState } from "react";
 import PageCard from "../components/atoms/PageCard/PageCard";
-import Navbar from "../components/organisms/Navbar/Navbar";
 
 const Home = () => {
     const [habits, setHabits] = useState([

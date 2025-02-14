@@ -109,3 +109,16 @@ body {
 .gray {
     color: var(--text-light) !important;
 }
+
+
+@media screen and (min-width: 768px) {
+    .container {
+        padding: 0 1.5rem;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .container {
+        padding: 0 2rem;
+    }
+}
