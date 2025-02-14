@@ -11,7 +11,7 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <ul>
-                <li>
+                <li className="active">
                     <HiOutlineBookmark />
                     Today
                 </li>

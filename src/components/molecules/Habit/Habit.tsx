@@ -2,7 +2,7 @@ import "./Habit.scss";
 import { Suspense, createElement, useState } from "react";
 import * as Emojis from "react-fluentui-emoji/lib/modern";
 import { HiPlus, HiCheck } from "react-icons/hi";
-import { cubicBezier, motion, } from "motion/react";
+import { cubicBezier, motion } from "motion/react";
 
 export interface HabitProps {
     id: number;
@@ -22,15 +22,12 @@ const Habit = ({
 }: HabitProps & {
     setHabitDone: (id: number, add: number) => void;
 }) => {
-    const [circles, setCircles] = useState<{ id: string; delay: number }[]>([]);
+    const [circles, setCircles] = useState<{ id: string }[]>([]);
 
     const handleAdd = () => {
         setHabitDone(id, 1);
         const timestamp = Date.now();
-        const newCircles = [
-            { id: `${timestamp}-1`, delay: 0 },
-            { id: `${timestamp}-2`, delay: 0.2 },
-        ];
+        const newCircles = [{ id: `${timestamp}` }];
         setCircles((prev) => [...prev, ...newCircles]);
     };
 
@@ -69,14 +66,13 @@ const Habit = ({
                                         initial={{ scale: 0, opacity: 1 }}
                                         animate={{ scale: 4, opacity: 0 }}
                                         transition={{
-                                            duration: 1,
+                                            duration: 0.6,
                                             ease: cubicBezier(
                                                 0.14,
                                                 0.8,
                                                 0.4,
                                                 1
                                             ),
-                                            delay: circle.delay,
                                         }}
                                         onAnimationComplete={() =>
                                             removeCircle(circle.id)
