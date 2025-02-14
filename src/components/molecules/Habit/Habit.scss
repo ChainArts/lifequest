@@ -1,3 +1,44 @@
+@keyframes wave {
+    0%,
+    100% {
+        clip-path: polygon(
+            0% 100%,
+            100% 100%,
+            100% 0%,
+            34% 0%,
+            31% 3%,
+            28% 11%,
+            27% 23%,
+            24% 31%,
+            20% 36%,
+            17% 46%,
+            15% 57%,
+            13% 64%,
+            10% 70%,
+
+            2% 91%
+        );
+    }
+    50% {
+        clip-path: polygon(
+            0% 100%,
+            100% 100%,
+            100% 0%,
+            34% 0%,
+            32% 11%,
+            29% 18%,
+            26% 23%,
+            23% 29%,
+            19% 40%,
+            17% 51%,
+            14% 61%,
+            10% 66%,
+            7% 78%,
+            4% 94%
+        );
+    }
+}
+
 .habit {
     position: relative;
     display: flex;
@@ -12,16 +53,16 @@
         left: 0;
         right: 0;
         bottom: 0;
-        width: calc(100% + 4rem);
-        height: 100%;
-        translate: 200%;
-        transition: all 0.4s var(--ease);
+        width: 140%;
+        height: 200%;
+        transform: translate(200%, -50%);
+        transition: all 1s var(--ease);
+
         background: linear-gradient(
             115deg,
             var(--purple-dark) 0%,
             var(--blue-light) 100%
         );
-        border-radius: 5rem;
         z-index: 1;
     }
 
@@ -29,7 +70,8 @@
         align-items: center;
 
         &::after {
-            translate: -2rem;
+            animation: wave 2s;
+            transform: translate(-20%, -50%);
         }
     }
 }
