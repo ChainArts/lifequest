@@ -8,6 +8,8 @@ import StreakProgress from "../components/organisms/StreakProgress/StreakProgres
 import DailyProgress from "../components/organisms/DailyProgress/DailyProgress";
 import IslandHeader from "../components/organisms/IslandHeader/IslandHeader";
 import { useState } from "react";
+import PageCard from "../components/atoms/PageCard/PageCard";
+import Navbar from "../components/organisms/Navbar/Navbar";
 
 const Home = () => {
     const [habits, setHabits] = useState([
@@ -65,14 +67,17 @@ const Home = () => {
         <motion.main>
             <IslandHeader />
             <DarkModeToggle />
-            <DailyProgress
-                progress={calculateProgress()}
-                habbits={habits.length}
-                xp={500}
-            />
-            <StreakProgress />
-            <StatsTeaser />
-            <DailyHabits habits={habits} setHabitDone={setHabitDone} />
+            <PageCard>
+                <DailyProgress
+                    progress={calculateProgress()}
+                    habbits={habits.length}
+                    xp={500}
+                />
+                <StreakProgress />
+
+                <DailyHabits habits={habits} setHabitDone={setHabitDone} />
+                <StatsTeaser />
+            </PageCard>
 
             {/* <form
                 className="row"

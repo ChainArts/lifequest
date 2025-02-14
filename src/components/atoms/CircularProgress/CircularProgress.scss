@@ -11,7 +11,7 @@
 
 .circle-progress__foreground {
     @include circle-progress();
-    transition: stroke-dashoffset 1s cubic-bezier(0.42, 0, 0.58, 1);
+    transition: stroke-dashoffset 1s var(--ease);
 }
 
 .circle-progress__number {

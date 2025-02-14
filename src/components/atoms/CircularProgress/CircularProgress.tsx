@@ -19,7 +19,7 @@ const CircularProgress = ({ progress }: CircularProgressProps) => {
     const radius = size - 10;
 
     const startAngle = -200;
-    const maxRadius = 60;
+    const maxRadius = 61;
 
     const dashArray = 2 * Math.PI * radius;
     const dashOffset =
@@ -28,7 +28,7 @@ const CircularProgress = ({ progress }: CircularProgressProps) => {
     useEffect(() => {
         let start = previousProgress;
         let end = progress;
-        const duration = 1000; // Duration of the animation in ms
+        const duration = 1000;
         const startTimestamp = performance.now();
 
         const animate = (timestamp: number) => {
@@ -54,7 +54,7 @@ const CircularProgress = ({ progress }: CircularProgressProps) => {
     const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 
     return (
-        <svg width={size * 2} height={size * 1.5}>
+        <svg width={size * 2} height={size * 1.41}>
             <defs>
                 <linearGradient
                     id="gradient"

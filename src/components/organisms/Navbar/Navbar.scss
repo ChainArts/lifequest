@@ -1,0 +1,36 @@
+.navbar {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--background-base);
+    padding: 0.5rem 1rem 1.5rem 1rem;
+
+    ul {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
+        width: 100%;
+        font-size: 0.75rem;
+        color: var(--text-light);
+
+        li {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s;
+
+            &.active {
+                background-color: var(--background-layer-sec);
+                color: var(--text-primary);
+            }
+
+            & :first-child {
+                font-size: 1.5rem;
+            }
+        }
+    }
+}
