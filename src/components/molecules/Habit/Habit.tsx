@@ -2,12 +2,7 @@ import "./Habit.scss";
 import { Suspense, createElement, useState } from "react";
 import * as Emojis from "react-fluentui-emoji/lib/modern";
 import { HiPlus, HiCheck } from "react-icons/hi";
-import {
-    AnimatePresence,
-    AnimateSharedLayout,
-    cubicBezier,
-    motion,
-} from "motion/react";
+import { cubicBezier, motion, } from "motion/react";
 
 export interface HabitProps {
     id: number;
