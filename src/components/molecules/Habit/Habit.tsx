@@ -21,29 +21,33 @@ const Habit = ({
 }: HabitProps & {
     setHabitDone: (id: number, add: number) => void;
 }) => {
+    const finished = done >= goal ? "finished" : "";
     return (
-        <div className="habit card">
+        <div className={`habit card ${finished}`}>
             <div className="habit__icon">
                 <Suspense fallback={null}>
                     {createElement(Emojis[emoji as keyof typeof Emojis])}
                 </Suspense>
             </div>
-            <div className="habit__content">
+            <div className={`habit__content ${finished}`}>
                 <div className="habit__info">
-                    <div className="habit__title">
-                        <span className="fst--upper-heading">
+                    <div className={`habit__title ${finished}`}>
+                        <span className={`fst--upper-heading ${finished}`}>
                             {done}/{goal}
                         </span>
                         <span className="fst--card-title">{name}</span>
                     </div>
-                    <button
-                        className="habit__add"
-                        onClick={() => setHabitDone(id, 1)}
-                    >
-                        <HiPlus />
-                    </button>
+                    {done < goal && (
+                        <button
+                            className="habit__add"
+                            onClick={() => setHabitDone(id, 1)}
+                        >
+                            <HiPlus />
+                        </button>
+                    )}
                 </div>
-                <div className="habit__progress">
+
+                <div className={`habit__progress ${finished}`}>
                     <div
                         className="habit__progress-cover"
                         style={{ width: `${100 - (done / goal) * 100}%` }}
