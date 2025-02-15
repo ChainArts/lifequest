@@ -13,7 +13,7 @@ const DailyHabits = ({ habits, setHabitDone }: DailyHabitsProps) => {
         <section className="container">
             <IconContext.Provider value={{ className: "daily-habits__icons" }}>
                 <Headline level={2} style="section">
-                    Daily Habits
+                    Todays Habits
                 </Headline>
                 <div className="daily-habits__list">
                     {habits.map((habit) => (

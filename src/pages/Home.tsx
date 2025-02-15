@@ -13,26 +13,29 @@ const Home = () => {
             id: 1,
             name: "Meditation",
             goal: 5,
-            done: 3,
+            done: 0,
         },
         {
             id: 2,
             name: "Workout",
             goal: 3,
-            done: 2,
+            done: 0,
         },
         {
             id: 3,
             name: "Reading",
             goal: 10,
-            done: 5,
+            done: 0,
         },
     ]);
 
     const calculateProgress = () => {
         const totalHabits = habits.length;
 
-        const totalDone = habits.reduce((total, habit) => total + habit.done / habit.goal, 0);
+        const totalDone = habits.reduce(
+            (total, habit) => total + habit.done / habit.goal,
+            0
+        );
 
         return Math.round((totalDone / totalHabits) * 100);
     };
@@ -57,8 +60,17 @@ const Home = () => {
     //     setGreetMsg(await invoke("greet", { name }));
     // }
     return (
-        <motion.main initial="initial" animate="in" exit="out" variants={pageVariants}>
-            <DailyProgress progress={calculateProgress()} habbits={habits.length} xp={500} />
+        <motion.main
+            initial="initial"
+            animate="in"
+            exit="out"
+            variants={pageVariants}
+        >
+            <DailyProgress
+                progress={calculateProgress()}
+                habbits={habits.length}
+                xp={500}
+            />
             <StreakProgress />
 
             <DailyHabits habits={habits} setHabitDone={setHabitDone} />

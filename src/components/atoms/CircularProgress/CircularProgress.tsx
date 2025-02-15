@@ -63,7 +63,7 @@ const CircularProgress = ({ progress }: CircularProgressProps) => {
                     x2="100%"
                     y2="100%"
                 >
-                    <stop offset="0%" style={{ stopColor: "#93cff5" }} />
+                    <stop offset="0%" style={{ stopColor: "#bbe5ff" }} />
                     <stop offset="100%" style={{ stopColor: "#9a98ef" }} />
                 </linearGradient>
             </defs>
