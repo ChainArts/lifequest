@@ -1,6 +1,6 @@
 @mixin circle-progress() {
     fill: none;
-    stroke-width: 10px;
+    stroke-width: 0.5rem;
     stroke-linecap: round;
 }
 
@@ -16,6 +16,6 @@
 
 .circle-progress__number {
     font-size: 2.25rem;
-    font-weight: 700;
+    font-weight: 600;
     fill: var(--text-sec);
 }
