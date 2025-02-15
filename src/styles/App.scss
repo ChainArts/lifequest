@@ -96,6 +96,8 @@ main {
     padding-bottom: var(--navbar-height);
     min-height: 100svh;
     height: 100%;
+    margin-top: 33svh;
+    background-color: var(--background-base);
 
     &::before {
         content: "";

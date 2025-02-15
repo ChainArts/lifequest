@@ -1,3 +1,8 @@
-.island-header{
+.island-header {
+    position: fixed;
+    top: 0;
+}
+
+.island-header__canvas{
     height: 33svh !important;
 }

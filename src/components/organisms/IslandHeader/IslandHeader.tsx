@@ -10,28 +10,17 @@ const Model = (props: any) => {
 
 const IslandHeader = () => {
     return (
-        <Canvas className="island-header" onCreated={({ scene }) =>
-            (scene.background = new THREE.Color("#9da8e6")) 
-        }>
-            <Stats />
-            <OrbitControls />
-            <ambientLight intensity={Math.PI / 2} />
-            <spotLight
-                position={[10, 10, 10]}
-                angle={0.15}
-                penumbra={1}
-                decay={0}
-                intensity={Math.PI}
-            />
-            <pointLight
-                position={[-10, -10, -10]}
-                decay={0}
-                intensity={Math.PI}
-            />
-            <Model position={[0, 0, 0]} />
-        </Canvas>
+        <header className="island-header">
+            <Canvas className="island-header__canvas" onCreated={({ scene }) => (scene.background = new THREE.Color("#9da8e6"))}>
+                <Stats />
+                <OrbitControls />
+                <ambientLight intensity={Math.PI / 2} />
+                <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
+                <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
+                <Model position={[0, 0, 0]} />
+            </Canvas>
+        </header>
     );
 };
 
 export default IslandHeader;
-
