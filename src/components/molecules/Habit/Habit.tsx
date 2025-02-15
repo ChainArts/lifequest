@@ -46,8 +46,8 @@ const Habit = ({
             </div>
             <div className="habit__content">
                 <div className="habit__info">
-                    <div className={`habit__title`}>
-                        <span className="fst--upper-heading">
+                    <div className="habit__title">
+                        <span className={`fst--upper-heading ${finished ? "" : "gray"}`}>
                             {done}/{goal}
                         </span>
                         <span className="fst--card-title">{name}</span>

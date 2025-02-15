@@ -2,10 +2,12 @@ import { NavLink } from "react-router-dom";
 import "./Navbar.scss";
 import { HiOutlineBookmark, HiOutlineBadgeCheck, HiOutlineBookOpen, HiOutlineUser } from "react-icons/hi";
 import { IconContext } from "react-icons";
+import { AnimatePresence } from "motion/react";
 
 const Navbar = () => {
     return (
         <IconContext.Provider value={{ className: "navbar__icons" }}>
+            <AnimatePresence mode="popLayout">
             <nav className="navbar">
                 <ul>
                     <li>
@@ -33,7 +35,8 @@ const Navbar = () => {
                         </NavLink>
                     </li>
                 </ul>
-            </nav>
+                </nav>
+                </AnimatePresence>
         </IconContext.Provider>
     );
 };

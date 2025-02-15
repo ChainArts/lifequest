@@ -166,8 +166,8 @@
         font-size: 1.5rem;
     }
 
-    .habit.finished & .fst--upper-heading {
-        color: var(--text-invert);
+    .habit.finished & {
+        color: var(--text-invert) !important;
     }
 }
 

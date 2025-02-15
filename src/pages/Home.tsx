@@ -5,6 +5,7 @@ import DailyHabits from "../components/organisms/DailyHabits/DailyHabits";
 import StreakProgress from "../components/organisms/StreakProgress/StreakProgress";
 import DailyProgress from "../components/organisms/DailyProgress/DailyProgress";
 import { useState } from "react";
+import pageVariants from "../components/atoms/PageTransition/PageTransition";
 
 const Home = () => {
     const [habits, setHabits] = useState([
@@ -56,7 +57,7 @@ const Home = () => {
     //     setGreetMsg(await invoke("greet", { name }));
     // }
     return (
-        <motion.main>
+        <motion.main initial="initial" animate="in" exit="out" variants={pageVariants}>
             <DailyProgress progress={calculateProgress()} habbits={habits.length} xp={500} />
             <StreakProgress />
 
