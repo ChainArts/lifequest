@@ -20,41 +20,11 @@
         );
     }
     50% {
-        clip-path: polygon(
-            0% 100%,
-            100% 100%,
-            100% 0%,
-            34% 0%,
-            32% 11%,
-            29% 18%,
-            26% 23%,
-            23% 29%,
-            19% 40%,
-            17% 51%,
-            14% 61%,
-            10% 66%,
-            7% 78%,
-            4% 94%
-        );
+        clip-path: polygon(0% 100%, 100% 100%, 100% 0%, 34% 0%, 32% 11%, 29% 18%, 26% 23%, 23% 29%, 19% 40%, 17% 51%, 14% 61%, 10% 66%, 7% 78%, 4% 94%);
     }
 
     100% {
-        clip-path: polygon(
-            0% 100%,
-            100% 100%,
-            100% 0%,
-            34% 0%,
-            0 0,
-            0 3%,
-            0 12%,
-            0 21%,
-            0 32%,
-            0 44%,
-            0 56%,
-            0 66%,
-            0 76%,
-            0 88%
-        );
+        clip-path: polygon(0% 100%, 100% 100%, 100% 0%, 34% 0%, 0 0, 0 3%, 0 12%, 0 21%, 0 32%, 0 44%, 0 56%, 0 66%, 0 76%, 0 88%);
     }
 }
 
@@ -77,11 +47,7 @@
         transform: translate(200%, -50%);
         transition: all 1s var(--ease);
 
-        background: linear-gradient(
-            115deg,
-            var(--purple-dark) 0%,
-            var(--blue-light) 100%
-        );
+        background: linear-gradient(115deg, var(--purple-dark) 0%, var(--blue-light) 100%);
         z-index: 1;
     }
 
@@ -102,11 +68,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(
-        135deg,
-        var(--purple-dark) 0%,
-        transparent 120%
-    );
+    background: linear-gradient(135deg, var(--purple-dark) 0%, transparent 120%);
     border-radius: calc(var(--radius) / 2);
 
     & svg {
@@ -178,18 +140,18 @@
 }
 
 .habit__progress {
+    --_bar-height: 0.375rem;
     position: relative;
-    height: 0.375rem;
-    border-radius: 0.25rem;
-    background: linear-gradient(
-        90deg,
-        var(--purple-dark) 0%,
-        var(--blue-light) 100%
-    );
+    height: var(--_bar-height);
+    border-radius: var(--_bar-height);
+    background: linear-gradient(90deg, var(--purple-dark) 0%, var(--blue-light) 100%);
     width: 100%;
+    opacity: 1;
+    transition: height 0.5s var(--ease), opacity 0.5s var(--ease);
 
     .habit.finished & {
         height: 0;
+        opacity: 0;
     }
 
     & .habit__progress-cover {
@@ -198,6 +160,7 @@
         right: 0;
         height: 100%;
         width: 0;
+        border-radius: var(--_bar-height);
         background-color: var(--progress-bg);
         transition: width 0.5s var(--ease);
     }
