@@ -1,54 +1,46 @@
 .habit-card {
     display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 6px;
-    background: linear-gradient(90deg, var(--purple-dark) 0%, rgba(0, 0, 0, 0) 400%);
+    grid-template-columns: 0.2fr 0.8fr;
+    padding: 0.75rem;
+    background: var(--background-layer);
+    min-height: 7rem;
+
+    .habit-card__icon {
+        display: flex;
+        align-items: center;
+    }
 
     .habit-card__content {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        justify-content: space-between;
         color: var(--text-invert);
 
         svg {
             font-size: 1rem;
             vertical-align: bottom;
         }
-    }
 
-    .habit-card__icon {
-        z-index: 2;
-        display: flex;
-        justify-content: center;
-    }
-
-    .habit-card__line {
-        grid-column: span 2;
-        height: 1px;
-        width: 100%;
-        background-color: var(--text-invert);
+        .habit-card__info, .habit-card__progress{
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
     }
 
     .habit-card__week {
-        grid-column: span 2;
         display: flex;
-        gap: 0.5rem;
-        justify-content: end;
+        justify-content: flex-start;
+        gap: 0.25rem;
         align-items: center;
         font-size: 0.75rem;
         color: var(--text-light);
 
-        span {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 1.25rem;
-            border-radius: 0.25rem;
-            text-align: center;
-            margin-bottom: -2px;
+        & .habit-card__day{
+            padding: 0.25rem 0.35rem;
         }
 
-        span.active {
+        & span.active {
             position: relative;
             color: var(--text-invert);
 
@@ -56,4 +48,14 @@
             border: 1px solid var(--text-invert);
         }
     }
+}
+
+.habit-card__stats{
+    display: flex;
+    justify-content: space-between;
+}
+
+.habit-card__title{
+    font-size: 1.25rem;
+    font-weight: 700;
 }

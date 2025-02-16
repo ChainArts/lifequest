@@ -6,12 +6,12 @@ interface LinearProgressProps {
     done: number;
 }
 
-const LinearProgress = ({className, goal, done }: LinearProgressProps) => {
+const LinearProgress = ({ className, goal, done }: LinearProgressProps) => {
     return (
         <div className={`linear-progress ${className}`}>
-                    <div className="linear-progress-cover" style={{ width: `${100 - (done / goal) * 100}%` }}></div>
-                </div>
+            <div className="linear-progress-cover" style={{ width: `${100 - (done / goal) * 100}%` }}></div>
+        </div>
     );
-}
+};
 
 export default LinearProgress;

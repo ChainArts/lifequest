@@ -7,6 +7,7 @@
     border-radius: var(--_bar-height);
     background: linear-gradient(90deg, var(--purple-dark) 0%, var(--blue-light) 100%);
     width: 100%;
+    overflow: hidden;
 
     & .linear-progress-cover {
         z-index: 0;
