@@ -5,17 +5,21 @@ import Card from "../../molecules/Card/Card";
 import "./HabitCard.scss";
 
 const HabitCard = () => {
+    const streak = 5;
+
+
+
     return (
         <Card className="habit-card">
             <div className="habit-card__content">
-                <span className="fst--upper-heading ">
-                    <AiFillFire />5
+                <span className="fst--upper-heading">
+                    <AiFillFire /> {streak}
                 </span>
                 <span className="fst--card-title">Workout</span>
             </div>
 
             <div className="habit-card__icon">
-                <Suspense fallback={null}>{createElement(Emojis["IconMFlexedBicepsDefault"])}</Suspense>
+                <Suspense fallback={null}>{createElement(Emojis["IconMFlexedBicepsDefault"], {size: "5rem"})}</Suspense>
             </div>
 
             <div className="habit-card__line" />
