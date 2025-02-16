@@ -6,6 +6,7 @@ import StreakProgress from "../components/organisms/StreakProgress/StreakProgres
 import DailyProgress from "../components/organisms/DailyProgress/DailyProgress";
 import { useState } from "react";
 import pageVariants from "../components/atoms/PageTransition/PageTransition";
+import Section from "../components/molecules/Section/Section";
 
 const Home = () => {
     const [habits, setHabits] = useState([
@@ -32,10 +33,7 @@ const Home = () => {
     const calculateProgress = () => {
         const totalHabits = habits.length;
 
-        const totalDone = habits.reduce(
-            (total, habit) => total + habit.done / habit.goal,
-            0
-        );
+        const totalDone = habits.reduce((total, habit) => total + habit.done / habit.goal, 0);
 
         return Math.round((totalDone / totalHabits) * 100);
     };
@@ -60,22 +58,7 @@ const Home = () => {
     //     setGreetMsg(await invoke("greet", { name }));
     // }
     return (
-        <motion.main
-            initial="initial"
-            animate="in"
-            exit="out"
-            variants={pageVariants}
-        >
-            <DailyProgress
-                progress={calculateProgress()}
-                habbits={habits.length}
-                xp={500}
-            />
-            <StreakProgress />
-
-            <DailyHabits habits={habits} setHabitDone={setHabitDone} />
-            <StatsTeaser />
-
+        <motion.main initial="initial" animate="in" exit="out" variants={pageVariants}>
             {/* <form
                 className="row"
                 onSubmit={(e) => {
@@ -92,6 +75,11 @@ const Home = () => {
             
             </form>
             <p>{greetMsg}</p> */}
+
+            <DailyProgress progress={calculateProgress()} habbits={habits.length} xp={500} />
+            <StreakProgress />
+            <DailyHabits habits={habits} setHabitDone={setHabitDone} />
+            <StatsTeaser />
         </motion.main>
     );
 };

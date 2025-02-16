@@ -34,6 +34,7 @@
     --progress-bg-round: #2a2e38;
 
     --navbar-height: 5rem;
+    --gap: 0.5rem;    
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -106,13 +107,13 @@ main {
     &::before {
         content: "";
         position: absolute;
-        top: calc(-2rem + 1px);
+        top: calc(-1rem + 1px);
         left: 0;
         right: 0;
         z-index: 1;
         background-color: var(--background-base);
         border-radius: 2rem 2rem 0 0;
-        padding: 1rem 0;
+        padding: 0.5rem 0;
     }
 }
 
