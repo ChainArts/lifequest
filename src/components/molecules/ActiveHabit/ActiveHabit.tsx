@@ -3,7 +3,7 @@ import { Suspense, createElement, useState } from "react";
 import * as Emojis from "react-fluentui-emoji/lib/modern";
 import { HiPlus, HiCheck } from "react-icons/hi";
 import { cubicBezier, motion } from "motion/react";
-
+import LinearProgress from "../../atoms/LinearProgress/LinearProgress";
 export interface ActiveHabitProps {
     id: number;
     name: string;
@@ -75,10 +75,7 @@ const ActiveHabit = ({
                         </motion.div>
                     )}
                 </div>
-
-                <div className="habit__progress">
-                    <div className="habit__progress-cover" style={{ width: `${100 - (done / goal) * 100}%` }}></div>
-                </div>
+                <LinearProgress className="habit__progress" goal={goal} done={done} />
             </div>
         </div>
     );
