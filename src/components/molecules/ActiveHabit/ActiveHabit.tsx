@@ -1,10 +1,10 @@
-import "./Habit.scss";
+import "./ActiveHabit.scss";
 import { Suspense, createElement, useState } from "react";
 import * as Emojis from "react-fluentui-emoji/lib/modern";
 import { HiPlus, HiCheck } from "react-icons/hi";
 import { cubicBezier, motion } from "motion/react";
 
-export interface HabitProps {
+export interface ActiveHabitProps {
     id: number;
     name: string;
     goal: number;
@@ -12,14 +12,14 @@ export interface HabitProps {
     emoji?: string;
 }
 
-const Habit = ({
+const ActiveHabit = ({
     id,
     name,
     goal,
     done,
     emoji = "IconMSlightlySmilingFace",
     setHabitDone,
-}: HabitProps & {
+}: ActiveHabitProps & {
     setHabitDone: (id: number, add: number) => void;
 }) => {
     const [circles, setCircles] = useState<{ id: string }[]>([]);
@@ -40,9 +40,7 @@ const Habit = ({
     return (
         <div className={`habit card ${finished ? "finished" : ""}`}>
             <div className="habit__icon">
-                <Suspense fallback={null}>
-                    {createElement(Emojis[emoji as keyof typeof Emojis])}
-                </Suspense>
+                <Suspense fallback={null}>{createElement(Emojis[emoji as keyof typeof Emojis])}</Suspense>
             </div>
             <div className="habit__content">
                 <div className="habit__info">
@@ -54,10 +52,7 @@ const Habit = ({
                     </div>
                     {!finished ? (
                         <motion.div layout>
-                            <motion.button
-                                className="habit__add"
-                                onClick={handleAdd}
-                            >
+                            <motion.button className="habit__add" onClick={handleAdd}>
                                 <HiPlus />
                                 {circles.map((circle) => (
                                     <motion.div
@@ -67,16 +62,9 @@ const Habit = ({
                                         animate={{ scale: 4, opacity: 0 }}
                                         transition={{
                                             duration: 0.6,
-                                            ease: cubicBezier(
-                                                0.14,
-                                                0.8,
-                                                0.4,
-                                                1
-                                            ),
+                                            ease: cubicBezier(0.14, 0.8, 0.4, 1),
                                         }}
-                                        onAnimationComplete={() =>
-                                            removeCircle(circle.id)
-                                        }
+                                        onAnimationComplete={() => removeCircle(circle.id)}
                                     />
                                 ))}
                             </motion.button>
@@ -89,14 +77,11 @@ const Habit = ({
                 </div>
 
                 <div className="habit__progress">
-                    <div
-                        className="habit__progress-cover"
-                        style={{ width: `${100 - (done / goal) * 100}%` }}
-                    ></div>
+                    <div className="habit__progress-cover" style={{ width: `${100 - (done / goal) * 100}%` }}></div>
                 </div>
             </div>
         </div>
     );
 };
 
-export default Habit;
+export default ActiveHabit;

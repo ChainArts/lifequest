@@ -1,14 +1,14 @@
 import "./DailyHabits.scss";
-import Habit, { HabitProps } from "../../molecules/Habit/Habit";
+import ActiveHabit, { ActiveHabitProps } from "../../molecules/ActiveHabit/ActiveHabit";
 import Headline from "../../atoms/Headline/Headline";
 import { IconContext } from "react-icons";
 
 type DailyHabitsProps = {
-    habits: HabitProps[];
+    activeHabits: ActiveHabitProps[];
     setHabitDone: (id: number, add: number) => void;
 };
 
-const DailyHabits = ({ habits, setHabitDone }: DailyHabitsProps) => {
+const DailyHabits = ({ activeHabits, setHabitDone }: DailyHabitsProps) => {
     return (
         <section className="container">
             <IconContext.Provider value={{ className: "daily-habits__icons" }}>
@@ -16,8 +16,8 @@ const DailyHabits = ({ habits, setHabitDone }: DailyHabitsProps) => {
                     Todays Habits
                 </Headline>
                 <div className="daily-habits__list">
-                    {habits.map((habit) => (
-                        <Habit
+                    {activeHabits.map((habit) => (
+                        <ActiveHabit
                             key={habit.id}
                             id={habit.id}
                             name={habit.name}

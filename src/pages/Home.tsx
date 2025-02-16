@@ -6,7 +6,6 @@ import StreakProgress from "../components/organisms/StreakProgress/StreakProgres
 import DailyProgress from "../components/organisms/DailyProgress/DailyProgress";
 import { useState } from "react";
 import pageVariants from "../components/atoms/PageTransition/PageTransition";
-import Section from "../components/molecules/Section/Section";
 
 const Home = () => {
     const [habits, setHabits] = useState([
@@ -76,9 +75,9 @@ const Home = () => {
             </form>
             <p>{greetMsg}</p> */}
 
-            <DailyProgress progress={calculateProgress()} habbits={habits.length} xp={500} />
+            <DailyProgress progress={calculateProgress()} habits={habits.length} xp={500} />
             <StreakProgress />
-            <DailyHabits habits={habits} setHabitDone={setHabitDone} />
+            <DailyHabits activeHabits={habits} setHabitDone={setHabitDone} />
             <StatsTeaser />
         </motion.main>
     );

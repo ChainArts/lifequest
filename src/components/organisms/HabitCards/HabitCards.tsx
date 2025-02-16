@@ -1,6 +1,6 @@
 import { IconContext } from "react-icons";
 import Headline from "../../atoms/Headline/Headline";
-import Card from "../Card/Card";
+import Card from "../../molecules/Card/Card";
 import "./HabitCards.scss";
 import * as Emojis from "react-fluentui-emoji/lib/modern";
 import { AiFillFire } from "react-icons/ai";

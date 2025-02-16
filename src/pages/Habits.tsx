@@ -2,7 +2,7 @@ import pageVariants from "../components/atoms/PageTransition/PageTransition";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { Sheet } from "react-modal-sheet";
-import HabitCards from "../components/molecules/HabitCards/HabitCards";
+import HabitCards from "../components/organisms/HabitCards/HabitCards";
 
 const Habits = () => {
     const [isOpen, setOpen] = useState(false);
