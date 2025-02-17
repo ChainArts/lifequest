@@ -21,7 +21,7 @@ const HabitCard = () => {
     return (
         <Card className="habit-card">
             <div className="habit-card__icon">
-                <Suspense fallback={null}>{createElement(Emojis["IconMFlexedBicepsDefault"], { size: "3rem" })}</Suspense>
+                <Suspense fallback={null}>{createElement(Emojis["IconMFlexedBicepsDefault"], { size: "2.5rem" })}</Suspense>
             </div>
             <div className="habit-card__content">
                 <div className="habit-card__info">

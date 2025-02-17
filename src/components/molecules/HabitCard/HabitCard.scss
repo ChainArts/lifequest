@@ -1,13 +1,44 @@
 .habit-card {
+    position: relative;
     display: grid;
     grid-template-columns: 0.2fr 0.8fr;
     padding: 0.75rem;
     background: var(--background-layer);
     min-height: 7rem;
+    overflow: hidden;
 
     .habit-card__icon {
         display: flex;
         align-items: center;
+
+
+        &::before, &::after {
+            content:"";
+            position: absolute;
+            left: -6rem;
+            width: 11rem;
+            height: 11rem;
+            background: var(--purple-dark);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        &::before {
+            z-index: 1;
+            opacity: 0.1;
+            left: -6.5rem;
+            top: 60%;
+        }
+
+        &::after {
+            z-index: 2;
+            opacity: 0.05;
+        }
+
+        & svg {
+            z-index: 3;
+        }
     }
 
     .habit-card__content {
@@ -38,14 +69,12 @@
 
         & .habit-card__day{
             padding: 0.25rem 0.35rem;
-        }
 
-        & span.active {
-            position: relative;
-            color: var(--text-invert);
-
-            padding: 0 0.25rem;
-            border: 1px solid var(--text-invert);
+            &.active{
+                border: 1px solid var(--purple-dark);
+                color: var(--text-invert);
+                border-radius: 0.25rem;
+            }
         }
     }
 }
