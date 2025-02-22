@@ -13,20 +13,23 @@ const HabitCard = () => {
     const currentXp = 50;
     const quantity = 5;
     const quantityType = "reps";
+    const color = "#9A98EF";
+    //calculate lighter shade of color
+    const colorLight = color + "FF";
 
     //convert activeDays to array of boolean
     const activeDaysArray = activeDays.split("").map((day) => (day === "1" ? true : false));
     const days = ["M", "T", "W", "T", "F", "S", "S"];
 
     return (
-        <Card className="habit-card">
+        <Card className="habit-card" style={{"--_card-color": color, "--_card-color-light": colorLight} as React.CSSProperties}>
             <div className="habit-card__icon">
                 <Suspense fallback={null}>{createElement(Emojis["IconMFlexedBicepsDefault"], { size: "2.5rem" })}</Suspense>
             </div>
             <div className="habit-card__content">
                 <div className="habit-card__title">
                     <div className="habit-card__info">
-                        <span className="fst--upper-heading gray">{`${quantity} ${quantityType}`}</span>
+                        <span className="fst--upper-heading">{`${quantity} ${quantityType}`}</span>
 
                         <span className="habit-card__title">{title}</span>
                     </div>
@@ -49,7 +52,7 @@ const HabitCard = () => {
                             <span className="habit-card__level">12</span>
                         </div>
                     </div>
-                    <LinearProgress goal={nextlevelXp} done={currentXp} className="switch-color" />
+                    <LinearProgress goal={nextlevelXp} done={currentXp}  />
                 </div>
             </div>
         </Card>
