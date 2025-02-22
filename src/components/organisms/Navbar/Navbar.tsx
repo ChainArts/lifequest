@@ -11,7 +11,7 @@ const Navbar = () => {
             <nav className="navbar">
                 <ul>
                     <li>
-                        <NavLink to="/" className={({ isActive }) => (isActive ? "active navbar-link" : "navbar-link")}>
+                        <NavLink to="/home" className={({ isActive }) => (isActive ? "active navbar-link" : "navbar-link")}>
                             <HiOutlineBookmark />
                             Today
                         </NavLink>
