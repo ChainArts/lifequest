@@ -16,7 +16,7 @@ const HabitCard = () => {
 
     //convert activeDays to array of boolean
     const activeDaysArray = activeDays.split("").map((day) => (day === "1" ? true : false));
-    const days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+    const days = ["M", "T", "W", "T", "F", "S", "S"];
 
     return (
         <Card className="habit-card">
@@ -24,25 +24,32 @@ const HabitCard = () => {
                 <Suspense fallback={null}>{createElement(Emojis["IconMFlexedBicepsDefault"], { size: "2.5rem" })}</Suspense>
             </div>
             <div className="habit-card__content">
-                <div className="habit-card__info">
-                    <div className="habit-card__stats">
+                <div className="habit-card__title">
+                    <div className="habit-card__info">
                         <span className="fst--upper-heading gray">{`${quantity} ${quantityType}`}</span>
-                        <span className="fst--upper-heading">
-                            <AiFillFire /> {streak}
-                        </span>
+
+                        <span className="habit-card__title">{title}</span>
                     </div>
 
-                    <span className="habit-card__title">{title}</span>
+                    <span className="fst--upper-heading">
+                        <AiFillFire /> {streak}
+                    </span>
                 </div>
                 <div className="habit-card__progress">
-                    <div className="habit-card__week">
-                        {days.map((day, index) => (
-                            <div key={index} className={`habit-card__day ${activeDaysArray[index] ? "active" : ""}`}>
-                                {day}
-                            </div>
-                        ))}
+                    <div className="habit-card__details">
+                        <div className="habit-card__week">
+                            {days.map((day, index) => (
+                                <div key={index} className={`habit-card__day ${activeDaysArray[index] ? "active" : ""}`}>
+                                    {day}
+                                </div>
+                            ))}
+                        </div>
+                        <div>
+                            <span className="fst--upper-heading">LVL</span>
+                            <span className="habit-card__level">12</span>
+                        </div>
                     </div>
-                    <LinearProgress goal={nextlevelXp} done={currentXp} />
+                    <LinearProgress goal={nextlevelXp} done={currentXp} className="switch-color" />
                 </div>
             </div>
         </Card>

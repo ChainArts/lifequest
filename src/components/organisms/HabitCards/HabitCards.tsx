@@ -3,14 +3,16 @@ import Headline from "../../atoms/Headline/Headline";
 import HabitCard from "../../molecules/HabitCard/HabitCard";
 import "./HabitCards.scss";
 
-
 const HabitCards = () => {
     return (
         <section className="container">
             <IconContext.Provider value={{ className: "habit-cards__icons" }}>
-                <Headline level={1} style="section">
-                    Habits
-                </Headline>
+                <div className="habit-cards__icons">
+                    <Headline level={1} style="section">
+                        Habits
+                    </Headline>
+                    <button className="fst_headline gray">create</button>
+                </div>
                 <div className="habit-cards__list">
                     <HabitCard />
                     <HabitCard />
@@ -19,7 +21,5 @@ const HabitCards = () => {
         </section>
     );
 };
-
-
 
 export default HabitCards;
