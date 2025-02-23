@@ -1,31 +1,39 @@
+@mixin CardBubble {
+    position: absolute;
+    content: "";
+    left: -6rem;
+    width: 10.5rem;
+    height: 10.5rem;
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+@mixin CardBubbleBeforeAfter {
+    &::before {
+        z-index: 1;
+        opacity: 0.4;
+        left: -6.5rem;
+        top: 60%;
+    }
+
+    &::after {
+        z-index: 2;
+        opacity: 0.2;
+    }
+}
+
 [data-theme="light"] {
     .habit-card {
         background: linear-gradient(145deg, var(--_card-color) 0%, rgba(255, 255, 255, 0.1) 250%);
         &::before,
         &::after {
-            content: "";
-            position: absolute;
-            left: -6rem;
-            width: 11rem;
-            height: 11rem;
+            @include CardBubble;
             background: linear-gradient(145deg, var(--background-layer) 0%, var(--_card-color-light) 90%);
             mix-blend-mode: screen;
-            border-radius: 50%;
-            top: 50%;
-            transform: translateY(-50%);
         }
 
-        &::before {
-            z-index: 1;
-            opacity: 0.4;
-            left: -6.5rem;
-            top: 60%;
-        }
-
-        &::after {
-            z-index: 2;
-            opacity: 0.2;
-        }
+        @include CardBubbleBeforeAfter;
 
         .habit-card__week {
             color: var(--text-invert);
@@ -48,7 +56,7 @@
     position: relative;
     display: grid;
     grid-template-columns: auto 1fr;
-    gap: 2rem;
+    gap: 1.75rem;
     padding: 0.75rem;
     background: var(--background-layer);
     min-height: 7rem;
@@ -65,28 +73,11 @@
 
         &::before,
         &::after {
-            content: "";
-            position: absolute;
-            left: -6rem;
-            width: 11rem;
-            height: 11rem;
+            @include CardBubble;
             background: linear-gradient(145deg, var(--purple-dark) 0%, rgba(255, 255, 255, 0) 90%);
-            border-radius: 50%;
-            top: 50%;
-            transform: translateY(-50%);
         }
 
-        &::before {
-            z-index: 1;
-            opacity: 0.3;
-            left: -6.5rem;
-            top: 60%;
-        }
-
-        &::after {
-            z-index: 2;
-            opacity: 0.2;
-        }
+        @include CardBubbleBeforeAfter;
 
         & svg {
             z-index: 3;

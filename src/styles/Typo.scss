@@ -88,3 +88,14 @@ h6 {
     font-size: 0.825rem;
     font-weight: 400;
 }
+
+.title-and-button {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 0.25rem;
+
+    button {
+        color: var(--text-light);
+        font-size: 1rem;
+    }
+}
