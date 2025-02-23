@@ -1,42 +1,40 @@
-// Login.tsx
-import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
+import { useGoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
-
-// Define an interface for your decoded Google user data.
-interface GoogleUser {
-    sub: string;
-    email: string;
-    name?: string;
-    picture?: string;
-    // Add additional fields as needed.
-}
+import { FaGoogle } from "react-icons/fa";
+import "./GoogleButton.scss";
 
 const GoogleButton = () => {
     const navigate = useNavigate();
-    const handleLoginSuccess = (credentialResponse: CredentialResponse) => {
-        if (credentialResponse.credential) {
-            try {
-                const decoded: GoogleUser = jwtDecode(credentialResponse.credential);
-                console.log("Decoded user info:", decoded);
-                // You can now send the token or decoded user info to your backend if needed.
-            } catch (error) {
-                console.error("Error decoding token:", error);
-            }
-            finally {
-                navigate("/home");
-            }
-        } else {
-            console.error("No credential received");
-        }
-    };
 
-    const handleLoginError = () => {
-        console.error("Login Failed");
-    };
+    const login = useGoogleLogin({
+        onSuccess: (tokenResponse) => {
+            console.log("Token response:", tokenResponse);
+            // Fetch the user's info with the access token
+            fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+                headers: {
+                    Authorization: `Bearer ${tokenResponse.access_token}`,
+                },
+            })
+                .then((res) => res.json())
+                .then((userData) => {
+                    console.log("Fetched user data:", userData);
+                    // You can now send userData to your backend if needed
+                    navigate("/home");
+                })
+                .catch((error) => {
+                    console.error("Failed to fetch user info:", error);
+                });
+        },
+        onError: () => {
+            console.error("Login Failed");
+        },
+    });
 
     return (
-        <GoogleLogin onSuccess={handleLoginSuccess} onError={handleLoginError} theme="filled_black"/>
+        <div className="google-button" onClick={() => login()}>
+            <span>Continue with Google</span>
+            <FaGoogle />
+        </div>
     );
 };
 
