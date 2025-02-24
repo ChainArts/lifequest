@@ -1,6 +1,7 @@
 import { useGoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
+import { invoke } from "@tauri-apps/api/core";
 import "./GoogleButton.scss";
 
 const GoogleButton = () => {
@@ -18,7 +19,12 @@ const GoogleButton = () => {
                 .then((res) => res.json())
                 .then((userData) => {
                     console.log("Fetched user data:", userData);
-                    // You can now send userData to your backend if needed
+                    // Save the user data to the backend
+                    const user = {
+                        name: userData.name,
+                        email: userData.email,
+                    }
+                    console.log(invoke("greet", user));
                     navigate("/home");
                 })
                 .catch((error) => {
