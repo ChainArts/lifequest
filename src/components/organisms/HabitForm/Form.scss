@@ -105,6 +105,15 @@
             opacity: 1;
             cursor: pointer;
         }
+
+        // error input
+        &[data-error="true"] {
+            outline: 1px solid tomato;
+        }
+    }
+
+    .error {
+        padding-top: 0;
     }
 }
 
@@ -133,6 +142,10 @@ input {
     transition: outline 0.3s var(--ease);
     outline: 1px solid transparent;
 
+    
+&:has(+ .error) {
+        outline: 1px solid tomato;
+    }
     &[type="checkbox"] {
         opacity: 0;
         height: 2rem;
@@ -216,4 +229,16 @@ input {
         opacity: 0;
         transition: all 0.3s var(--ease);
     }
+}
+
+.error {
+    color: tomato;
+    font-size: 0.75rem;
+    font-weight: 400;
+    padding-top: 0.5rem;
+    width: 100%;
+    text-align: end;
+    text-transform: lowercase;
+
+    
 }

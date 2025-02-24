@@ -1,135 +1,239 @@
-import { useFormik } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as yup from "yup";
 import "./Form.scss";
 import { HiOutlineX } from "react-icons/hi";
 import { Sheet } from "react-modal-sheet";
 
+// Yup schema with only title, goal, and color required.
+const habitSchema = yup.object().shape({
+    title: yup.string().required("Habit name is required"),
+    goal: yup
+        .number()
+        .positive("Goal must be positive")
+        .required("Goal is required")
+        .typeError("Goal must be a number"),
+    color: yup.string().required("Color is required"),
+    // Optional fields:
+    unit: yup.string(),
+    weekDays: yup.number(),
+    icon: yup.string(),
+});
+
 type HabitFormProps = {
-    isOpen: boolean;
     setOpen: (value: boolean) => void;
-    mode?: "create" | "edit";
+    isOpen: boolean;
+    mode: string;
 };
 
 const HabitForm = ({ setOpen, isOpen, mode }: HabitFormProps) => {
-    const formik = useFormik({
-        initialValues: {
-            habit: "",
-        },
-        onSubmit: (values) => {
-            console.log(values);
-        },
-    });
+    const weekDaysArr = [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+        "sunday",
+    ];
 
-    const weekDays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
-
-    const colors = [
-        {
-            color: "pink",
-            hex: "#F9b0d5",
-        },
-        {
-            color: "rose",
-            hex: "#cea3d8",
-        },
-        {
-            color: "purple",
-            hex: "#ad9deb",
-        },
-        {
-            color: "violet",
-            hex: "#8a9de8",
-        },
-        {
-            color: "blue",
-            hex: "#9bc1ff",
-        },
-        {
-            color: "teal",
-            hex: "#8ad8d8",
-        },
-
-        {
-            color: "orange",
-            hex: "#eab9ab",
-        },
-        {
-            color: "red",
-            hex: "#ef9898",
-        },
+    const colorsArr = [
+        { color: "pink", hex: "#F9b0d5" },
+        { color: "rose", hex: "#cea3d8" },
+        { color: "purple", hex: "#ad9deb" },
+        { color: "violet", hex: "#8a9de8" },
+        { color: "blue", hex: "#9bc1ff" },
+        { color: "teal", hex: "#8ad8d8" },
+        { color: "orange", hex: "#eab9ab" },
+        { color: "red", hex: "#ef9898" },
     ];
 
     return (
-        <form onSubmit={formik.handleSubmit}>
-            <Sheet isOpen={isOpen} onClose={() => setOpen(false)}>
-                <Sheet.Container>
-                    <Sheet.Header>
-                        <div className="form-header">
-                            <button onClick={() => setOpen(false)}>
-                                <HiOutlineX />
-                            </button>
-                            <h2>Create Habit</h2>
-                            <button type="submit">Save</button>
-                        </div>
-                    </Sheet.Header>
+        <Formik
+            initialValues={{
+                title: "",
+                goal: 1,
+                unit: "Repetition",
+                weekDays: 0, 
+                icon: "",
+                color: "#F9b0d5",
+            }}
+            validationSchema={habitSchema}
+            onSubmit={(values) => {
+                console.log(values);
+            }}
+        >
+            {({ values, setFieldValue }) => (
+                <Form id="habitForm">
+                    <Sheet isOpen={isOpen} onClose={() => setOpen(false)}>
+                        <Sheet.Container>
+                            <Sheet.Header>
+                                <div className="form-header">
+                                    <button
+                                        type="button"
+                                        onClick={() => setOpen(false)}
+                                    >
+                                        <HiOutlineX />
+                                    </button>
+                                    <h2>{mode} Habit</h2>
+                                    <button type="submit" form="habitForm">
+                                        Save
+                                    </button>
+                                </div>
+                            </Sheet.Header>
 
-                    <Sheet.Content>
-                        <Sheet.Scroller>
-                            <div className="container form-container">
-                                <fieldset>
-                                    <label htmlFor="habit">Habit Name</label>
-                                    <input className="single-input" id="habit" name="habit" type="text" placeholder="new habit" onChange={formik.handleChange} value={formik.values.habit} />
-                                </fieldset>
-                                <fieldset>
-                                    <legend>Set your Goal</legend>
-                                    <div className="form-box">
-                                        <label htmlFor="goal">
-                                            Amount
-                                            <input id="goal" name="goal" type="text" inputMode="numeric" />
-                                        </label>
-
-                                        <label htmlFor="unit">
-                                            Unit
-                                            <input id="unit" name="unit" type="text" placeholder="Repetition" />
-                                        </label>
-                                    </div>
-                                </fieldset>
-                                <fieldset>
-                                    <legend>Repeat every ...</legend>
-                                    <div className="form-box">
-                                        {weekDays.map((day) => (
-                                            <label key={day} htmlFor={day}>
-                                                {day}
-                                                <input id={day} name={day} type="checkbox" />
-                                                <span className="toggle" />
+                            <Sheet.Content>
+                                <Sheet.Scroller>
+                                    <div className="container form-container">
+                                        <fieldset>
+                                            <label htmlFor="title">
+                                                Habit Name
                                             </label>
-                                        ))}
-                                    </div>
-                                </fieldset>
-                                <fieldset>
-                                    <legend>Appearance</legend>
-                                    <div className="form-box">
-                                        <label htmlFor="icon">
-                                            Icon
-                                            <input id="icon" name="icon" type="text" placeholder="Icon" />
-                                        </label>
-                                        <div className="form-box-color">
-                                            {colors.map((color) => (
-                                                <label key={color.color} htmlFor={color.color}>
-                                                    <div className="color-box" style={{ backgroundColor: color.hex }} />
+                                            <Field
+                                                className="single-input"
+                                                id="title"
+                                                name="title"
+                                                type="text"
+                                                placeholder="new habit"
+                                            />
+                                            <ErrorMessage
+                                                name="title"
+                                                component="div"
+                                                className="error"
+                                            />
+                                        </fieldset>
 
-                                                    <input id={color.color} name="color" type="radio" value={color.hex} />
-                                                    <div className="color-button" style={{ "--_card-color": color.hex } as React.CSSProperties} />
+                                        <fieldset>
+                                            <legend>Set your Goal</legend>
+                                            <div className="form-box">
+                                                <label htmlFor="goal">
+                                                    Quantity
+                                                    <Field
+                                                        id="goal"
+                                                        name="goal"
+                                                        type="text"
+                                                        inputMode="numeric"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="goal"
+                                                        component="div"
+                                                        className="error"
+                                                    />
                                                 </label>
-                                            ))}
-                                        </div>
+
+                                                <label htmlFor="unit">
+                                                    Unit
+                                                    <Field
+                                                        id="unit"
+                                                        name="unit"
+                                                        type="text"
+                                                        placeholder="Repetition"
+                                                    />
+                                                </label>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <legend>Repeat every</legend>
+                                            <div className="form-box">
+                                                {weekDaysArr.map(
+                                                    (day, index) => {
+                                                        // Calculate the bit corresponding to this day.
+                                                        const dayBit =
+                                                            1 << (6 - index);
+                                                        return (
+                                                            <label
+                                                                key={day}
+                                                                htmlFor={day}
+                                                            >
+                                                                {day}
+                                                                <input
+                                                                    id={day}
+                                                                    name="weekDays"
+                                                                    type="checkbox"
+                                                                    checked={Boolean(
+                                                                        values.weekDays &
+                                                                            dayBit
+                                                                    )}
+                                                                    onChange={() =>
+                                                                        setFieldValue(
+                                                                            "weekDays",
+                                                                            values.weekDays ^
+                                                                                dayBit
+                                                                        )
+                                                                    }
+                                                                />
+                                                                <span className="toggle" />
+                                                            </label>
+                                                        );
+                                                    }
+                                                )}
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <legend>Appearance</legend>
+                                            <div className="form-box">
+                                                <label htmlFor="icon">
+                                                    Icon
+                                                    <Field
+                                                        id="icon"
+                                                        name="icon"
+                                                        type="text"
+                                                        placeholder="icon"
+                                                    />
+                                    
+                                                </label>
+                                                <div className="form-box-color">
+                                                    {colorsArr.map((color) => (
+                                                        <label
+                                                            key={color.color}
+                                                            htmlFor={
+                                                                color.color
+                                                            }
+                                                        >
+                                                            <div
+                                                                className="color-box"
+                                                                style={{
+                                                                    backgroundColor:
+                                                                        color.hex,
+                                                                }}
+                                                            />
+                                                            <Field
+                                                                id={color.color}
+                                                                name="color"
+                                                                type="radio"
+                                                                value={
+                                                                    color.hex
+                                                                }
+                                                            />
+                                                            <div
+                                                                className="color-button"
+                                                                style={
+                                                                    {
+                                                                        "--_card-color":
+                                                                            color.hex,
+                                                                    } as React.CSSProperties
+                                                                }
+                                                            />
+                                                        </label>
+                                                    ))}
+                                                    <ErrorMessage
+                                                        name="color"
+                                                        component="div"
+                                                        className="error"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </fieldset>
                                     </div>
-                                </fieldset>
-                            </div>
-                        </Sheet.Scroller>
-                    </Sheet.Content>
-                </Sheet.Container>
-                <Sheet.Backdrop />
-            </Sheet>
-        </form>
+                                </Sheet.Scroller>
+                            </Sheet.Content>
+                        </Sheet.Container>
+                        <Sheet.Backdrop />
+                    </Sheet>
+                </Form>
+            )}
+        </Formik>
     );
 };
 
