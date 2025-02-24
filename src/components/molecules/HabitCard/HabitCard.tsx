@@ -1,9 +1,8 @@
-import * as Emojis from "react-fluentui-emoji/lib/modern";
 import { AiFillFire } from "react-icons/ai";
-import { createElement, Suspense } from "react";
 import Card from "../../molecules/Card/Card";
 import "./HabitCard.scss";
 import LinearProgress from "../../atoms/LinearProgress/LinearProgress";
+import { FluentEmoji } from "@lobehub/fluent-emoji";
 
 const HabitCard = () => {
     const streak = 5;
@@ -15,17 +14,31 @@ const HabitCard = () => {
     const quantityType = "reps";
     const color = "#9A98EF";
     //calculate lighter shade of color
-    const colorLight = color + "FF";
+    const colorLight = color + "DD";
 
     //convert activeDays to array of boolean
     const activeDaysArray = activeDays.split("").map((day) => (day === "1" ? true : false));
     const days = ["M", "T", "W", "T", "F", "S", "S"];
 
     return (
-        <Card className="habit-card" style={{"--_card-color": color, "--_card-color-light": colorLight} as React.CSSProperties}>
+        <Card
+            className="habit-card"
+            style={
+                {
+                    "--_card-color": color,
+                    "--_card-color-light": colorLight,
+                } as React.CSSProperties
+            }
+        >
             <div className="habit-card__icon">
-                <Suspense fallback={null}>{createElement(Emojis["IconMFlexedBicepsDefault"], { size: "2.5rem" })}</Suspense>
+                <FluentEmoji
+                    type={"3d"}
+                    emoji="🏋️"
+                    size={48}
+                    className="emoji"
+                />
             </div>
+
             <div className="habit-card__content">
                 <div className="habit-card__title">
                     <div className="habit-card__info">
@@ -42,7 +55,12 @@ const HabitCard = () => {
                     <div className="habit-card__details">
                         <div className="habit-card__week">
                             {days.map((day, index) => (
-                                <div key={index} className={`habit-card__day ${activeDaysArray[index] ? "active" : ""}`}>
+                                <div
+                                    key={index}
+                                    className={`habit-card__day ${
+                                        activeDaysArray[index] ? "active" : ""
+                                    }`}
+                                >
                                     {day}
                                 </div>
                             ))}
@@ -52,7 +70,7 @@ const HabitCard = () => {
                             <span className="habit-card__level">12</span>
                         </div>
                     </div>
-                    <LinearProgress goal={nextlevelXp} done={currentXp}  />
+                    <LinearProgress goal={nextlevelXp} done={currentXp} />
                 </div>
             </div>
         </Card>

@@ -3,8 +3,10 @@ import * as yup from "yup";
 import "./Form.scss";
 import { HiOutlineX } from "react-icons/hi";
 import { Sheet } from "react-modal-sheet";
+import Picker from "@emoji-mart/react";
+import { useState } from "react";
 
-// Yup schema with only title, goal, and color required.
+
 const habitSchema = yup.object().shape({
     title: yup.string().required("Habit name is required"),
     goal: yup
@@ -26,6 +28,7 @@ type HabitFormProps = {
 };
 
 const HabitForm = ({ setOpen, isOpen, mode }: HabitFormProps) => {
+    const [selectedEmoji, setSelectedEmoji] = useState("");
     const weekDaysArr = [
         "monday",
         "tuesday",
@@ -53,8 +56,8 @@ const HabitForm = ({ setOpen, isOpen, mode }: HabitFormProps) => {
                 title: "",
                 goal: 1,
                 unit: "Repetition",
-                weekDays: 0, 
-                icon: "",
+                weekDays: 0,
+                icon: "🎯",
                 color: "#F9b0d5",
             }}
             validationSchema={habitSchema}
@@ -180,8 +183,11 @@ const HabitForm = ({ setOpen, isOpen, mode }: HabitFormProps) => {
                                                         name="icon"
                                                         type="text"
                                                         placeholder="icon"
+                                                        value={
+                                                            selectedEmoji ||
+                                                            values.icon
+                                                        }
                                                     />
-                                    
                                                 </label>
                                                 <div className="form-box-color">
                                                     {colorsArr.map((color) => (
@@ -225,6 +231,41 @@ const HabitForm = ({ setOpen, isOpen, mode }: HabitFormProps) => {
                                                 </div>
                                             </div>
                                         </fieldset>
+                                        <Picker
+                                            style={{
+                                                "--primary-color": "red",
+                                                "--font-size": "20px",
+                                                "background-color": "white !important",
+                                            }}
+                                            set="apple"
+                                            onEmojiSelect={(emoji: any) => {
+                                                setSelectedEmoji(emoji.native);
+                                            }}
+                                            categories={[
+                                                "people",
+                                                "nature",
+                                                "foods",
+                                                "activity",
+                                                "places",
+                                                "objects",
+                                            ]}
+                                            onClickOutside={() => {
+                                                // Close the picker when clicking outside.
+                                            }}
+                                            emojiButtonColors={{
+                                                people: "#FFCC4D",
+                                                nature: "#4CAF50",
+                                                foods: "#F06292",
+                                                activity: "#2196F3",
+                                                places: "#795548",
+                                                objects: "#607D8B",
+                                            }}
+                                            skinTonePosition="none"
+                                            previewPosition="none"
+                                            previewEmoji={values.icon}
+                                            perLine={7}
+                                            dataTheme="light"
+                                        />
                                     </div>
                                 </Sheet.Scroller>
                             </Sheet.Content>

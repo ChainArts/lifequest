@@ -1,9 +1,9 @@
 import "./ActiveHabit.scss";
-import { Suspense, createElement, useState } from "react";
-import * as Emojis from "react-fluentui-emoji/lib/modern";
+import { useState } from "react";
 import { HiPlus, HiCheck } from "react-icons/hi";
 import { cubicBezier, motion } from "motion/react";
 import LinearProgress from "../../atoms/LinearProgress/LinearProgress";
+import { FluentEmoji } from "@lobehub/fluent-emoji";
 export interface ActiveHabitProps {
     id: number;
     name: string;
@@ -40,19 +40,33 @@ const ActiveHabit = ({
     return (
         <div className={`habit card ${finished ? "finished" : ""}`}>
             <div className="habit__icon">
-                <Suspense fallback={null}>{createElement(Emojis[emoji as keyof typeof Emojis])}</Suspense>
+                <div className="habit-card__icon">
+                    <FluentEmoji
+                        type={"3d"}
+                        emoji="😀"
+                        size={32}
+                        className="emoji"
+                    />
+                </div>
             </div>
             <div className="habit__content">
                 <div className="habit__info">
                     <div className="habit__title">
-                        <span className={`fst--upper-heading ${finished ? "" : "gray"}`}>
+                        <span
+                            className={`fst--upper-heading ${
+                                finished ? "" : "gray"
+                            }`}
+                        >
                             {done}/{goal}
                         </span>
                         <span className="fst--card-title">{name}</span>
                     </div>
                     {!finished ? (
                         <motion.div layout>
-                            <motion.button className="habit__add" onClick={handleAdd}>
+                            <motion.button
+                                className="habit__add"
+                                onClick={handleAdd}
+                            >
                                 <HiPlus />
                                 {circles.map((circle) => (
                                     <motion.div
@@ -62,9 +76,16 @@ const ActiveHabit = ({
                                         animate={{ scale: 4, opacity: 0 }}
                                         transition={{
                                             duration: 0.6,
-                                            ease: cubicBezier(0.14, 0.8, 0.4, 1),
+                                            ease: cubicBezier(
+                                                0.14,
+                                                0.8,
+                                                0.4,
+                                                1
+                                            ),
                                         }}
-                                        onAnimationComplete={() => removeCircle(circle.id)}
+                                        onAnimationComplete={() =>
+                                            removeCircle(circle.id)
+                                        }
                                     />
                                 ))}
                             </motion.button>
@@ -75,7 +96,11 @@ const ActiveHabit = ({
                         </motion.div>
                     )}
                 </div>
-                <LinearProgress className="habit__progress" goal={goal} done={done} />
+                <LinearProgress
+                    className="habit__progress"
+                    goal={goal}
+                    done={done}
+                />
             </div>
         </div>
     );

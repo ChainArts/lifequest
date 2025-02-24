@@ -16,7 +16,7 @@
         right: 0;
         height: 100%;
         width: 0;
-        box-shadow: 0 0 1px 1px var(--progress-bg) inset, 0 0 1px 1px var(--progress-bg);
+        box-shadow: 0 0 4px 1px var(--progress-bg) inset, 0 0 1px 1px var(--progress-bg);
         background-color: var(--progress-bg);
         transition: width 0.5s var(--ease);
 
@@ -25,12 +25,12 @@
             z-index: 0;
             position: absolute;
             top: 0;
-            left: -4px;
-            height: calc(var(--_bar-height) / 2);
-            width: calc(var(--_bar-height) / 2);
+            left: -5px;
+            height: calc(var(--_bar-height) / 2 + 4px);
+            width: calc(var(--_bar-height) / 2 + 1px);
             border-top-right-radius: 3px;
             background-color: transparent;
-            box-shadow: 1px 0 0 0 var(--progress-bg);
+            box-shadow: 1px -1px 0 0 var(--progress-bg);
         }
 
         &::after {
@@ -38,12 +38,12 @@
             z-index: 0;
             position: absolute;
             bottom: 0;
-            left: -4px;
-            height: calc(var(--_bar-height) / 2);
-            width: calc(var(--_bar-height) / 2);
+            left: -5px;
+            height: calc(var(--_bar-height) / 2 + 4px);
+            width: calc(var(--_bar-height) / 2 + 1px);
             border-bottom-right-radius: 3px;
             background-color: transparent;
-            box-shadow: 1px 0 0 0 var(--progress-bg);
+            box-shadow: 1px 1px 0 0 var(--progress-bg);
         }
     }
 }
