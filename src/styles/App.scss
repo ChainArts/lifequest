@@ -19,6 +19,7 @@
     --background-base: #12151a;
     --background-layer: #1c2028;
     --background-layer-sec: #3c4953;
+    --background-layer-light: #22252d;
 
     --purple-dark: #9a98ef;
     --purple-light: #B6B5EE;
@@ -115,6 +116,14 @@ main {
     flex-direction: column;
     padding: 0 0.75rem;
     margin-bottom: 1rem;
+}
+
+.react-modal-sheet-container {
+    background-color: var(--background-layer) !important;
+}
+
+.react-modal-sheet-content {
+    padding-top: 1.25rem;
 }
 
 .uppercase {

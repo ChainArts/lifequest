@@ -1,0 +1,219 @@
+.form-header {
+    position: sticky;
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    align-items: center;
+    gap: 0.75rem;
+    padding-top: 1rem;
+
+    & > * {
+        font-size: 1rem;
+        color: var(--text-light);
+    }
+
+    h1,
+    h2 {
+        font-weight: 600;
+        text-align: center;
+    }
+
+    button:first-child {
+        padding-left: 0.75rem;
+        font-size: 1.25rem;
+        justify-self: start;
+    }
+
+    button[type="submit"] {
+        padding-right: 0.75rem;
+        color: var(--text-sec);
+        justify-self: end;
+        font-weight: 400;
+    }
+
+    &::after {
+        content: "";
+        grid-column: 1 / -1;
+        height: 1px;
+        background-color: var(--progress-bg-round);
+    }
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.form-box-color {
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    padding: var(--gap);
+    padding-left: 0;
+    gap: var(--gap);
+
+    label {
+        height: 100%;
+        width: fit-content;
+        display: flex;
+        justify-content: center;
+    }
+}
+
+.form-box {
+    display: flex;
+    flex-direction: column;
+    padding: var(--gap);
+    padding-left: 1rem;
+    border-radius: var(--radius);
+    background-color: var(--background-layer-light);
+    gap: var(--gap);
+
+    & > *:not(:last-child)::after {
+        content: "";
+        display: block;
+
+        width: 100%;
+        grid-column: 1 / -1;
+        border-bottom: 1px solid var(--progress-bg-round);
+    }
+
+    label {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1rem;
+        font-weight: 400;
+        margin-bottom: 0;
+        color: var(--text-baset);
+
+        gap: var(--gap);
+    }
+
+    input {
+        padding: 0;
+        background: none;
+        font-size: 1rem;
+        text-align: end;
+        max-width: 10rem;
+        padding: var(--gap);
+        height: 2rem;
+
+        &[type="number"]::-webkit-inner-spin-button {
+            opacity: 1;
+            cursor: pointer;
+        }
+    }
+}
+
+fieldset {
+    display: flex;
+    flex-direction: column;
+}
+
+label,
+legend {
+    position: relative;
+    -webkit-margin-bottom-collapse: separate;
+    margin-bottom: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    width: 100%;
+    color: var(--text-light);
+    text-transform: capitalize;
+}
+
+input {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border-radius: var(--radius);
+    background-color: var(--background-base);
+    transition: outline 0.3s var(--ease);
+    outline: 1px solid transparent;
+
+    &[type="checkbox"] {
+        opacity: 0;
+        height: 2rem;
+        width: 2rem;
+
+        &:checked + .toggle {
+            &::before {
+                background-color: var(--text-sec);
+            }
+            &::after {
+                transform: translateX(1.25rem);
+            }
+        }
+    }
+
+    &[type="radio"] {
+        opacity: 0;
+        height: 1.5rem;
+        width: 1.5rem;
+
+        &:checked + .color-button::after {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+    }
+
+    &:active,
+    &:focus {
+        outline: 1px solid var(--progress-bg-round);
+    }
+}
+
+.toggle {
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0.25rem;
+        right: var(--gap);
+        width: 3rem;
+        height: 1.75rem;
+        border-radius: 3rem;
+        background-color: var(--progress-bg-round);
+        transition: transform 0.3s var(--ease);
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        display: block;
+        top: 0.25rem;
+        right: 1.75rem;
+        margin: 0.125rem;
+        height: 1.5rem;
+        width: 1.5rem !important;
+        border-radius: 50%;
+        background-color: var(--background-layer);
+        transition: transform 0.3s var(--ease);
+    }
+}
+
+.color-button {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 1.5rem;
+    width: 1.5rem;
+    border-radius: 50%;
+    border: 2px solid var(--_card-color);
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        height: 1rem;
+        width: 1rem;
+        border-radius: 50%;
+        background-color: var(--_card-color);
+        opacity: 0;
+        transition: all 0.3s var(--ease);
+    }
+}
