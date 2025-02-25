@@ -14,7 +14,6 @@
     "start:db": "surreal start --user root --pass root"
   },
   "dependencies": {
-    "@emoji-mart/react": "^1.1.1",
     "@lobehub/fluent-emoji": "^1.2.0",
     "@react-three/drei": "^9.121.4",
     "@react-three/fiber": "^8.17.14",
@@ -22,6 +21,7 @@
     "@tauri-apps/plugin-opener": "^2",
     "@types/three": "^0.173.0",
     "date-fns": "^4.1.0",
+    "emoji-picker-react": "^4.12.0",
     "formik": "^2.4.6",
     "motion": "^12.4.3",
     "react": "^18.3.1",

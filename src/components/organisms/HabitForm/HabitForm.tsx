@@ -3,8 +3,8 @@ import * as yup from "yup";
 import "./Form.scss";
 import { HiOutlineX } from "react-icons/hi";
 import { Sheet } from "react-modal-sheet";
-import Picker from "@emoji-mart/react";
 import { useState } from "react";
+import EmojiPicker, { Categories } from "emoji-picker-react";
 
 
 const habitSchema = yup.object().shape({
@@ -55,8 +55,8 @@ const HabitForm = ({ setOpen, isOpen, mode }: HabitFormProps) => {
             initialValues={{
                 title: "",
                 goal: 1,
-                unit: "Repetition",
-                weekDays: 0,
+                unit: "",
+                weekDays: 0b1111111,
                 icon: "🎯",
                 color: "#F9b0d5",
             }}
@@ -231,40 +231,58 @@ const HabitForm = ({ setOpen, isOpen, mode }: HabitFormProps) => {
                                                 </div>
                                             </div>
                                         </fieldset>
-                                        <Picker
-                                            style={{
-                                                "--primary-color": "red",
-                                                "--font-size": "20px",
-                                                "background-color": "white !important",
-                                            }}
-                                            set="apple"
-                                            onEmojiSelect={(emoji: any) => {
-                                                setSelectedEmoji(emoji.native);
-                                            }}
+
+                                        <EmojiPicker
+                                            autoFocusSearch={false}
+                                            lazyLoadEmojis={true}
+                                            open={true}
+                                            width="100%"
                                             categories={[
-                                                "people",
-                                                "nature",
-                                                "foods",
-                                                "activity",
-                                                "places",
-                                                "objects",
+                                                {
+                                                    name: "Smileys & People",
+                                                    category:
+                                                        Categories.SMILEYS_PEOPLE,
+                                                },
+                                                {
+                                                    name: "Animals & Nature",
+                                                    category:
+                                                        Categories.ANIMALS_NATURE,
+                                                },
+                                                {
+                                                    name: "Food & Drink",
+                                                    category:
+                                                        Categories.FOOD_DRINK,
+                                                },
+                                                {
+                                                    name: "Travel & Places",
+                                                    category:
+                                                        Categories.TRAVEL_PLACES,
+                                                },
+                                                {
+                                                    name: "Activities",
+                                                    category: Categories.ACTIVITIES,
+                                                },
+                                                {
+                                                    name: "Objects",
+                                                    category: Categories.OBJECTS,
+                                                },
+                                                {
+                                                    name: "Symbols",
+                                                    category: Categories.SYMBOLS,
+                                                },
+                                                {
+                                                    name: "Flags",
+                                                    category: Categories.FLAGS,
+                                                },
                                             ]}
-                                            onClickOutside={() => {
-                                                // Close the picker when clicking outside.
+                                            skinTonesDisabled={true}
+                                            onEmojiClick={(object) => {
+                                                setSelectedEmoji(object.emoji);
                                             }}
-                                            emojiButtonColors={{
-                                                people: "#FFCC4D",
-                                                nature: "#4CAF50",
-                                                foods: "#F06292",
-                                                activity: "#2196F3",
-                                                places: "#795548",
-                                                objects: "#607D8B",
+                                            previewConfig={{
+                                                defaultCaption:
+                                                    "What represents your habit?",
                                             }}
-                                            skinTonePosition="none"
-                                            previewPosition="none"
-                                            previewEmoji={values.icon}
-                                            perLine={7}
-                                            dataTheme="light"
                                         />
                                     </div>
                                 </Sheet.Scroller>
