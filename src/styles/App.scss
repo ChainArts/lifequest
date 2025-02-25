@@ -1,6 +1,7 @@
 :root {
     //disable scrollbar
     scrollbar-width: none;
+    -webkit-tap-highlight-color: transparent;
 
     //font
 
@@ -19,6 +20,7 @@
     --background-base: #12151a;
     --background-layer: #1c2028;
     --background-layer-sec: #3c4953;
+    --background-layer-light: #22252d;
 
     --purple-dark: #9a98ef;
     --purple-light: #B6B5EE;
@@ -56,12 +58,21 @@
     --background-base: #f6f8ff;
     --background-layer: #ffffff;
     --background-layer-sec: #e3ecff;
+    --background-layer-light:  #ffffff;
 
     --shadow: hsla(241, 42%, 71%, 0.25);
     --box-shadow: 0px 2px 8px 0px var(--shadow);
 
     --progress-bg: #eaeaf3;
     --progress-bg-round: #eaeaf3;
+
+    .react-modal-sheet-container {
+        background-color: var(--background-base)!important;
+    }
+
+    input {
+        background-color: var(--background-layer-light);
+    }
 }
 
 * {
@@ -117,6 +128,14 @@ main {
     margin-bottom: 1rem;
 }
 
+.react-modal-sheet-container {
+    background-color: var(--background-layer) !important;
+}
+
+.react-modal-sheet-content {
+    padding-top: 1.25rem;
+}
+
 .uppercase {
     text-transform: uppercase;
 }
@@ -137,6 +156,7 @@ main {
 .gray {
     color: var(--text-light) !important;
 }
+
 
 @media screen and (min-width: 768px) {
     .container {
