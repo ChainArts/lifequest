@@ -20,11 +20,11 @@ const GoogleButton = () => {
                 .then((userData) => {
                     console.log("Fetched user data:", userData);
                     // Save the user data to the backend
-                    const user = {
+                    const googleUser = {
                         name: userData.name,
                         email: userData.email,
                     }
-                    console.log(invoke("greet", user));
+                    console.log(invoke("greet", { user: googleUser }));
                     navigate("/home");
                 })
                 .catch((error) => {
