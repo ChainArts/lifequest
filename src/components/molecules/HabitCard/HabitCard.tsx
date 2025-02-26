@@ -4,15 +4,24 @@ import "./HabitCard.scss";
 import LinearProgress from "../../atoms/LinearProgress/LinearProgress";
 import { FluentEmoji } from "@lobehub/fluent-emoji";
 
-const HabitCard = () => {
+
+export interface HabitCardProps {
+    id: { id: { String: string }, tb: string };
+    title: string;
+    goal: number;
+    unit: string;
+    week_days: number;
+    icon: string;
+    color: string;
+}
+
+const HabitCard = ({ title, goal, unit, week_days, icon, color } : HabitCardProps ) => {
     const streak = 5;
-    const activeDays = "1001001";
-    const title = "Workout";
+    const activeDays = week_days.toString(2);
     const nextlevelXp = 100;
     const currentXp = 50;
-    const quantity = 5;
-    const quantityType = "reps";
-    const color = "#9A98EF";
+    const quantity = goal;
+    const quantityType = unit;
     //calculate lighter shade of color
     const colorLight = color + "DD";
 
@@ -33,7 +42,7 @@ const HabitCard = () => {
             <div className="habit-card__icon">
                 <FluentEmoji
                     type={"3d"}
-                    emoji="🏋️"
+                    emoji={icon}
                     size={48}
                     className="emoji"
                 />

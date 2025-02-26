@@ -5,18 +5,25 @@ import "./HabitCards.scss";
 import { useEffect, useState } from "react";
 import HabitForm from "../HabitForm/HabitForm";
 import { invoke } from "@tauri-apps/api/core";
+import { HabitCardProps } from "../../molecules/HabitCard/HabitCard";
+import { AnimatePresence } from "motion/react";
 
 const HabitCards = () => {
     const [isOpen, setOpen] = useState(false);
-    const [habitList, setHabitList] = useState([]);
+    const [habitList, setHabitList] = useState<HabitCardProps[]>([]);
+
+    const fetchHabits = async() => {
+        try {
+            const habits = await invoke("get_habits");
+            setHabitList(habits as HabitCardProps[]);
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     useEffect(() => {
-        invoke("get_habits").then((res) => {
-            setHabitList(res as []);
-            console.log(habitList);
-        });
-    }
-    , []);
+        fetchHabits();
+    }, []);
     return (
         <>
             <section className="container">
@@ -28,8 +35,11 @@ const HabitCards = () => {
                         <button onClick={() => setOpen(true)}>create</button>
                     </div>
                     <div className="habit-cards__list">
-                        <HabitCard />
-                        <HabitCard />
+                        <AnimatePresence mode="sync">
+                            {habitList.map((habit) => (
+                                <HabitCard key={habit.id.id.String} {...habit} />
+                            ))}
+                        </AnimatePresence>
                     </div>
                 </IconContext.Provider>
             </section>

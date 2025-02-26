@@ -19,9 +19,9 @@ pub async fn insert_habit(values: schema::Habit) -> surrealdb::Result<()> {
 }
 
 #[tauri::command]
-pub async fn get_habits() -> surrealdb::Result<Vec<schema::Habit>> {
+pub async fn get_habits() -> surrealdb::Result<serde_json::Value> {
     let mut res= LOCAL_DB.query("SELECT * FROM habit").await?;
 
-    let habits: Vec<schema::Habit> = res.take(0)?;
-    Ok(habits)
+    let habits: Vec<schema::HabitWithId> = res.take(0)?;
+    Ok(json!(habits))
 }
