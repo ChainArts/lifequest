@@ -13,14 +13,14 @@ import DarkModeToggle from "./components/atoms/DarkModeToggle/DarkModeToggle";
 function App() {
     const location = useLocation();
     //TEMP CHECK FOR LOGGED IN
-    const isLoggedIn = location.pathname !== "/";
+    const isLoggedIn = true //location.pathname !== "/";
     return (
         <>
             <DarkModeToggle />
             {isLoggedIn && <IslandHeader />}
             <AnimatePresence mode="wait">
                 <Routes location={location} key={location.pathname}>
-                    <Route path="/" element={<Login />} />
+                    <Route path="/" element={<Home />} />
                     <Route path="/home" element={<Home />} />
                     <Route path="/habits" element={<Habits />} />
                     <Route path="/diary" element={<Diary />} />

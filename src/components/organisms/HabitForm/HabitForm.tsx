@@ -21,10 +21,12 @@ type HabitFormProps = {
     setOpen: (value: boolean) => void;
     isOpen: boolean;
     mode: string;
+    onSubmitSuccess?: () => void;
 };
 
-const HabitForm = ({ setOpen, isOpen, mode }: HabitFormProps) => {
+const HabitForm = ({ setOpen, isOpen, mode, onSubmitSuccess }: HabitFormProps) => {
     const [selectedEmoji, setSelectedEmoji] = useState("");
+    const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
     const weekDaysArr = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 
     const colorsArr = [
@@ -51,8 +53,10 @@ const HabitForm = ({ setOpen, isOpen, mode }: HabitFormProps) => {
             validationSchema={habitSchema}
             onSubmit={(values) => {
                 console.log(values);
-                invoke("insert_habit", { values: values });
-                setOpen(false);
+                invoke("insert_habit", { values: values }).then(() => {
+                    setOpen(false);
+                    onSubmitSuccess && onSubmitSuccess();
+                })
             }}
         >
             {({ values, setFieldValue }) => (
@@ -61,7 +65,10 @@ const HabitForm = ({ setOpen, isOpen, mode }: HabitFormProps) => {
                         <Sheet.Container>
                             <Sheet.Header>
                                 <div className="form-header">
-                                    <button type="button" onClick={() => setOpen(false)}>
+                                    <button
+                                        type="button"
+                                        onClick={() => setOpen(false)}
+                                    >
                                         <HiOutlineX />
                                     </button>
                                     <h2>{mode} Habit</h2>
@@ -75,9 +82,21 @@ const HabitForm = ({ setOpen, isOpen, mode }: HabitFormProps) => {
                                 <Sheet.Scroller>
                                     <div className="container form-container">
                                         <fieldset>
-                                            <label htmlFor="title">Habit Name</label>
-                                            <Field className="single-input" id="title" name="title" type="text" placeholder="new habit" />
-                                            <ErrorMessage name="title" component="div" className="error" />
+                                            <label htmlFor="title">
+                                                Habit Name
+                                            </label>
+                                            <Field
+                                                className="single-input"
+                                                id="title"
+                                                name="title"
+                                                type="text"
+                                                placeholder="new habit"
+                                            />
+                                            <ErrorMessage
+                                                name="title"
+                                                component="div"
+                                                className="error"
+                                            />
                                         </fieldset>
 
                                         <fieldset>
@@ -85,13 +104,27 @@ const HabitForm = ({ setOpen, isOpen, mode }: HabitFormProps) => {
                                             <div className="form-box">
                                                 <label htmlFor="goal">
                                                     Quantity
-                                                    <Field id="goal" name="goal" type="text" inputMode="numeric" />
-                                                    <ErrorMessage name="goal" component="div" className="error" />
+                                                    <Field
+                                                        id="goal"
+                                                        name="goal"
+                                                        type="text"
+                                                        inputMode="numeric"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="goal"
+                                                        component="div"
+                                                        className="error"
+                                                    />
                                                 </label>
 
                                                 <label htmlFor="unit">
                                                     Unit
-                                                    <Field id="unit" name="unit" type="text" placeholder="Repetition" />
+                                                    <Field
+                                                        id="unit"
+                                                        name="unit"
+                                                        type="text"
+                                                        placeholder="Repetition"
+                                                    />
                                                 </label>
                                             </div>
                                         </fieldset>
@@ -99,17 +132,38 @@ const HabitForm = ({ setOpen, isOpen, mode }: HabitFormProps) => {
                                         <fieldset>
                                             <legend>Repeat every</legend>
                                             <div className="form-box">
-                                                {weekDaysArr.map((day, index) => {
-                                                    // Calculate the bit corresponding to this day.
-                                                    const dayBit = 1 << (6 - index);
-                                                    return (
-                                                        <label key={day} htmlFor={day}>
-                                                            {day}
-                                                            <input id={day} name="week_days" type="checkbox" checked={Boolean(values.week_days & dayBit)} onChange={() => setFieldValue("week_days", values.week_days ^ dayBit)} />
-                                                            <span className="toggle" />
-                                                        </label>
-                                                    );
-                                                })}
+                                                {weekDaysArr.map(
+                                                    (day, index) => {
+                                                        // Calculate the bit corresponding to this day.
+                                                        const dayBit =
+                                                            1 << (6 - index);
+                                                        return (
+                                                            <label
+                                                                key={day}
+                                                                htmlFor={day}
+                                                            >
+                                                                {day}
+                                                                <input
+                                                                    id={day}
+                                                                    name="week_days"
+                                                                    type="checkbox"
+                                                                    checked={Boolean(
+                                                                        values.week_days &
+                                                                            dayBit
+                                                                    )}
+                                                                    onChange={() =>
+                                                                        setFieldValue(
+                                                                            "week_days",
+                                                                            values.week_days ^
+                                                                                dayBit
+                                                                        )
+                                                                    }
+                                                                />
+                                                                <span className="toggle" />
+                                                            </label>
+                                                        );
+                                                    }
+                                                )}
                                             </div>
                                         </fieldset>
 
@@ -118,79 +172,76 @@ const HabitForm = ({ setOpen, isOpen, mode }: HabitFormProps) => {
                                             <div className="form-box">
                                                 <label htmlFor="icon">
                                                     Icon
-                                                    <Field id="icon" name="icon" type="text" placeholder="icon" value={selectedEmoji || values.icon} />
+                                                    <Field
+                                                        id="icon"
+                                                        name="icon"
+                                                        type="hidden"
+                                                        placeholder="icon"
+                                                        value={
+                                                            selectedEmoji ||
+                                                            values.icon
+                                                        }
+                                                    />
+                                                    <button
+                                                        className="input"
+                                                        onClick={() =>
+                                                            setEmojiPickerOpen(
+                                                                true
+                                                            )
+                                                        }
+                                                    >
+                                                        {selectedEmoji ||
+                                                            values.icon}
+                                                    </button>
                                                 </label>
                                                 <div className="form-box-color">
                                                     {colorsArr.map((color) => (
-                                                        <label key={color.color} htmlFor={color.color}>
+                                                        <label
+                                                            key={color.color}
+                                                            htmlFor={
+                                                                color.color
+                                                            }
+                                                        >
                                                             <div
                                                                 className="color-box"
                                                                 style={{
-                                                                    backgroundColor: color.hex,
+                                                                    backgroundColor:
+                                                                        color.hex,
                                                                 }}
                                                             />
-                                                            <Field id={color.color} name="color" type="radio" value={color.hex} />
+                                                            <Field
+                                                                id={color.color}
+                                                                name="color"
+                                                                type="radio"
+                                                                value={
+                                                                    color.hex
+                                                                }
+                                                            />
                                                             <div
                                                                 className="color-button"
                                                                 style={
                                                                     {
-                                                                        "--_card-color": color.hex,
+                                                                        "--_card-color":
+                                                                            color.hex,
                                                                     } as React.CSSProperties
                                                                 }
                                                             />
                                                         </label>
                                                     ))}
-                                                    <ErrorMessage name="color" component="div" className="error" />
+                                                    <ErrorMessage
+                                                        name="color"
+                                                        component="div"
+                                                        className="error"
+                                                    />
                                                 </div>
                                             </div>
                                         </fieldset>
-
-                                        <EmojiPicker
-                                            autoFocusSearch={false}
-                                            lazyLoadEmojis={true}
-                                            open={true}
-                                            width="100%"
-                                            categories={[
-                                                {
-                                                    name: "Smileys & People",
-                                                    category: Categories.SMILEYS_PEOPLE,
-                                                },
-                                                {
-                                                    name: "Animals & Nature",
-                                                    category: Categories.ANIMALS_NATURE,
-                                                },
-                                                {
-                                                    name: "Food & Drink",
-                                                    category: Categories.FOOD_DRINK,
-                                                },
-                                                {
-                                                    name: "Travel & Places",
-                                                    category: Categories.TRAVEL_PLACES,
-                                                },
-                                                {
-                                                    name: "Activities",
-                                                    category: Categories.ACTIVITIES,
-                                                },
-                                                {
-                                                    name: "Objects",
-                                                    category: Categories.OBJECTS,
-                                                },
-                                                {
-                                                    name: "Symbols",
-                                                    category: Categories.SYMBOLS,
-                                                },
-                                                {
-                                                    name: "Flags",
-                                                    category: Categories.FLAGS,
-                                                },
-                                            ]}
-                                            skinTonesDisabled={true}
-                                            onEmojiClick={(object) => {
-                                                setSelectedEmoji(object.emoji);
-                                            }}
-                                            previewConfig={{
-                                                defaultCaption: "What represents your habit?",
-                                            }}
+                                        <EmojiPickerComponent
+                                            setEmojiPickerOpen={
+                                                setEmojiPickerOpen
+                                            }
+                                            emojiPickerOpen={emojiPickerOpen}
+                                            setSelectedEmoji={setSelectedEmoji}
                                         />
                                     </div>
                                 </Sheet.Scroller>
@@ -203,5 +254,79 @@ const HabitForm = ({ setOpen, isOpen, mode }: HabitFormProps) => {
         </Formik>
     );
 };
+
+
+type EmojiPickerProps = {
+    emojiPickerOpen: boolean;
+    setEmojiPickerOpen: (value: boolean) => void;
+    setSelectedEmoji: (value: string) => void;
+};
+
+
+const EmojiPickerComponent = ({ emojiPickerOpen, setEmojiPickerOpen, setSelectedEmoji }: EmojiPickerProps) => {
+    return (
+        <Sheet
+            isOpen={emojiPickerOpen}
+            onClose={() => setEmojiPickerOpen(false)}
+            detent="content-height"
+
+            
+        >
+            <Sheet.Container>
+                <Sheet.Header/>
+                <Sheet.Content>
+                    <EmojiPicker
+                        autoFocusSearch={false}
+                        lazyLoadEmojis={true}
+                        open={emojiPickerOpen}
+                        width="100%"
+                        searchDisabled={true}
+                        height={"50svh"}
+                        categories={[
+                            {
+                                name: "Smileys & People",
+                                category: Categories.SMILEYS_PEOPLE,
+                            },
+                            {
+                                name: "Animals & Nature",
+                                category: Categories.ANIMALS_NATURE,
+                            },
+                            {
+                                name: "Food & Drink",
+                                category: Categories.FOOD_DRINK,
+                            },
+                            {
+                                name: "Travel & Places",
+                                category: Categories.TRAVEL_PLACES,
+                            },
+                            {
+                                name: "Activities",
+                                category: Categories.ACTIVITIES,
+                            },
+                            {
+                                name: "Objects",
+                                category: Categories.OBJECTS,
+                            },
+                            {
+                                name: "Symbols",
+                                category: Categories.SYMBOLS,
+                            },
+                        ]}
+                        skinTonesDisabled={true}
+                        onEmojiClick={(object) => {
+                            setSelectedEmoji(object.emoji);
+                        }}
+                        previewConfig={{
+                            defaultCaption: "What represents your habit?",
+                            defaultEmoji: "1f3af",
+                        }}
+                    />
+                </Sheet.Content>
+            </Sheet.Container>
+            <Sheet.Backdrop onTap={() => setEmojiPickerOpen(false)} />
+        </Sheet>
+    );
+}
+    
 
 export default HabitForm;

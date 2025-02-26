@@ -44,7 +44,7 @@ const HabitCards = () => {
                 </IconContext.Provider>
             </section>
             <section className="container">
-                <HabitForm setOpen={setOpen} isOpen={isOpen} mode="create" />
+                <HabitForm setOpen={setOpen} isOpen={isOpen} mode="create" onSubmitSuccess={fetchHabits} />
             </section>
         </>
     );

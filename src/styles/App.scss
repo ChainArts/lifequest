@@ -60,7 +60,7 @@
     --background-layer-sec: #e3ecff;
     --background-layer-light:  #ffffff;
 
-    --shadow: hsla(241, 42%, 71%, 0.25);
+    --shadow: hsla(241, 42%, 71%, 0.10);
     --box-shadow: 0px 2px 8px 0px var(--shadow);
 
     --progress-bg: #eaeaf3;
@@ -119,6 +119,10 @@ main {
         border-radius: 2rem 2rem 0 0;
         padding: 0.5rem 0;
     }
+}
+
+button, a {
+    cursor: pointer;
 }
 
 .container {

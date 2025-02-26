@@ -71,6 +71,7 @@
     border-radius: var(--radius);
     background-color: var(--background-layer-light);
     gap: var(--gap);
+    box-shadow: var(--box-shadow);
 
     & > *:not(:last-child)::after {
         content: "";
@@ -94,7 +95,7 @@
         gap: var(--gap);
     }
 
-    input {
+    input, .input {
         padding: 0;
         background: none;
         font-size: 1rem;
@@ -143,6 +144,7 @@ input {
     background-color: var(--background-base);
     transition: outline 0.3s var(--ease);
     outline: 1px solid transparent;
+    user-select: text;
 
     
 &:has(+ .error) {
@@ -245,6 +247,9 @@ input {
 
 
 .EmojiPickerReact {
+    position: absolute !important;
+    bottom: 0;
+    left: 0;
     --epr-bg-color: var(--background-layer-light) !important;
     --epr-hover-bg-color: var(--progress-bg-round) !important;
     --epr-emoji-hover-color: var(--progress-bg-round) !important;
@@ -258,4 +263,9 @@ input {
     border: none !important;
     font-family: "Poppins", sans-serif !important;
     font-weight: 400 !important;
+
+    h2 {
+        display: none !important;
+    }   
 }
+
