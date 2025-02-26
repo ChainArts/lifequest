@@ -17,7 +17,7 @@ const ActiveHabit = ({
     name,
     goal,
     done,
-    emoji = "IconMSlightlySmilingFace",
+    emoji = "😀",
     setHabitDone,
 }: ActiveHabitProps & {
     setHabitDone: (id: number, add: number) => void;
@@ -43,7 +43,7 @@ const ActiveHabit = ({
                 <div className="habit-card__icon">
                     <FluentEmoji
                         type={"3d"}
-                        emoji="😀"
+                        emoji={emoji}
                         size={32}
                         className="emoji"
                     />

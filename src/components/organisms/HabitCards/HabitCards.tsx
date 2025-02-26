@@ -2,11 +2,21 @@ import { IconContext } from "react-icons";
 import Headline from "../../atoms/Headline/Headline";
 import HabitCard from "../../molecules/HabitCard/HabitCard";
 import "./HabitCards.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HabitForm from "../HabitForm/HabitForm";
+import { invoke } from "@tauri-apps/api/core";
 
 const HabitCards = () => {
     const [isOpen, setOpen] = useState(false);
+    const [habitList, setHabitList] = useState([]);
+
+    useEffect(() => {
+        invoke("get_habits").then((res) => {
+            setHabitList(res as []);
+            console.log(habitList);
+        });
+    }
+    , []);
     return (
         <>
             <section className="container">

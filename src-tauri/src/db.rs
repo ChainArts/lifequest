@@ -1,14 +1,10 @@
-use serde::Deserialize;
-// use surrealdb::Surreal;
-// use surrealdb::engine::local::{Db, RocksDb};
+use std::sync::LazyLock;
 
-#[derive(Deserialize, Debug)]
-pub struct GoogleUser {
-    pub email: String,
-    pub name: String,
-}
+use surrealdb::engine::local::Db;
+use surrealdb::engine::remote::ws::Client;
+use surrealdb::Surreal;
 
-#[tauri::command]
-pub fn greet(user: GoogleUser) -> String {
-    format!("Hello, {} ({})", user.name, user.email)
-}
+
+pub static LOCAL_DB: LazyLock<Surreal<Db>> = LazyLock::new(Surreal::init);
+pub static EXTERNAL_DB: LazyLock<Surreal<Client>> = LazyLock::new(Surreal::init);
+
