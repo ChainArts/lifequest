@@ -136,6 +136,19 @@ main {
     padding-top: 1.25rem;
 }
 
+.container--full {
+    margin: 0;
+    padding: 2rem 0.75rem;
+}
+
+.login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5rem;
+}
+
 .uppercase {
     text-transform: uppercase;
 }
