@@ -13,7 +13,8 @@
     --text: #ffffff;
     --text-invert: #ffffff;
     --text-sec: #cabbfb;
-    --text-light: #b2c0cb;
+    --text-light: rgb(182, 182, 182);
+    --error: #e57373;
 
     // ui
 
@@ -21,6 +22,8 @@
     --background-layer: #1c2028;
     --background-layer-sec: #3c4953;
     --background-layer-light: #22252d;
+
+    --disabled: rgb(182, 182, 182);
 
     --purple-dark: #9a98ef;
     --purple-light: #B6B5EE;
@@ -40,9 +43,6 @@
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
@@ -96,8 +96,15 @@ body {
     color: var(--text);
     min-height: 100svh;
     height: 100%;
-
     transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
+    scrollbar-color: var(--background-layer-sec) transparent;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+
 }
 
 main {

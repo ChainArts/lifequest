@@ -1,4 +1,4 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, useFormikContext } from "formik";
 import * as yup from "yup";
 import "./HabitForm.scss";
 import { HiOutlineX } from "react-icons/hi";
@@ -6,9 +6,10 @@ import { Sheet } from "react-modal-sheet";
 import { useState } from "react";
 import EmojiPicker, { Categories } from "emoji-picker-react";
 import { invoke } from "@tauri-apps/api/core";
+import { BiSolidUpArrow, BiSolidDownArrow, BiSolidRightArrow } from "react-icons/bi";
 
 const habitSchema = yup.object().shape({
-    title: yup.string().required("Habit name is required"),
+    title: yup.string().required("name is required"),
     goal: yup.number().positive("Goal must be positive").required("Goal is required").typeError("Goal must be a number"),
     color: yup.string().required("Color is required"),
     // Optional fields:
@@ -22,10 +23,17 @@ type HabitFormProps = {
     isOpen: boolean;
     mode: string;
     onSubmitSuccess?: () => void;
+    initialValues?: {
+        title: string;
+        goal: number;
+        unit: string;
+        week_days: number;
+        icon: string;
+        color: string;
+    };
 };
 
-const HabitForm = ({ setOpen, isOpen, mode, onSubmitSuccess }: HabitFormProps) => {
-    const [selectedEmoji, setSelectedEmoji] = useState("");
+const HabitForm = ({ setOpen, isOpen, mode, onSubmitSuccess, initialValues }: HabitFormProps) => {
     const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
     const weekDaysArr = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 
@@ -40,26 +48,28 @@ const HabitForm = ({ setOpen, isOpen, mode, onSubmitSuccess }: HabitFormProps) =
         { color: "red", hex: "#ef9898" },
     ];
 
+    const defaultValues = {
+        title: "",
+        goal: 1,
+        unit: "",
+        week_days: 0b1111111,
+        icon: "🎯",
+        color: "#F9b0d5",
+    };
+
     return (
         <Formik
-            initialValues={{
-                title: "",
-                goal: 1,
-                unit: "",
-                week_days: 0b1111111,
-                icon: "🎯",
-                color: "#F9b0d5",
-            }}
+            initialValues={initialValues || defaultValues}
             validationSchema={habitSchema}
-            onSubmit={(values) => {
-                console.log(values);
+            onSubmit={(values, { resetForm }) => {
                 invoke("insert_habit", { values: values }).then(() => {
+                    resetForm({ values: defaultValues });
                     setOpen(false);
                     onSubmitSuccess && onSubmitSuccess();
-                })
+                });
             }}
         >
-            {({ values, setFieldValue }) => (
+            {({ values, setFieldValue, resetForm }) => (
                 <Form id="habitForm">
                     <Sheet isOpen={isOpen} onClose={() => setOpen(false)}>
                         <Sheet.Container>
@@ -67,7 +77,10 @@ const HabitForm = ({ setOpen, isOpen, mode, onSubmitSuccess }: HabitFormProps) =
                                 <div className="form-header">
                                     <button
                                         type="button"
-                                        onClick={() => setOpen(false)}
+                                        onClick={() => {
+                                            resetForm({ values: defaultValues });
+                                            setOpen(false);
+                                        }}
                                     >
                                         <HiOutlineX />
                                     </button>
@@ -82,167 +95,89 @@ const HabitForm = ({ setOpen, isOpen, mode, onSubmitSuccess }: HabitFormProps) =
                                 <Sheet.Scroller>
                                     <div className="container form-container">
                                         <fieldset>
-                                            <label htmlFor="title">
-                                                Habit Name
-                                            </label>
-                                            <Field
-                                                className="single-input"
-                                                id="title"
-                                                name="title"
-                                                type="text"
-                                                placeholder="new habit"
-                                            />
-                                            <ErrorMessage
-                                                name="title"
-                                                component="div"
-                                                className="error"
-                                            />
+                                            <label htmlFor="title">Name Your Habit</label>
+                                            <Field className="single-input" id="title" name="title" type="text" placeholder="new habit" />
+                                            <ErrorMessage name="title" component="div" className="error" />
                                         </fieldset>
 
                                         <fieldset>
-                                            <legend>Set your Goal</legend>
+                                            <legend>Define your Goal</legend>
                                             <div className="form-box">
                                                 <label htmlFor="goal">
                                                     Quantity
-                                                    <Field
-                                                        id="goal"
-                                                        name="goal"
-                                                        type="text"
-                                                        inputMode="numeric"
-                                                    />
-                                                    <ErrorMessage
-                                                        name="goal"
-                                                        component="div"
-                                                        className="error"
-                                                    />
+                                                    <Field id="goal" name="goal" type="number" inputMode="numeric" />
+                                                    <div className="arrow-buttons">
+                                                        <button type="button" onClick={() => setFieldValue("goal", Math.max(Number(values.goal) + 1, 1))}>
+                                                            <BiSolidUpArrow />
+                                                        </button>
+                                                        <button type="button" onClick={() => setFieldValue("goal", Math.max(Number(values.goal) - 1, 1))}>
+                                                            <BiSolidDownArrow />
+                                                        </button>
+                                                    </div>
+                                                    <ErrorMessage name="goal" component="div" className="error" />
                                                 </label>
 
                                                 <label htmlFor="unit">
                                                     Unit
-                                                    <Field
-                                                        id="unit"
-                                                        name="unit"
-                                                        type="text"
-                                                        placeholder="Repetition"
-                                                    />
+                                                    <Field id="unit" name="unit" type="text" placeholder="Repetition" />
                                                 </label>
                                             </div>
                                         </fieldset>
 
                                         <fieldset>
-                                            <legend>Repeat every</legend>
+                                            <legend>Personalize your Habit</legend>
                                             <div className="form-box">
-                                                {weekDaysArr.map(
-                                                    (day, index) => {
-                                                        // Calculate the bit corresponding to this day.
-                                                        const dayBit =
-                                                            1 << (6 - index);
-                                                        return (
-                                                            <label
-                                                                key={day}
-                                                                htmlFor={day}
-                                                            >
-                                                                {day}
-                                                                <input
-                                                                    id={day}
-                                                                    name="week_days"
-                                                                    type="checkbox"
-                                                                    checked={Boolean(
-                                                                        values.week_days &
-                                                                            dayBit
-                                                                    )}
-                                                                    onChange={() =>
-                                                                        setFieldValue(
-                                                                            "week_days",
-                                                                            values.week_days ^
-                                                                                dayBit
-                                                                        )
-                                                                    }
-                                                                />
-                                                                <span className="toggle" />
-                                                            </label>
-                                                        );
-                                                    }
-                                                )}
-                                            </div>
-                                        </fieldset>
-
-                                        <fieldset>
-                                            <legend>Appearance</legend>
-                                            <div className="form-box">
-                                                <label htmlFor="icon">
+                                                <label htmlFor="icon" onClick={() => setEmojiPickerOpen(true)}>
                                                     Icon
-                                                    <Field
-                                                        id="icon"
-                                                        name="icon"
-                                                        type="hidden"
-                                                        placeholder="icon"
-                                                        value={
-                                                            selectedEmoji ||
-                                                            values.icon
-                                                        }
-                                                    />
-                                                    <button
-                                                        className="input"
-                                                        onClick={() =>
-                                                            setEmojiPickerOpen(
-                                                                true
-                                                            )
-                                                        }
-                                                    >
-                                                        {selectedEmoji ||
-                                                            values.icon}
-                                                    </button>
+                                                    <Field id="icon" name="icon" type="hidden" placeholder="icon" value={values.icon} />
+                                                    <div>
+                                                        <button className="input">{values.icon}</button>
+                                                        <BiSolidRightArrow className="arrow" />
+                                                    </div>
                                                 </label>
                                                 <div className="form-box-color">
                                                     {colorsArr.map((color) => (
-                                                        <label
-                                                            key={color.color}
-                                                            htmlFor={
-                                                                color.color
-                                                            }
-                                                        >
+                                                        <label key={color.color} htmlFor={color.color}>
                                                             <div
                                                                 className="color-box"
                                                                 style={{
-                                                                    backgroundColor:
-                                                                        color.hex,
+                                                                    backgroundColor: color.hex,
                                                                 }}
                                                             />
-                                                            <Field
-                                                                id={color.color}
-                                                                name="color"
-                                                                type="radio"
-                                                                value={
-                                                                    color.hex
-                                                                }
-                                                            />
+                                                            <Field id={color.color} name="color" type="radio" value={color.hex} />
                                                             <div
                                                                 className="color-button"
                                                                 style={
                                                                     {
-                                                                        "--_card-color":
-                                                                            color.hex,
+                                                                        "--_card-color": color.hex,
                                                                     } as React.CSSProperties
                                                                 }
                                                             />
                                                         </label>
                                                     ))}
-                                                    <ErrorMessage
-                                                        name="color"
-                                                        component="div"
-                                                        className="error"
-                                                    />
+                                                    <ErrorMessage name="color" component="div" className="error" />
                                                 </div>
                                             </div>
                                         </fieldset>
-                                        <EmojiPickerComponent
-                                            setEmojiPickerOpen={
-                                                setEmojiPickerOpen
-                                            }
-                                            emojiPickerOpen={emojiPickerOpen}
-                                            setSelectedEmoji={setSelectedEmoji}
-                                        />
+
+                                        <fieldset>
+                                            <legend>Choose Your Routine</legend>
+                                            <div className="form-box">
+                                                {weekDaysArr.map((day, index) => {
+                                                    // Calculate the bit corresponding to this day.
+                                                    const dayBit = 1 << (6 - index);
+                                                    return (
+                                                        <label key={day} htmlFor={day}>
+                                                            {day}
+                                                            <input id={day} name="week_days" type="checkbox" checked={Boolean(values.week_days & dayBit)} onChange={() => setFieldValue("week_days", values.week_days ^ dayBit)} />
+                                                            <span className="toggle" />
+                                                        </label>
+                                                    );
+                                                })}
+                                            </div>
+                                        </fieldset>
+
+                                        <EmojiPickerComponent setEmojiPickerOpen={setEmojiPickerOpen} emojiPickerOpen={emojiPickerOpen} />
                                     </div>
                                 </Sheet.Scroller>
                             </Sheet.Content>
@@ -255,25 +190,18 @@ const HabitForm = ({ setOpen, isOpen, mode, onSubmitSuccess }: HabitFormProps) =
     );
 };
 
-
 type EmojiPickerProps = {
     emojiPickerOpen: boolean;
     setEmojiPickerOpen: (value: boolean) => void;
-    setSelectedEmoji: (value: string) => void;
 };
 
+const EmojiPickerComponent = ({ emojiPickerOpen, setEmojiPickerOpen }: EmojiPickerProps) => {
+    const { setFieldValue } = useFormikContext();
 
-const EmojiPickerComponent = ({ emojiPickerOpen, setEmojiPickerOpen, setSelectedEmoji }: EmojiPickerProps) => {
     return (
-        <Sheet
-            isOpen={emojiPickerOpen}
-            onClose={() => setEmojiPickerOpen(false)}
-            detent="content-height"
-
-            
-        >
+        <Sheet isOpen={emojiPickerOpen} onClose={() => setEmojiPickerOpen(false)} detent="content-height">
             <Sheet.Container>
-                <Sheet.Header/>
+                <Sheet.Header />
                 <Sheet.Content>
                     <EmojiPicker
                         autoFocusSearch={false}
@@ -307,14 +235,12 @@ const EmojiPickerComponent = ({ emojiPickerOpen, setEmojiPickerOpen, setSelected
                                 name: "Objects",
                                 category: Categories.OBJECTS,
                             },
-                            {
-                                name: "Symbols",
-                                category: Categories.SYMBOLS,
-                            },
                         ]}
                         skinTonesDisabled={true}
                         onEmojiClick={(object) => {
-                            setSelectedEmoji(object.emoji);
+                            // Update Formik's icon field directly
+                            setFieldValue("icon", object.emoji);
+                            setEmojiPickerOpen(false);
                         }}
                         previewConfig={{
                             defaultCaption: "What represents your habit?",
@@ -326,7 +252,6 @@ const EmojiPickerComponent = ({ emojiPickerOpen, setEmojiPickerOpen, setSelected
             <Sheet.Backdrop onTap={() => setEmojiPickerOpen(false)} />
         </Sheet>
     );
-}
-    
+};
 
 export default HabitForm;
