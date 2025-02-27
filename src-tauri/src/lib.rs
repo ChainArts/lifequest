@@ -49,7 +49,8 @@ pub fn run() {
             db_commands::get_habits,
             db_commands::update_habit,
             db_commands::delete_habit,
-            db_commands::get_single_habit
+            db_commands::get_single_habit,
+            db_commands::get_todays_habits
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

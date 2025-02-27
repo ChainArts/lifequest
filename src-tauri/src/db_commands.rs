@@ -1,5 +1,6 @@
 mod schema;
 use serde_json::json;
+use serde_json::Number;
 
 use crate::db::LOCAL_DB;
 
@@ -42,4 +43,21 @@ pub async fn delete_habit(id: String) -> surrealdb::Result<()> {
     println!("Deleting habit: {:?}", id);
     let _res: Option<schema::Habit> = LOCAL_DB.delete(("habit", id)).await?;
     Ok(())
+}
+
+#[tauri::command]
+pub async fn get_todays_habits(today_index: Number) -> surrealdb::Result<serde_json::Value> {
+
+    // pase today_index to u8
+    let today_index = today_index.as_u64().unwrap() as u8;
+    let today_mask = 1 << (7 - today_index);
+
+    // log today_mask as binary
+    println!("Today mask: {:07b}", today_mask);
+
+    let mut res = LOCAL_DB.query("SELECT * FROM habit WHERE (week_day & $today_mask) != 0")
+        .bind(("today_mask", today_mask))
+        .await?;
+    let habits: Vec<schema::HabitWithId> = res.take(0)?;
+    Ok(json!(habits))
 }

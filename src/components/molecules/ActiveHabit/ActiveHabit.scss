@@ -68,7 +68,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, var(--purple-dark) 0%, transparent 120%);
+    background: linear-gradient(135deg, var(--_card-color) 0%, transparent 120%);
     border-radius: calc(var(--radius) / 2);
 
     & svg {

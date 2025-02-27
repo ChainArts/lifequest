@@ -5,7 +5,7 @@ import { IconContext } from "react-icons";
 
 type DailyHabitsProps = {
     activeHabits: ActiveHabitProps[];
-    setHabitDone: (id: number, add: number) => void;
+    setHabitDone: (id: string, add: number) => void;
 };
 
 const DailyHabits = ({ activeHabits, setHabitDone }: DailyHabitsProps) => {
@@ -16,16 +16,8 @@ const DailyHabits = ({ activeHabits, setHabitDone }: DailyHabitsProps) => {
                     Todays Habits
                 </Headline>
                 <div className="daily-habits__list">
-                    {activeHabits.map((habit) => (
-                        <ActiveHabit
-                            key={habit.id}
-                            id={habit.id}
-                            name={habit.name}
-                            goal={habit.goal}
-                            done={habit.done}
-                            emoji={habit.emoji}
-                            setHabitDone={setHabitDone}
-                        />
+                    {activeHabits.map((habit, index) => (
+                        <ActiveHabit key={index} habit={habit} setHabitDone={setHabitDone} />
                     ))}
                 </div>
             </IconContext.Provider>
