@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Habits from "./pages/Habits";
 import Diary from "./pages/Diary";
 import Profile from "./pages/Profile";
+import HabitDetail from "./pages/HabitDetail";
 import Login from "./pages/Login";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { AnimatePresence } from "motion/react";
@@ -20,9 +21,10 @@ function App() {
             {isLoggedIn && <IslandHeader />}
             <AnimatePresence mode="wait">
                 <Routes location={location} key={location.pathname}>
-                    <Route path="/" element={<Home />} />
+                    <Route path="/" element={<Login />} />
                     <Route path="/home" element={<Home />} />
                     <Route path="/habits" element={<Habits />} />
+                    <Route path="habits/:id" element={<HabitDetail />} />
                     <Route path="/diary" element={<Diary />} />
                     <Route path="/profile" element={<Profile />} />
                 </Routes>

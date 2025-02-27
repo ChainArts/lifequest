@@ -22,6 +22,7 @@ type HabitFormProps = {
     setOpen: (value: boolean) => void;
     isOpen: boolean;
     mode: string;
+    id?: string
     onSubmitSuccess?: () => void;
     initialValues?: {
         title: string;
@@ -33,7 +34,7 @@ type HabitFormProps = {
     };
 };
 
-const HabitForm = ({ setOpen, isOpen, mode, onSubmitSuccess, initialValues }: HabitFormProps) => {
+const HabitForm = ({id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }: HabitFormProps) => {
     const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
     const weekDaysArr = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 
@@ -62,11 +63,18 @@ const HabitForm = ({ setOpen, isOpen, mode, onSubmitSuccess, initialValues }: Ha
             initialValues={initialValues || defaultValues}
             validationSchema={habitSchema}
             onSubmit={(values, { resetForm }) => {
-                invoke("insert_habit", { values: values }).then(() => {
-                    resetForm({ values: defaultValues });
-                    setOpen(false);
-                    onSubmitSuccess && onSubmitSuccess();
-                });
+                if (mode === "edit") {
+                    invoke("update_habit", { values: values, id: id }).then(() => {
+                        setOpen(false);
+                        onSubmitSuccess && onSubmitSuccess();
+                    });
+                } else {
+                    invoke("insert_habit", { values: values }).then(() => {
+                        resetForm({ values: defaultValues });
+                        setOpen(false);
+                        onSubmitSuccess && onSubmitSuccess();
+                    });
+                }
             }}
         >
             {({ values, setFieldValue, resetForm }) => (
@@ -78,7 +86,9 @@ const HabitForm = ({ setOpen, isOpen, mode, onSubmitSuccess, initialValues }: Ha
                                     <button
                                         type="button"
                                         onClick={() => {
-                                            resetForm({ values: defaultValues });
+                                            if (mode !== "edit") {
+                                                resetForm({ values: defaultValues });
+                                            }
                                             setOpen(false);
                                         }}
                                     >

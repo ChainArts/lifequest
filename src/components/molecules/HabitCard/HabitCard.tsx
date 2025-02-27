@@ -3,10 +3,10 @@ import Card from "../../molecules/Card/Card";
 import "./HabitCard.scss";
 import LinearProgress from "../../atoms/LinearProgress/LinearProgress";
 import { FluentEmoji } from "@lobehub/fluent-emoji";
-
+import { NavLink } from "react-router-dom";
 
 export interface HabitCardProps {
-    id: { id: { String: string }, tb: string };
+    id: { id: { String: string }; tb: string };
     title: string;
     goal: number;
     unit: string;
@@ -15,7 +15,7 @@ export interface HabitCardProps {
     color: string;
 }
 
-const HabitCard = ({ title, goal, unit, week_days, icon, color } : HabitCardProps ) => {
+const HabitCard = ({ id, title, goal, unit, week_days, icon, color }: HabitCardProps) => {
     const streak = 5;
     const activeDays = week_days.toString(2);
     const nextlevelXp = 100;
@@ -30,59 +30,51 @@ const HabitCard = ({ title, goal, unit, week_days, icon, color } : HabitCardProp
     const days = ["M", "T", "W", "T", "F", "S", "S"];
 
     return (
-        <Card
-            className="habit-card"
-            style={
-                {
-                    "--_card-color": color,
-                    "--_card-color-light": colorLight,
-                } as React.CSSProperties
-            }
-        >
-            <div className="habit-card__icon">
-                <FluentEmoji
-                    type={"3d"}
-                    emoji={icon}
-                    size={48}
-                    className="emoji"
-                />
-            </div>
-
-            <div className="habit-card__content">
-                <div className="habit-card__title">
-                    <div className="habit-card__info">
-                        <span className="fst--upper-heading">{`${quantity} ${quantityType}`}</span>
-
-                        <span className="habit-card__title">{title}</span>
-                    </div>
-
-                    <span className="fst--upper-heading">
-                        <AiFillFire /> {streak}
-                    </span>
+        <NavLink to={`/habits/${id.id.String}`} className="habit-card__link">
+            <Card
+                className="habit-card"
+                style={
+                    {
+                        "--_card-color": color,
+                        "--_card-color-light": colorLight,
+                    } as React.CSSProperties
+                }
+            >
+                <div className="habit-card__icon">
+                    <FluentEmoji type={"3d"} emoji={icon} size={48} className="emoji" />
                 </div>
-                <div className="habit-card__progress">
-                    <div className="habit-card__details">
-                        <div className="habit-card__week">
-                            {days.map((day, index) => (
-                                <div
-                                    key={index}
-                                    className={`habit-card__day ${
-                                        activeDaysArray[index] ? "active" : ""
-                                    }`}
-                                >
-                                    {day}
-                                </div>
-                            ))}
+
+                <div className="habit-card__content">
+                    <div className="habit-card__title">
+                        <div className="habit-card__info">
+                            <span className="fst--upper-heading">{`${quantity} ${quantityType}`}</span>
+
+                            <span className="habit-card__title">{title}</span>
                         </div>
-                        <div>
-                            <span className="fst--upper-heading">LVL</span>
-                            <span className="habit-card__level">12</span>
-                        </div>
+
+                        <span className="fst--upper-heading">
+                            <AiFillFire /> {streak}
+                        </span>
                     </div>
-                    <LinearProgress goal={nextlevelXp} done={currentXp} />
+                    <div className="habit-card__progress">
+                        <div className="habit-card__details">
+                            <div className="habit-card__week">
+                                {days.map((day, index) => (
+                                    <div key={index} className={`habit-card__day ${activeDaysArray[index] ? "active" : ""}`}>
+                                        {day}
+                                    </div>
+                                ))}
+                            </div>
+                            <div>
+                                <span className="fst--upper-heading">LVL</span>
+                                <span className="habit-card__level">12</span>
+                            </div>
+                        </div>
+                        <LinearProgress goal={nextlevelXp} done={currentXp} />
+                    </div>
                 </div>
-            </div>
-        </Card>
+            </Card>
+        </NavLink>
     );
 };
 
