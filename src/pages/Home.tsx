@@ -32,7 +32,7 @@ const Home = () => {
     const [habits, setHabits] = useState<ActiveHabitProps[]>([]);
     const [xp, setXP] = useState(0);
 
-    const today = new Date().getDay();
+    const today = new Date().getDay() - 1;
 
     const fetchHabits = async () => {
         try {
@@ -56,7 +56,7 @@ const Home = () => {
 
     const calculateProgress = (): number => {
         const totalHabits = habits.length;
-        if (totalHabits === 0) return 100;
+        if (totalHabits === 0) return 0;
 
         const totalDone = habits.reduce((total, habit) => total + habit.done / habit.goal, 0);
 

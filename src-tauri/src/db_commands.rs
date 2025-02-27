@@ -22,6 +22,20 @@ pub async fn get_habits() -> surrealdb::Result<serde_json::Value> {
     let mut res = LOCAL_DB.query("SELECT * FROM habit").await?;
 
     let habits: Vec<schema::HabitWithId> = res.take(0)?;
+
+    // map over all habits and change the id to a string
+    // let habits: Vec<schema::HabitWithId> = habits.into_iter().map(|habit| {
+    //     schema::HabitWithId {
+    //         id: habit.id.to_string(),
+    //         title: habit.title,
+    //         goal: habit.goal,
+    //         unit: habit.unit,
+    //         week_days: habit.week_days,
+    //         icon: habit.icon,
+    //         color: habit.color,
+    //     }
+    // }).collect();
+
     Ok(json!(habits))
 }
 
@@ -47,17 +61,10 @@ pub async fn delete_habit(id: String) -> surrealdb::Result<()> {
 
 #[tauri::command]
 pub async fn get_todays_habits(today_index: Number) -> surrealdb::Result<serde_json::Value> {
-
-    // pase today_index to u8
-    let today_index = today_index.as_u64().unwrap() as u8;
-    let today_mask = 1 << (7 - today_index);
-
-    // log today_mask as binary
-    println!("Today mask: {:07b}", today_mask);
-
-    let mut res = LOCAL_DB.query("SELECT * FROM habit WHERE (week_day & $today_mask) != 0")
-        .bind(("today_mask", today_mask))
-        .await?;
+    let mut res = LOCAL_DB
+    .query("SELECT * FROM habit WHERE array::at(week_days, $index) = true")
+    .bind(("index", today_index))
+    .await?;
     let habits: Vec<schema::HabitWithId> = res.take(0)?;
     Ok(json!(habits))
 }

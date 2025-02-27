@@ -22,19 +22,19 @@ type HabitFormProps = {
     setOpen: (value: boolean) => void;
     isOpen: boolean;
     mode: string;
-    id?: string
+    id?: string;
     onSubmitSuccess?: () => void;
     initialValues?: {
         title: string;
         goal: number;
         unit: string;
-        week_days: number;
+        week_days: Array<boolean>;
         icon: string;
         color: string;
     };
 };
 
-const HabitForm = ({id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }: HabitFormProps) => {
+const HabitForm = ({ id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }: HabitFormProps) => {
     const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
     const weekDaysArr = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 
@@ -53,7 +53,7 @@ const HabitForm = ({id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }:
         title: "",
         goal: 1,
         unit: "",
-        week_days: 0b1111111,
+        week_days: [true, true, true, true, true, true, true],
         icon: "🎯",
         color: "#F9b0d5",
     };
@@ -174,12 +174,10 @@ const HabitForm = ({id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }:
                                             <legend>Choose Your Routine</legend>
                                             <div className="form-box">
                                                 {weekDaysArr.map((day, index) => {
-                                                    // Calculate the bit corresponding to this day.
-                                                    const dayBit = 1 << (6 - index);
                                                     return (
                                                         <label key={day} htmlFor={day}>
                                                             {day}
-                                                            <input id={day} name="week_days" type="checkbox" checked={Boolean(values.week_days & dayBit)} onChange={() => setFieldValue("week_days", values.week_days ^ dayBit)} />
+                                                            <input id={day} name="week_days" type="checkbox" checked={values.week_days[index]} onChange={() => setFieldValue(`week_days[${index}]`, !values.week_days[index])} />
                                                             <span className="toggle" />
                                                         </label>
                                                     );

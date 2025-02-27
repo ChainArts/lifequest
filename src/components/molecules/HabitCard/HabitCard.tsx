@@ -10,14 +10,14 @@ export interface HabitCardProps {
     title: string;
     goal: number;
     unit: string;
-    week_days: number;
+    week_days: Array<boolean>;
     icon: string;
     color: string;
 }
 
 const HabitCard = ({ id, title, goal, unit, week_days, icon, color }: HabitCardProps) => {
     const streak = 5;
-    const activeDays = week_days.toString(2);
+    const activeDays = week_days.map((day) => (day ? "1" : "0")).join("");
     const nextlevelXp = 100;
     const currentXp = 50;
     const quantity = goal;
