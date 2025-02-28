@@ -4,6 +4,7 @@ import HabitCard from "../../molecules/HabitCard/HabitCard";
 import "./HabitCards.scss";
 import { HabitCardProps } from "../../molecules/HabitCard/HabitCard";
 import { AnimatePresence } from "motion/react";
+import Card from "../../molecules/Card/Card";
 
 type HabitCardsProps = {
     setOpen: (open: boolean) => void;
@@ -20,13 +21,20 @@ const HabitCards = ({ setOpen, habitList }: HabitCardsProps) => {
                     </Headline>
                     <button onClick={() => setOpen(true)}>create</button>
                 </div>
-                <div className="habit-cards__list">
-                    <AnimatePresence mode="sync">
-                        {habitList.map((habit) => (
-                            <HabitCard key={habit.id.id.String} {...habit} />
-                        ))}
-                    </AnimatePresence>
-                </div>
+                {habitList.length === 0 ? (
+                    <Card className="secondary no-habits" onClick={() => setOpen(true)}>
+                        <p className="fst--card-title">No habits yet</p>
+                        <p className="fst--base">Tap "+" or "create" to add your first habit!</p>
+                    </Card>
+                ) : (
+                    <div className="habit-cards__list">
+                        <AnimatePresence mode="sync">
+                            {habitList.map((habit) => (
+                                <HabitCard key={habit.id.id.String} {...habit} />
+                            ))}
+                        </AnimatePresence>
+                    </div>
+                )}
             </IconContext.Provider>
         </section>
     );

@@ -2,8 +2,8 @@
     display: grid;
     grid-template-columns: repeat(7, 2.5rem);
     justify-content: space-around;
-    padding: 0 1rem;
+    padding: 0 0.75rem;
     background-color: var(--background-layer-sec);
-    border-radius: 2rem;
+    border-radius: 3rem;
     margin-bottom: var(--gap);
 }

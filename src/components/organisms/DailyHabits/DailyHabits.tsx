@@ -2,6 +2,7 @@ import "./DailyHabits.scss";
 import ActiveHabit, { ActiveHabitProps } from "../../molecules/ActiveHabit/ActiveHabit";
 import Headline from "../../atoms/Headline/Headline";
 import { IconContext } from "react-icons";
+import Card from "../../molecules/Card/Card";
 
 type DailyHabitsProps = {
     activeHabits: ActiveHabitProps[];
@@ -15,11 +16,18 @@ const DailyHabits = ({ activeHabits, setHabitDone }: DailyHabitsProps) => {
                 <Headline level={2} style="section">
                     Todays Habits
                 </Headline>
-                <div className="daily-habits__list">
-                    {activeHabits.map((habit, index) => (
-                        <ActiveHabit key={index} habit={habit} setHabitDone={setHabitDone} />
-                    ))}
-                </div>
+                {activeHabits.length === 0 ? (
+                    <Card className="secondary no-habits" route="/habits">
+                        <p className="fst--card-title">No habits for today</p>
+                        <p className="fst--base">Create a new habit or schedule one for today</p>
+                    </Card>
+                ) : (
+                    <div className="daily-habits__list">
+                        {activeHabits.map((habit, index) => (
+                            <ActiveHabit key={index} habit={habit} setHabitDone={setHabitDone} />
+                        ))}
+                    </div>
+                )}
             </IconContext.Provider>
         </section>
     );

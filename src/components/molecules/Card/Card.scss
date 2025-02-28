@@ -1,6 +1,18 @@
 .card {
-  background-color: var(--background-layer);
-  border-radius: var(--radius);
-  padding: 0.5rem;
-  box-shadow: var(--box-shadow);
+    background-color: var(--background-layer);
+    border-radius: var(--radius);
+    padding: 0.5rem;
+    box-shadow: var(--box-shadow);
+
+    &.secondary {
+        background-color: var(--background-layer-sec);
+        box-shadow: none;
+        color: var(--text-light);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 1.5rem 0;
+        gap: var(--gap);
+    }
 }
