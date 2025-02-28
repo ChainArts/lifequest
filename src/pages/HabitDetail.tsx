@@ -9,6 +9,8 @@ import HabitStats from "../components/organisms/HabitStats/HabitStats";
 import HabitSettings from "../components/organisms/HabitSettings/HabitSettings";
 import HabitHeatmap from "../components/organisms/HabitHeatmap/HabitHeatmap";
 import HabitGraph from "../components/organisms/HabitGraph/HabitGraph";
+import ActionButton from "../components/atoms/ActionButton/ActionButton";
+import { HiPencil } from "react-icons/hi";
 
 const fetchHabitDetail = async (id: string): Promise<HabitCardProps> => {
     try {
@@ -54,14 +56,19 @@ const HabitDetail = () => {
                 Back
             </div>
             <HabitStats icon={habit.icon} xp={habit.xp} title={habit.title} />
-            <HabitSettings  setOpen={(value: boolean) => setOpen(value)} />
+            <HabitSettings setOpen={(value: boolean) => setOpen(value)} />
             <HabitHeatmap />
             <HabitGraph />
 
-            {habit && <button className="delete" onClick={() => deleteHabit(id as string)}>Delete</button>}
+            {habit && (
+                <button className="delete" onClick={() => deleteHabit(id as string)}>
+                    Delete
+                </button>
+            )}
             <section className="container">
                 <HabitForm setOpen={setOpen} isOpen={isOpen} mode="edit" onSubmitSuccess={() => id && fetchHabitDetail(id)} initialValues={habit} id={id} />
             </section>
+            <ActionButton onClick={() => setOpen(true)} icon={<HiPencil />} />
         </motion.main>
     );
 };

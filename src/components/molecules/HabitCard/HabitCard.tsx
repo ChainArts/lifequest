@@ -21,8 +21,6 @@ const HabitCard = ({ id, title, goal, unit, week_days, icon, color }: HabitCardP
     const activeDays = week_days.map((day) => (day ? "1" : "0")).join("");
     const nextlevelXp = 100;
     const currentXp = 50;
-    const quantity = goal;
-    const quantityType = unit;
     //calculate lighter shade of color
     const colorLight = color + "DD";
 
@@ -48,7 +46,7 @@ const HabitCard = ({ id, title, goal, unit, week_days, icon, color }: HabitCardP
                 <div className="habit-card__content">
                     <div className="habit-card__title">
                         <div className="habit-card__info">
-                            <span className="fst--upper-heading">{`${quantity} ${quantityType}`}</span>
+                            <span className="fst--upper-heading">{`${goal} ${unit}`}</span>
 
                             <span className="habit-card__title">{title}</span>
                         </div>

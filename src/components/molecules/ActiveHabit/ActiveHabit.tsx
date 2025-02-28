@@ -9,6 +9,7 @@ export type ActiveHabitProps = {
     id: string;
     title: string;
     goal: number;
+    unit: string;
     icon: string;
     done: number;
     color: string;
@@ -16,7 +17,7 @@ export type ActiveHabitProps = {
 
 const ActiveHabit = ({ habit, setHabitDone }: { habit: ActiveHabitProps; setHabitDone: (id: string, add: number) => void }) => {
     const [circles, setCircles] = useState<{ id: string }[]>([]);
-    const { id, title, goal, done, icon, color } = habit;
+    const { id, title, goal, done, icon, color, unit } = habit;
 
     const handleAdd = () => {
         setHabitDone(id, 1);
@@ -49,7 +50,7 @@ const ActiveHabit = ({ habit, setHabitDone }: { habit: ActiveHabitProps; setHabi
                 <div className="habit__info">
                     <div className="habit__title">
                         <span className={`fst--upper-heading ${finished ? "" : "gray"}`}>
-                            {done}/{goal}
+                            {done}/{goal} {unit}
                         </span>
                         <span className="fst--card-title">{title}</span>
                     </div>
