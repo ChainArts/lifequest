@@ -10,7 +10,7 @@ const Profile = () => {
         navigate("/");
     };
     return (
-        <motion.main initial="initial" animate="in" exit="out" variants={pageVariants}>
+        <motion.main initial="initial" animate="in" exit="out" variants={pageVariants} className="container">
             <h1>Profile</h1>
             <span onClick={handleLogout}>Logout</span>
 

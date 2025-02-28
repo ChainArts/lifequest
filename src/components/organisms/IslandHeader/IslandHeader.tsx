@@ -1,5 +1,5 @@
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, useGLTF, Stats } from "@react-three/drei";
+import { OrbitControls, useGLTF } from "@react-three/drei";
 import "./IslandHeader.scss";
 import * as THREE from "three";
 import { useMemo } from "react";
@@ -40,7 +40,7 @@ const IslandHeader = () => {
                 scene.background = rt.texture;
                 scene.environment = pmremGenerator.fromEquirectangular(texture).texture;
             }}>
-                <Stats />
+                {/* <Stats /> */}
                 <OrbitControls />
                 <ambientLight intensity={0.5} />
                 <pointLight position={[10, 10, 0]} decay={0} intensity={Math.PI / 2} />

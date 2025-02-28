@@ -111,7 +111,7 @@ body {
 main {
     position: relative;
     padding-bottom: var(--navbar-height);
-    min-height: 100svh;
+    min-height: 66svh;
     height: 100%;
     margin-top: 33svh;
     background-color: var(--background-base);
@@ -151,6 +151,7 @@ button, a {
 
 .container--full {
     margin: 0;
+    min-height: 100svh;
     padding: 2rem 0.75rem;
 }
 
