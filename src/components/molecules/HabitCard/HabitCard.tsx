@@ -13,6 +13,7 @@ export interface HabitCardProps {
     week_days: Array<boolean>;
     icon: string;
     color: string;
+    xp: number;
 }
 
 const HabitCard = ({ id, title, goal, unit, week_days, icon, color }: HabitCardProps) => {

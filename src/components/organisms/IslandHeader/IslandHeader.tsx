@@ -7,7 +7,7 @@ import { useMemo } from "react";
 const Island = (props: any) => {
     const scene = useMemo(() => {
         const { scene } = useGLTF("/src/assets/models/island.glb");
-        // scale up the island by 10
+        // scale up the island by 20
         scene.scale.set(20, 20, 20);
         return scene;
     }, []);

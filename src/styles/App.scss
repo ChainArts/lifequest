@@ -39,7 +39,8 @@
     --progress-bg-round: #2a2e38;
 
     --navbar-height: 5rem;
-    --gap: 0.5rem;    
+    --gap: 0.5rem;
+    --error: tomato;
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -137,6 +138,7 @@ button, a {
     flex-direction: column;
     padding: 0 0.75rem;
     margin-bottom: 1rem;
+    gap: 1rem;
 }
 
 .react-modal-sheet-container {
@@ -179,6 +181,18 @@ button, a {
 
 .gray {
     color: var(--text-light) !important;
+}
+
+.delete {
+    background-color: var(--error) !important;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    border-radius: var(--radius);
+}
+
+.back{
+    color: var(--purple-dark);
+    padding: 0.5rem 1rem 1rem 0.5rem;
 }
 
 

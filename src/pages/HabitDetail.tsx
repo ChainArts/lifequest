@@ -5,6 +5,10 @@ import pageVariants from "../components/atoms/PageTransition/PageTransition";
 import { invoke } from "@tauri-apps/api/core";
 import { useEffect, useState } from "react";
 import HabitForm from "../components/organisms/HabitForm/HabitForm";
+import HabitStats from "../components/organisms/HabitStats/HabitStats";
+import HabitSettings from "../components/organisms/HabitSettings/HabitSettings";
+import HabitHeatmap from "../components/organisms/HabitHeatmap/HabitHeatmap";
+import HabitGraph from "../components/organisms/HabitGraph/HabitGraph";
 
 const fetchHabitDetail = async (id: string): Promise<HabitCardProps> => {
     try {
@@ -46,12 +50,15 @@ const HabitDetail = () => {
 
     return (
         <motion.main initial="initial" animate="in" exit="out" variants={pageVariants} className="container">
-            <h1>Habit Detail</h1>
-            <div>
-                <h2>{habit.title}</h2>
+            <div className="back" onClick={() => navigate("/habits")}>
+                Back
             </div>
-            {habit && <button onClick={() => setOpen(true)}>Edit</button>}
-            {habit && <button onClick={() => deleteHabit(id as string)}>Delete</button>}
+            <HabitStats icon={habit.icon} xp={habit.xp} title={habit.title} />
+            <HabitSettings  setOpen={(value: boolean) => setOpen(value)} />
+            <HabitHeatmap />
+            <HabitGraph />
+
+            {habit && <button className="delete" onClick={() => deleteHabit(id as string)}>Delete</button>}
             <section className="container">
                 <HabitForm setOpen={setOpen} isOpen={isOpen} mode="edit" onSubmitSuccess={() => id && fetchHabitDetail(id)} initialValues={habit} id={id} />
             </section>
