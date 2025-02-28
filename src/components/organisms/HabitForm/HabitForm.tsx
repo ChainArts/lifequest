@@ -129,7 +129,7 @@ const HabitForm = ({ id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }
 
                                                 <label htmlFor="unit">
                                                     Unit
-                                                    <Field id="unit" name="unit" type="text" placeholder="Repetition" />
+                                                    <Field id="unit" name="unit" type="text" placeholder="steps" />
                                                 </label>
                                             </div>
                                         </fieldset>
@@ -139,12 +139,15 @@ const HabitForm = ({ id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }
                                             <div className="form-box">
                                                 <label htmlFor="icon" onClick={() => setEmojiPickerOpen(true)}>
                                                     Icon
-                                                    <Field id="icon" name="icon" type="hidden" placeholder="icon" value={values.icon} />
                                                     <div>
-                                                        <button className="input">{values.icon}</button>
-                                                        <BiSolidRightArrow className="arrow" />
+                                                        <Field id="icon" name="icon" type="hidden" placeholder="icon" value={values.icon} />
+                                                        <button className="input">
+                                                            {values.icon}
+                                                            <BiSolidRightArrow className="arrow" />
+                                                        </button>
                                                     </div>
                                                 </label>
+
                                                 <div className="form-box-color">
                                                     {colorsArr.map((color) => (
                                                         <label key={color.color} htmlFor={color.color}>
@@ -171,14 +174,24 @@ const HabitForm = ({ id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }
                                         </fieldset>
 
                                         <fieldset>
-                                            <legend>Choose Your Routine</legend>
+                                            <legend>Track your progress</legend>
                                             <div className="form-box">
+                                                <label htmlFor="tracking">
+                                                    Enable
+                                                    <input id="tracking" name="tracking" type="checkbox" />
+                                                    <span className="toggle" />
+                                                </label>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <legend>Choose Your Routine</legend>
+                                            <div className="form-box-weekdays">
                                                 {weekDaysArr.map((day, index) => {
                                                     return (
                                                         <label key={day} htmlFor={day}>
-                                                            {day}
+                                                            {day.slice(0, 2)}
                                                             <input id={day} name="week_days" type="checkbox" checked={values.week_days[index]} onChange={() => setFieldValue(`week_days[${index}]`, !values.week_days[index])} />
-                                                            <span className="toggle" />
                                                         </label>
                                                     );
                                                 })}

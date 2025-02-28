@@ -17,11 +17,29 @@ pub struct Habit {
     pub week_days: [bool; 7],
     pub icon: String,
     pub color: String,
+    // pub tracking: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct HabitWithId {
     #[serde(flatten)]
     pub habit: Habit,
+    pub id: Thing,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Schedule {
+    pub date: String,
+    pub habit_id: Thing,
+    pub done: Number,
+    pub goal: Number,
+    pub recived_reward: bool,
+    pub data: Number,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ScheduleWithId {
+    #[serde(flatten)]
+    pub schedule: Schedule,
     pub id: Thing,
 }

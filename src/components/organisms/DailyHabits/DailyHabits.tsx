@@ -19,7 +19,7 @@ const DailyHabits = ({ activeHabits, setHabitDone }: DailyHabitsProps) => {
                 {activeHabits.length === 0 ? (
                     <Card className="secondary no-habits" route="/habits">
                         <p className="fst--card-title">No habits for today</p>
-                        <p className="fst--base">Create a new habit or schedule one for today</p>
+                        <p className="fst--base">Create a new habit or plan one for today!</p>
                     </Card>
                 ) : (
                     <div className="daily-habits__list">

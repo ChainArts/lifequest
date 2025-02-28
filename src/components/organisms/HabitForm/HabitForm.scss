@@ -43,8 +43,6 @@
     font-size: 0.5rem;
     color: var(--disabled);
     cursor: pointer;
-    margin-left: -0.25rem;
-    margin-right: var(--gap);
 }
 
 .arrow-buttons {
@@ -75,16 +73,48 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    margin-bottom: 4rem;
 }
 
+.form-box-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    justify-content: center;
+    align-items: center;
+    gap: var(--gap);
+    label {
+        position: relative;
+        border-radius: 0.25rem;
+        width: fit-content;
+        background-color: var(--background-layer-light);
+        font-size: 1rem;
+        font-weight: 400;
+        margin-bottom: 0;
+        color: var(--text-baset);
+        text-align: center;
+        width: 100%;
+        padding: 0.75rem var(--gap);
+        transition: background-color 0.2s var(--ease);
+
+        &:has(input:checked) {
+            background-color: var(--purple-dark);
+        }
+    }
+
+    input[type="checkbox"] {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+    }
+}
 .form-box-color {
     justify-content: space-between;
     align-items: center;
     display: flex;
     flex-wrap: wrap;
-    padding: var(--gap);
-    padding-left: 0;
-    gap: var(--gap);
+    padding: var(--gap) 0;
 
     label {
         height: 100%;
@@ -98,7 +128,6 @@
     display: flex;
     flex-direction: column;
     padding: var(--gap);
-    padding-left: 1rem;
     border-radius: var(--radius);
     background-color: var(--background-layer-light);
     gap: var(--gap);
@@ -120,15 +149,18 @@
         align-items: center;
         font-size: 1rem;
         font-weight: 400;
+        padding-left: var(--gap);
         margin-bottom: 0;
         color: var(--text-baset);
-
         gap: var(--gap);
     }
 
     input,
     .input {
-        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.25rem;
         background: none;
         font-size: 1rem;
         text-align: end;
@@ -180,6 +212,10 @@ input {
     &:has(+ .error) {
         outline: 1px solid var(--error);
     }
+
+    &[type="text"] {
+        position: sticky;
+    }
     &[type="checkbox"] {
         opacity: 0;
         height: 2rem;
@@ -187,7 +223,7 @@ input {
 
         &:checked + .toggle {
             &::before {
-                background-color: var(--text-sec);
+                background-color: var(--purple-dark);
             }
             &::after {
                 transform: translateX(1.5rem);
@@ -271,6 +307,7 @@ input {
     font-size: 0.75rem;
     font-weight: 400;
     padding-top: 0.5rem;
+
     width: 100%;
     text-align: end;
     text-transform: lowercase;
