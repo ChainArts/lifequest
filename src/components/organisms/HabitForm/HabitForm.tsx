@@ -186,15 +186,17 @@ const HabitForm = ({ id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }
 
                                         <fieldset>
                                             <legend>Choose Your Routine</legend>
-                                            <div className="form-box-weekdays">
-                                                {weekDaysArr.map((day, index) => {
-                                                    return (
-                                                        <label key={day} htmlFor={day}>
-                                                            {day.slice(0, 2)}
-                                                            <input id={day} name="week_days" type="checkbox" checked={values.week_days[index]} onChange={() => setFieldValue(`week_days[${index}]`, !values.week_days[index])} />
-                                                        </label>
-                                                    );
-                                                })}
+                                            <div className="form-box">
+                                                <div className="form-box-weekdays">
+                                                    {weekDaysArr.map((day, index) => {
+                                                        return (
+                                                            <label key={day} htmlFor={day}>
+                                                                <span>{day.slice(0, 2)}</span>
+                                                                <input id={day} name="week_days" type="checkbox" checked={values.week_days[index]} onChange={() => setFieldValue(`week_days[${index}]`, !values.week_days[index])} />
+                                                            </label>
+                                                        );
+                                                    })}
+                                                </div>
                                             </div>
                                         </fieldset>
 

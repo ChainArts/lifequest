@@ -18,6 +18,7 @@ pub struct Habit {
     pub icon: String,
     pub color: String,
     // pub tracking: bool,
+    // pub xp: Number,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

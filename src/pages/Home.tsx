@@ -31,6 +31,7 @@ const calulateStreakXP = (streak: number) => {
 const Home = () => {
     const [habits, setHabits] = useState<ActiveHabitProps[]>([]);
     const [xp, setXP] = useState(0);
+    const streak = 0;
 
     const today = new Date().getDay() - 1;
 
@@ -79,7 +80,7 @@ const Home = () => {
     return (
         <motion.main initial="initial" animate="in" exit="out" variants={pageVariants}>
             <DailyProgress progress={calculateProgress()} habits={habits.length} xp={xp} />
-            <StreakProgress />
+            <StreakProgress streak={streak} isCompleted={calculateProgress() == 100} />
             <DailyHabits activeHabits={habits} setHabitDone={setHabitDone} />
             <StatsTeaser />
         </motion.main>

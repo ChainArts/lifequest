@@ -1,17 +1,25 @@
 import StreakDay from "../../atoms/StreakDay/StreakDay";
 import "./StreakProgress.scss";
 
-const StreakTracker = () => {
+type StreakTrackerProps = {
+    streak: number;
+    isCompleted: boolean;
+};
+
+const StreakTracker = ({ streak, isCompleted }: StreakTrackerProps) => {
+    const today = new Date().getDay() - 1;
+    const days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+
+    const startIndex = (today - streak + 1 + 7) % 7;
+
+    const orderedDays = days.slice(startIndex).concat(days.slice(0, startIndex));
+
     return (
         <div className="container">
             <div className="streak-progress__container">
-                <StreakDay day="Mo" isToday={false} isCompleted={true} />
-                <StreakDay day="Tu" isToday={false} isCompleted={true} />
-                <StreakDay day="We" isToday={false} isCompleted={true} />
-                <StreakDay day="Th" isToday={true} isCompleted={false} />
-                <StreakDay day="Fr" isToday={false} isCompleted={false} />
-                <StreakDay day="Sa" isToday={false} isCompleted={false} />
-                <StreakDay day="Su" isToday={false} isCompleted={false} />
+                {orderedDays.map((day, index) => (
+                    <StreakDay key={index} day={day} isToday={index === streak} isCompleted={(isCompleted && index === streak) || index < streak} />
+                ))}
             </div>
         </div>
     );

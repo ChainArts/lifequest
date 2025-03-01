@@ -82,10 +82,10 @@
     justify-content: center;
     align-items: center;
     gap: var(--gap);
+
     label {
         position: relative;
         border-radius: 0.25rem;
-        width: fit-content;
         background-color: var(--background-layer-light);
         font-size: 1rem;
         font-weight: 400;
@@ -93,8 +93,13 @@
         color: var(--text-baset);
         text-align: center;
         width: 100%;
-        padding: 0.75rem var(--gap);
+        padding: 0.75rem 0 !important;
         transition: background-color 0.2s var(--ease);
+
+        & > span {
+            width: 100%;
+            text-align: center;
+        }
 
         &:has(input:checked) {
             background-color: var(--purple-dark);
@@ -107,6 +112,7 @@
         left: 0;
         height: 100%;
         width: 100%;
+        cursor: pointer;
     }
 }
 .form-box-color {
@@ -121,6 +127,8 @@
         width: fit-content;
         display: flex;
         justify-content: center;
+        padding: 0 !important;
+        cursor: pointer;
     }
 }
 
