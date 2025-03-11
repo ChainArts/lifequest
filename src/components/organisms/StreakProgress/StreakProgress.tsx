@@ -7,10 +7,10 @@ type StreakTrackerProps = {
 };
 
 const StreakTracker = ({ streak, isCompleted }: StreakTrackerProps) => {
-    const today = new Date().getDay() - 1;
+    const today = new Date().getDay();
     const days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 
-    const startIndex = (today - streak + 1 + 7) % 7;
+    const startIndex = (today - streak + 6) % 7;
 
     const orderedDays = days.slice(startIndex).concat(days.slice(0, startIndex));
 
