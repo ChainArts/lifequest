@@ -1,0 +1,1 @@
+UPDATE habit SET tracking = false, xp = 0 WHERE tracking IS MISSING OR xp IS MISSING;

@@ -17,8 +17,8 @@ pub struct Habit {
     pub week_days: [bool; 7],
     pub icon: String,
     pub color: String,
-    // pub tracking: bool,
-    // pub xp: Number,
+    pub tracking: bool,
+    pub xp: Number,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
