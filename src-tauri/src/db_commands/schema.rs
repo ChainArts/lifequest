@@ -34,7 +34,7 @@ pub struct Schedule {
     pub habit_id: Thing,
     pub done: Number,
     pub goal: Number,
-    pub recived_reward: bool,
+    pub received_reward: bool,
     pub data: Number,
 }
 
