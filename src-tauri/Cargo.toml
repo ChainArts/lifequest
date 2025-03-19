@@ -22,10 +22,11 @@ tauri = { version = "2", features = [] }
 tauri-plugin-opener = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-tokio = { version = "1.43.0", features = ["full"] }
-surrealdb = { version = "2.1.4", features = ["kv-rocksdb"] }
+tokio = { version = "1.44.1", features = ["full"] }
+surrealdb = { version = "2.2.1", features = ["kv-rocksdb"] }
 dotenv = "0.15.0"
 winapi = { version = "0.3", features = ["winbase"] }
+surrealdb-migrations = "2.2.0"
 
 [profile.release]
 lto = true
