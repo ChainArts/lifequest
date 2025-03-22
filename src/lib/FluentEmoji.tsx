@@ -26,6 +26,7 @@ const FluentEmoji = ({ emoji, size, className }: { emoji: string; size: number; 
     return (
         <img
             src={`https://registry.npmmirror.com/@lobehub/fluent-emoji-3d/latest/files/assets/${emojiUnicode}.webp`}
+            loading="lazy"
             alt={emojiName}
             style={{ width: size, height: size }}
             className={className}
