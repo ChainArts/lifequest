@@ -37,7 +37,6 @@ const Home = () => {
 
     const fetchHabits = async () => {
         try {
-            console.log(today);
             const habits: HabitCardProps[] = await invoke("get_todays_habits", { todayIndex: today });
 
             const transformedHabits = habits.map((habit: any) => ({

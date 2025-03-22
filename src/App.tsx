@@ -7,7 +7,6 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { AnimatePresence } from "motion/react";
 import Navbar from "./components/organisms/Navbar/Navbar";
 import IslandHeader from "./components/organisms/IslandHeader/IslandHeader";
-import DarkModeToggle from "./components/atoms/DarkModeToggle/DarkModeToggle";
 import Shop from "./pages/Shop";
 
 function App() {
@@ -16,7 +15,6 @@ function App() {
     const isLoggedIn = true; //location.pathname !== "/";
     return (
         <>
-            <DarkModeToggle />
             {isLoggedIn && <IslandHeader />}
             <AnimatePresence mode="wait">
                 <Routes location={location} key={location.pathname}>

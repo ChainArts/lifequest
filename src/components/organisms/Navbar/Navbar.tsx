@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import "./Navbar.scss";
-import { HiOutlineBookmark, HiOutlineBadgeCheck, HiOutlineBookOpen, HiOutlineUser, HiOutlineShoppingBag } from "react-icons/hi";
+import { HiOutlineBookmark, HiOutlineBadgeCheck, HiOutlineUser, HiOutlineShoppingBag } from "react-icons/hi";
 import { IconContext } from "react-icons";
 import { AnimatePresence } from "motion/react";
 
@@ -11,7 +11,7 @@ const Navbar = () => {
                 <nav className="navbar">
                     <ul>
                         <li>
-                            <NavLink to="/home" className={({ isActive }) => (isActive ? "active navbar-link" : "navbar-link")}>
+                            <NavLink to="/" className={({ isActive }) => (isActive ? "active navbar-link" : "navbar-link")}>
                                 <HiOutlineBookmark />
                                 Today
                             </NavLink>

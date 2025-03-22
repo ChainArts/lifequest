@@ -1,4 +1,4 @@
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import { Environment, OrbitControls, PerformanceMonitor, PerspectiveCamera, useGLTF } from "@react-three/drei";
 import "./IslandHeader.scss";
 import { EffectComposer, SMAA, Vignette } from "@react-three/postprocessing";
@@ -47,7 +47,7 @@ const IslandHeader = () => {
                     <Vignette eskil={false} offset={0.1} darkness={0.5} />
                 </EffectComposer>
                 <PerformanceMonitor onDecline={() => degrade(true)} />
-                <Environment near={0.01} far={300} frames={degraded ? 1 : Infinity} resolution={4096} backgroundRotation={[0, 0, 0]} files="/models/skybox.hdr" background backgroundIntensity={1.15} backgroundBlurriness={0.075} />
+                <Environment near={0.01} far={300} frames={degraded ? 1 : Infinity} resolution={2048} backgroundRotation={[0, 0, 0]} files="/models/skybox.hdr" background backgroundIntensity={1.5} environmentIntensity={1.25} backgroundBlurriness={0.075} />
                 <pointLight position={[-10, 15, 20]} decay={0} intensity={6} color={"#ffeebb"} shadow-mapSize-width={2048} shadow-mapSize-height={2048} castShadow />
                 <Island position={[0, 0, 0]} scale={20} />
                 <FloatingObject amplitude={0.5} frequency={0.8}>
