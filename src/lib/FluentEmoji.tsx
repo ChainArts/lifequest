@@ -14,12 +14,18 @@ const getEmojiNameByCharacter = (emoji: string): string | undefined => {
     return EmojiLab?.[pureEmoji];
 };
 
+const emojiToUnicode = (emoji: string) => {
+    return [...emoji].map((char) => char?.codePointAt(0)?.toString(16)).join('-');
+}
+
 const FluentEmoji = ({ emoji, size, className }: { emoji: string; size: number; className: string }) => {
     const emojiName = getEmojiNameByCharacter(emoji);
+    const emojiUnicode = emojiToUnicode(emoji);
     if (!emojiName) return null;
+
     return (
         <img
-            src={`https://emojicdn.elk.sh/${emojiName}`}
+            src={`https://registry.npmmirror.com/@lobehub/fluent-emoji-3d/latest/files/assets/${emojiUnicode}.webp`}
             alt={emojiName}
             style={{ width: size, height: size }}
             className={className}
