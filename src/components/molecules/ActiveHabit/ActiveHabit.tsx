@@ -3,7 +3,6 @@ import { useState } from "react";
 import { HiPlus, HiCheck } from "react-icons/hi";
 import { cubicBezier, motion } from "motion/react";
 import LinearProgress from "../../atoms/LinearProgress/LinearProgress";
-import { FluentEmoji } from "@lobehub/fluent-emoji";
 
 export type ActiveHabitProps = {
     id: string;
@@ -43,7 +42,7 @@ const ActiveHabit = ({ habit, setHabitDone }: { habit: ActiveHabitProps; setHabi
         >
             <div className="habit__icon">
                 <div className="habit-card__icon">
-                    <FluentEmoji type={"3d"} emoji={icon} size={32} className="emoji" />
+                    {/* <FluentEmoji type={"3d"} emoji={icon} size={32} className="emoji" /> */}
                 </div>
             </div>
             <div className="habit__content">

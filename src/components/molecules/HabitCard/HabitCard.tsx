@@ -2,7 +2,7 @@ import { AiFillFire } from "react-icons/ai";
 import Card from "../../molecules/Card/Card";
 import "./HabitCard.scss";
 import LinearProgress from "../../atoms/LinearProgress/LinearProgress";
-import { FluentEmoji } from "@lobehub/fluent-emoji";
+import { getEmojiNameByCharacter } from "../../../lib/getEmoji";
 import { NavLink } from "react-router-dom";
 
 export interface HabitCardProps {
@@ -40,7 +40,7 @@ const HabitCard = ({ id, title, goal, unit, week_days, icon, color }: HabitCardP
                 }
             >
                 <div className="habit-card__icon">
-                    <FluentEmoji type={"3d"} emoji={icon} size={48} className="emoji" />
+                    {icon}
                 </div>
 
                 <div className="habit-card__content">
