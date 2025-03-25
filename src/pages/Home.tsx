@@ -64,16 +64,33 @@ const Home = () => {
     };
 
     const setHabitDone = (id: string, add: number) => {
-        setHabits((habits) =>
-            habits.map((habit) =>
-                habit.id === id
-                    ? {
-                          ...habit,
-                          done: Math.min(habit.done + add, habit.goal),
-                      }
-                    : habit
-            )
-        );
+        setHabits((prevHabits) => {
+            let bonusTriggered = false;
+
+            const updatedHabits = prevHabits.map((habit) => {
+                if (habit.id === id) {
+                    // Only mark bonus if habit transitions from incomplete to complete.
+                    const newDone = Math.min(habit.done + add, habit.goal);
+                    if (habit.done < habit.goal && newDone === habit.goal) {
+                        bonusTriggered = true;
+                    }
+                    return {
+                        ...habit,
+                        done: newDone,
+                    };
+                }
+                return habit;
+            });
+
+            // If bonus is triggered and now every habit is complete, add bonus xp.
+            if (bonusTriggered && updatedHabits.length > 0 && updatedHabits.every((habit) => habit.done === habit.goal)) {
+                setXP((prevXP) => prevXP + 50);
+            }
+
+            return updatedHabits;
+        });
+        // Add 10 XP for each step regardless.
+        setXP((prevXP) => prevXP + 10 * add);
     };
 
     return (
