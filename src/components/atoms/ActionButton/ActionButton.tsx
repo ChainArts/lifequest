@@ -9,11 +9,11 @@ type ActionButtonProps = {
 
 const ActionButton = ({ children, onClick, icon }: ActionButtonProps) => {
     return (
-        <motion.div layout>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             {children}
-            <button onClick={onClick} className="action-button">
+            <motion.button layout onClick={onClick} className="action-button">
                 {icon}
-            </button>
+            </motion.button>
         </motion.div>
     );
 };
