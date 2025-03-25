@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { useParams, useNavigate } from "react-router-dom";
 import { HabitCardProps } from "../components/molecules/HabitCard/HabitCard";
-import pageVariants from "../components/atoms/PageTransition/PageTransition";
+import { pageVariants, sectionVariants } from "../components/atoms/PageTransition/PageTransition";
 import { invoke } from "@tauri-apps/api/core";
 import { useEffect, useState } from "react";
 import HabitForm from "../components/organisms/HabitForm/HabitForm";
@@ -52,23 +52,35 @@ const HabitDetail = () => {
 
     return (
         <motion.main initial="initial" animate="in" exit="out" variants={pageVariants} className="container">
-            <div className="back" onClick={() => navigate("/habits")}>
-                Back
-            </div>
-            <HabitStats icon={habit.icon} xp={habit.xp} title={habit.title} />
-            <HabitSettings setOpen={(value: boolean) => setOpen(value)} />
-            <HabitHeatmap />
-            <HabitGraph />
+            <motion.section variants={sectionVariants}>
+                <div className="back" onClick={() => navigate("/habits")}>
+                    Back
+                </div>
+                <HabitStats icon={habit.icon} xp={habit.xp} title={habit.title} />
+            </motion.section>
+            <motion.section variants={sectionVariants}>
+                <HabitSettings setOpen={(value: boolean) => setOpen(value)} />
+            </motion.section>
+            <motion.section variants={sectionVariants}>
+                <HabitHeatmap />
+            </motion.section>
+            <motion.section variants={sectionVariants}>
+                <HabitGraph />
+            </motion.section>
+            <motion.section variants={sectionVariants}>
+                {habit && (
+                    <button className="delete" onClick={() => deleteHabit(id as string)}>
+                        Delete
+                    </button>
+                )}
+                <section className="container">
+                    <HabitForm setOpen={setOpen} isOpen={isOpen} mode="edit" onSubmitSuccess={() => id && fetchHabitDetail(id)} initialValues={habit} id={id} />
+                </section>
 
-            {habit && (
-                <button className="delete" onClick={() => deleteHabit(id as string)}>
-                    Delete
-                </button>
-            )}
-            <section className="container">
-                <HabitForm setOpen={setOpen} isOpen={isOpen} mode="edit" onSubmitSuccess={() => id && fetchHabitDetail(id)} initialValues={habit} id={id} />
-            </section>
-            <ActionButton onClick={() => setOpen(true)} icon={<HiPencil />} />
+                <div className="relative">
+                    <ActionButton onClick={() => setOpen(true)} icon={<HiPencil />} />
+                </div>
+            </motion.section>
         </motion.main>
     );
 };

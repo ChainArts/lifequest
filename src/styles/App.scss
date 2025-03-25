@@ -97,7 +97,6 @@ body {
     color: var(--text);
     min-height: 100svh;
     height: 100%;
-    transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
     scrollbar-color: var(--background-layer-sec) transparent;
     scroll-behavior: smooth;
     scrollbar-width: thin;

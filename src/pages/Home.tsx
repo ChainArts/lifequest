@@ -5,7 +5,7 @@ import DailyHabits from "../components/organisms/DailyHabits/DailyHabits";
 import StreakProgress from "../components/organisms/StreakProgress/StreakProgress";
 import DailyProgress from "../components/organisms/DailyProgress/DailyProgress";
 import { useEffect, useState } from "react";
-import pageVariants from "../components/atoms/PageTransition/PageTransition";
+import { pageVariants, sectionVariants } from "../components/atoms/PageTransition/PageTransition";
 import { invoke } from "@tauri-apps/api/core";
 import { HabitCardProps } from "../components/molecules/HabitCard/HabitCard";
 import { ActiveHabitProps } from "../components/molecules/ActiveHabit/ActiveHabit";
@@ -78,10 +78,18 @@ const Home = () => {
 
     return (
         <motion.main initial="initial" animate="in" exit="out" variants={pageVariants}>
-            <DailyProgress progress={calculateProgress()} habits={habits.length} xp={xp} />
-            <StreakProgress streak={streak} isCompleted={calculateProgress() == 100} />
-            <DailyHabits activeHabits={habits} setHabitDone={setHabitDone} />
-            <StatsTeaser />
+            <motion.section variants={sectionVariants}>
+                <DailyProgress progress={calculateProgress()} habits={habits.length} xp={xp} />
+            </motion.section>
+            <motion.section variants={sectionVariants}>
+                <StreakProgress streak={streak} isCompleted={calculateProgress() == 100} />
+            </motion.section>
+            <motion.section variants={sectionVariants}>
+                <DailyHabits activeHabits={habits} setHabitDone={setHabitDone} />
+            </motion.section>
+            <motion.section variants={sectionVariants}>
+                <StatsTeaser />
+            </motion.section>
         </motion.main>
     );
 };

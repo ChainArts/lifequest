@@ -3,8 +3,8 @@ import Headline from "../../atoms/Headline/Headline";
 import HabitCard from "../../molecules/HabitCard/HabitCard";
 import "./HabitCards.scss";
 import { HabitCardProps } from "../../molecules/HabitCard/HabitCard";
-import { AnimatePresence } from "motion/react";
 import Card from "../../molecules/Card/Card";
+import { AnimatePresence } from "motion/react";
 
 type HabitCardsProps = {
     setOpen: (open: boolean) => void;
@@ -27,12 +27,12 @@ const HabitCards = ({ setOpen, habitList }: HabitCardsProps) => {
                         <p className="fst--base">Tap "+" or "create" to add your first habit!</p>
                     </Card>
                 ) : (
-                    <div className="habit-cards__list">
-                        <AnimatePresence mode="sync">
+                        <div className="habit-cards__list">
+                            <AnimatePresence>
                             {habitList.map((habit) => (
                                 <HabitCard key={habit.id.id.String} {...habit} />
                             ))}
-                        </AnimatePresence>
+                            </AnimatePresence>
                     </div>
                 )}
             </IconContext.Provider>

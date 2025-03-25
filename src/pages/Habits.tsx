@@ -1,5 +1,5 @@
-import pageVariants from "../components/atoms/PageTransition/PageTransition";
-import { motion } from "motion/react";
+import { pageVariants, sectionVariants } from "../components/atoms/PageTransition/PageTransition";
+import { AnimatePresence, motion } from "motion/react";
 import HabitCards from "../components/organisms/HabitCards/HabitCards";
 import ActionButton from "../components/atoms/ActionButton/ActionButton";
 import { useEffect, useState } from "react";
@@ -26,7 +26,9 @@ const Habits = () => {
     }, []);
     return (
         <motion.main initial="initial" animate="in" exit="out" variants={pageVariants}>
-            <HabitCards setOpen={setIsHabitFormOpen} habitList={habitList} />
+            <motion.section variants={sectionVariants}>
+                <HabitCards setOpen={setIsHabitFormOpen} habitList={habitList} />
+            </motion.section>
             <section className="container">
                 <HabitForm setOpen={setIsHabitFormOpen} isOpen={isHabitFormOpen} mode="create" onSubmitSuccess={fetchHabits} />
             </section>

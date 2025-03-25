@@ -1,12 +1,14 @@
-import pageVariants from "../components/atoms/PageTransition/PageTransition";
+import { pageVariants, sectionVariants } from "../components/atoms/PageTransition/PageTransition";
 import { motion } from "motion/react";
 
-const Diary = () => {
+const Shop = () => {
     return (
         <motion.main initial="initial" animate="in" exit="out" variants={pageVariants} className="container">
-            <h1>Diary</h1>
+            <motion.section variants={sectionVariants}>
+                <h1>Shop</h1>
+            </motion.section>
         </motion.main>
     );
 };
 
-export default Diary;
+export default Shop;
