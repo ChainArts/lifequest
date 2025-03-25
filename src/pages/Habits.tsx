@@ -1,5 +1,5 @@
 import { pageVariants, sectionVariants } from "../components/atoms/PageTransition/PageTransition";
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 import HabitCards from "../components/organisms/HabitCards/HabitCards";
 import ActionButton from "../components/atoms/ActionButton/ActionButton";
 import { useEffect, useState } from "react";

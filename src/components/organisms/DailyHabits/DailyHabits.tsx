@@ -3,7 +3,6 @@ import ActiveHabit, { ActiveHabitProps } from "../../molecules/ActiveHabit/Activ
 import Headline from "../../atoms/Headline/Headline";
 import { IconContext } from "react-icons";
 import Card from "../../molecules/Card/Card";
-import { useState } from "react";
 
 type DailyHabitsProps = {
     activeHabits: ActiveHabitProps[];
@@ -11,8 +10,6 @@ type DailyHabitsProps = {
 };
 
 const DailyHabits = ({ activeHabits, setHabitDone }: DailyHabitsProps) => {
-    const [isEditHabitsOpen, setIsEditHabitsOpen] = useState(false);
-
     return (
         <section className="container">
             <IconContext.Provider value={{ className: "daily-habits__icons" }}>
@@ -20,7 +17,6 @@ const DailyHabits = ({ activeHabits, setHabitDone }: DailyHabitsProps) => {
                     <Headline level={2} style="section">
                         Todays Habits
                     </Headline>
-                    <button onClick={() => setIsEditHabitsOpen(true)}>edit</button>
                 </div>
                 {activeHabits.length === 0 ? (
                     <Card className="secondary no-habits" route="/habits">
