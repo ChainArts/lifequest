@@ -15,6 +15,7 @@ export interface HabitCardProps {
     week_days: Array<boolean>;
     icon: string;
     color: string;
+    tracking: boolean;
     xp: number;
 }
 

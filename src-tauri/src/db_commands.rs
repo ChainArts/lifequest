@@ -1,6 +1,8 @@
 mod schema;
 use serde_json::json;
 use serde_json::Number;
+use surrealdb::Datetime;
+use surrealdb::sql::Thing;
 
 use crate::db::LOCAL_DB;
 
@@ -67,4 +69,30 @@ pub async fn get_todays_habits(today_index: Number) -> surrealdb::Result<serde_j
     .await?;
     let habits: Vec<schema::HabitWithId> = res.take(0)?;
     Ok(json!(habits))
+}
+
+#[tauri::command]
+pub async fn init_schedule(today: Datetime, habit_id: Thing, goal: Number) -> surrealdb::Result<()> {
+
+    let schedule = schema::Schedule {
+        date: today.to_string(),
+        habit_id,
+        done: 0.into(),
+        goal,
+        received_reward: false,
+        data: 0.into(),
+    };
+    let _res: Vec<schema::Schedule> = LOCAL_DB.insert("schedule").content(json!(schedule)).await?;
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn get_schedule(habit_id: Thing, date: Datetime) -> surrealdb::Result<serde_json::Value> {
+    let mut res = LOCAL_DB
+        .query("SELECT * FROM schedule WHERE habit_id = $habit_id AND date = $date")
+        .bind(("habit_id", habit_id))
+        .bind(("date", date))
+        .await?;
+    let schedule: Vec<schema::ScheduleWithId> = res.take(0)?;
+    Ok(json!(schedule))
 }

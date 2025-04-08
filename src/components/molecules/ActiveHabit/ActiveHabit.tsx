@@ -56,7 +56,7 @@ const ActiveHabit = ({ habit, setHabitDone }: { habit: ActiveHabitProps; setHabi
                     </div>
                     {!finished ? (
                         <motion.div layout>
-                            <motion.button className="habit__add" onClick={handleAdd}>
+                            <motion.button className="habit__add" onTap={handleAdd}>
                                 <HiPlus />
                                 {circles.map((circle) => (
                                     <motion.div
