@@ -16,6 +16,7 @@ const habitSchema = yup.object().shape({
     unit: yup.string(),
     weekDays: yup.number(),
     icon: yup.string(),
+    tracking: yup.boolean(),
 });
 
 type HabitFormProps = {
@@ -31,6 +32,8 @@ type HabitFormProps = {
         week_days: Array<boolean>;
         icon: string;
         color: string;
+        tracking: boolean;
+        xp: number;
     };
 };
 
@@ -56,6 +59,8 @@ const HabitForm = ({ id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }
         week_days: [true, true, true, true, true, true, true],
         icon: "🎯",
         color: "#F9b0d5",
+        tracking: false,
+        xp: 0,
     };
 
     return (
@@ -63,13 +68,16 @@ const HabitForm = ({ id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }
             initialValues={initialValues || defaultValues}
             validationSchema={habitSchema}
             onSubmit={(values, { resetForm }) => {
+                const xpForSubmit = mode === "edit" ? initialValues?.xp : 0;
+                const habitValues = { ...values, xp: xpForSubmit };
+
                 if (mode === "edit") {
-                    invoke("update_habit", { values: values, id: id }).then(() => {
+                    invoke("update_habit", { values: habitValues, id }).then(() => {
                         setOpen(false);
                         onSubmitSuccess && onSubmitSuccess();
                     });
                 } else {
-                    invoke("insert_habit", { values: values }).then(() => {
+                    invoke("insert_habit", { values: habitValues }).then(() => {
                         resetForm({ values: defaultValues });
                         setOpen(false);
                         onSubmitSuccess && onSubmitSuccess();
@@ -187,16 +195,15 @@ const HabitForm = ({ id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }
                                         <fieldset>
                                             <legend>Choose Your Routine</legend>
                                             <div className="form-box">
-                                                <div className="form-box-weekdays">
-                                                    {weekDaysArr.map((day, index) => {
-                                                        return (
-                                                            <label key={day} htmlFor={day}>
-                                                                <span>{day.slice(0, 2)}</span>
-                                                                <input id={day} name="week_days" type="checkbox" checked={values.week_days[index]} onChange={() => setFieldValue(`week_days[${index}]`, !values.week_days[index])} />
-                                                            </label>
-                                                        );
-                                                    })}
-                                                </div>
+                                                {weekDaysArr.map((day, index) => {
+                                                    return (
+                                                        <label key={day} htmlFor={day}>
+                                                            <span>{day}</span>
+                                                            <input id={day} name="week_days" type="checkbox" checked={values.week_days[index]} onChange={() => setFieldValue(`week_days[${index}]`, !values.week_days[index])} />
+                                                            <span className="toggle" />
+                                                        </label>
+                                                    );
+                                                })}
                                             </div>
                                         </fieldset>
 
