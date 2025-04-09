@@ -56,7 +56,7 @@ const HabitDetail = () => {
                 <div className="back" onClick={() => navigate("/habits")}>
                     Back
                 </div>
-                <HabitStats icon={habit.icon} xp={habit.xp} title={habit.title} />
+                <HabitStats icon={habit.icon} xp={habit.habit_xp} title={habit.title} />
             </motion.section>
             <motion.section variants={sectionVariants}>
                 <HabitSettings setOpen={(value: boolean) => setOpen(value)} />

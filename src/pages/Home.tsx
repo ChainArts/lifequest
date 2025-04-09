@@ -10,27 +10,9 @@ import { invoke } from "@tauri-apps/api/core";
 import { HabitCardProps } from "../components/molecules/HabitCard/HabitCard";
 import { ActiveHabitProps } from "../components/molecules/ActiveHabit/ActiveHabit";
 
-const calulateStreakXP = (streak: number) => {
-    const thresholds = [3, 7, 14, 21, 30, 45, 60, 100, 150];
-    const baseXP = 10;
-    let multiplier = 1;
-
-    if (streak > thresholds[thresholds.length - 1]) return baseXP * thresholds.length;
-
-    for (const threshold of thresholds) {
-        if (streak > threshold) {
-            multiplier++;
-        } else {
-            break;
-        }
-    }
-
-    return baseXP * multiplier;
-};
-
 const Home = () => {
     const [habits, setHabits] = useState<ActiveHabitProps[]>([]);
-    const [xp, setXP] = useState(0);
+    const [dailyXp, setDailyXp] = useState(0);
     const streak = 0;
 
     const today = new Date().getDay() - 1;
@@ -49,8 +31,18 @@ const Home = () => {
         }
     };
 
+    const fetchXP = async () => {
+        try {
+            const xp: number = await invoke("get_xp_for_today", {});
+            setDailyXp(xp);
+        } catch (error) {
+            console.error("Error fetching XP:", error);
+        }
+    };
+
     useEffect(() => {
         fetchHabits();
+        fetchXP();
     }, []);
 
     const calculateProgress = (): number => {
@@ -62,17 +54,15 @@ const Home = () => {
         return Math.round((totalDone / totalHabits) * 100);
     };
 
-    const setHabitDone = (id: string, add: number) => {
+    const setHabitProgress = (id: string, add: number) => {
         setHabits((prevHabits) => {
-            let bonusTriggered = false;
-
             const updatedHabits = prevHabits.map((habit) => {
                 if (habit.id === id) {
-                    // Only mark bonus if habit transitions from incomplete to complete.
                     const newDone = Math.min(habit.done + add, habit.goal);
-                    if (habit.done < habit.goal && newDone === habit.goal) {
-                        bonusTriggered = true;
+                    if (newDone === habit.goal && habit.done < habit.goal) {
+                        fetchXP();
                     }
+
                     return {
                         ...habit,
                         done: newDone,
@@ -81,27 +71,20 @@ const Home = () => {
                 return habit;
             });
 
-            // If bonus is triggered and now every habit is complete, add bonus xp.
-            if (bonusTriggered && updatedHabits.length > 0 && updatedHabits.every((habit) => habit.done === habit.goal)) {
-                setXP((prevXP) => prevXP + 50);
-            }
-
             return updatedHabits;
         });
-        // Add 10 XP for each step regardless.
-        setXP((prevXP) => prevXP + 10 * add);
     };
 
     return (
         <motion.main initial="initial" animate="in" exit="out" variants={pageVariants}>
             <motion.section variants={sectionVariants}>
-                <DailyProgress progress={calculateProgress()} habits={habits.length} xp={xp} />
+                <DailyProgress progress={calculateProgress()} habits={habits.length} xp={dailyXp} />
             </motion.section>
             <motion.section variants={sectionVariants}>
                 <StreakProgress streak={streak} isCompleted={calculateProgress() == 100} />
             </motion.section>
             <motion.section variants={sectionVariants}>
-                <DailyHabits activeHabits={habits} setHabitDone={setHabitDone} />
+                <DailyHabits activeHabits={habits} setHabitProgress={setHabitProgress} updateXP={fetchXP} />
             </motion.section>
             <motion.section variants={sectionVariants}>
                 <StatsTeaser />

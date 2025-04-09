@@ -66,6 +66,20 @@ pub async fn delete_habit(id: String) -> surrealdb::Result<()> {
 }
 
 #[tauri::command]
+pub async fn get_xp_for_today() -> surrealdb::Result<serde_json::Value> {
+    let today_str = Local::now().format("%Y-%m-%d").to_string();
+    let mut res = LOCAL_DB
+        .query("math::sum(SELECT VALUE exp FROM habit_log WHERE date = $date)")
+        .bind(("date", today_str))
+        .await?;
+    // Directly extract the total as an Option<i64>
+    let total: Option<i64> = res.take(0)?;
+    println!("Total XP for today: {:?}", total.unwrap_or(0));
+    // Return the number, using 0 as a default if total is None
+    Ok(json!(total.unwrap_or(0)))
+}
+
+#[tauri::command]
 pub async fn get_todays_habits(today_index: Number) -> surrealdb::Result<serde_json::Value> {
     let mut res = LOCAL_DB
         .query("SELECT * FROM habit WHERE array::at(week_days, $index) = true")
@@ -104,7 +118,7 @@ pub async fn sync_habit_log(today_index: Number) -> surrealdb::Result<serde_json
                 data: None,
                 progress: 0.into(),
                 completed: false,
-                xp_earned: 0.into(),
+                exp: 0.into(),
             };
             let _inserted_logs: Vec<schema::HabitLog> =
                 LOCAL_DB.insert("habit_log").content(json!(new_log)).await?;
@@ -124,17 +138,19 @@ pub async fn sync_habit_log(today_index: Number) -> surrealdb::Result<serde_json
     Ok(json!(output))
 }
 
-//update habit log with id and either completed, data, xp_earned or progress
 #[tauri::command]
 pub async fn update_habit_log(
     id: String,
+    exp: Option<Number>,
     completed: Option<bool>,
     progress: Option<Number>,
-    data: Option<String>, 
-    xp_earned: Option<Number>,
+    data: Option<String>,
 ) -> surrealdb::Result<()> {
     let mut update_data = json!({});
-    
+
+    if let Some(exp) = exp {
+        update_data["exp"] = json!(exp);
+    }
     if let Some(completed) = completed {
         update_data["completed"] = json!(completed);
     }
@@ -144,12 +160,8 @@ pub async fn update_habit_log(
     if let Some(data) = data {
         update_data["data"] = json!(data);
     }
-    if let Some(xp_earned) = xp_earned {
-        update_data["xp_earned"] = json!(xp_earned);
-    }
-    
-    // Update habit_log where habit_id is "habit:{id}"
     println!("Updating habit log with id: {:?}", id);
+    println!("Update data: {:?}", update_data);
     let _res = LOCAL_DB
         .query("UPDATE habit_log MERGE $update_data WHERE habit_id = $habit_id")
         .bind(("update_data", update_data))

@@ -19,7 +19,7 @@ export interface HabitCardProps {
     highest_streak: number;
     current_streak: number;
     last_completed?: string;
-    xp: number;
+    habit_xp: number;
 }
 
 const HabitCard = ({ id, title, goal, unit, week_days, icon, color }: HabitCardProps) => {
