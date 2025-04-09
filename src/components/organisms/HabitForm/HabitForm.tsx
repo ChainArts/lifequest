@@ -33,7 +33,7 @@ type HabitFormProps = {
         icon: string;
         color: string;
         tracking: boolean;
-        xp: number;
+        habit_xp: number;
         highest_streak: number;
         current_streak: number;
         last_completed?: string;
@@ -66,7 +66,7 @@ const HabitForm = ({ id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }
         highest_streak: 0,
         current_streak: 0,
         last_completed: undefined,
-        xp: 0,
+        habit_xp: 0,
     };
 
     return (
@@ -74,9 +74,9 @@ const HabitForm = ({ id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }
             initialValues={initialValues || defaultValues}
             validationSchema={habitSchema}
             onSubmit={(values, { resetForm }) => {
-                const xpForSubmit = mode === "edit" ? initialValues?.xp : 0;
+                const habit_xp = mode === "edit" ? initialValues?.habit_xp : 0;
                 const highest_streak = mode === "edit" ? initialValues?.highest_streak : 0;
-                const habitValues = { ...values, xp: xpForSubmit, highest_streak, current_streak: 0 };
+                const habitValues = { ...values, habit_xp, highest_streak, current_streak: 0 };
 
                 if (mode === "edit") {
                     invoke("update_habit", { values: habitValues, id }).then(() => {

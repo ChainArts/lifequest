@@ -11,7 +11,7 @@ pub struct Habit {
     pub icon: String,
     pub color: String,
     pub tracking: bool,
-    pub xp: Number,
+    pub habit_xp: Number,
     pub highest_streak: Number,
     pub current_streak: Number,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -30,7 +30,7 @@ pub struct HabitLog {
     pub habit_id: String,
     pub date: String,
     pub completed: bool,
-    pub xp_earned: Number,
+    pub exp: Number,
     pub progress: Number,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<String>,

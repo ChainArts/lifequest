@@ -4,7 +4,7 @@ import StatsTeaser from "../components/organisms/StatsTeaser/StatsTeaser";
 import DailyHabits from "../components/organisms/DailyHabits/DailyHabits";
 import StreakProgress from "../components/organisms/StreakProgress/StreakProgress";
 import DailyProgress from "../components/organisms/DailyProgress/DailyProgress";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { pageVariants, sectionVariants } from "../components/atoms/PageTransition/PageTransition";
 import { invoke } from "@tauri-apps/api/core";
 import { HabitCardProps } from "../components/molecules/HabitCard/HabitCard";
@@ -12,7 +12,7 @@ import { ActiveHabitProps } from "../components/molecules/ActiveHabit/ActiveHabi
 
 const Home = () => {
     const [habits, setHabits] = useState<ActiveHabitProps[]>([]);
-    const [xp, setXP] = useState(0);
+    const [dailyXp, setDailyXp] = useState(0);
     const streak = 0;
 
     const today = new Date().getDay() - 1;
@@ -34,7 +34,7 @@ const Home = () => {
     const fetchXP = async () => {
         try {
             const xp: number = await invoke("get_xp_for_today", {});
-            setXP(xp);
+            setDailyXp(xp);
         } catch (error) {
             console.error("Error fetching XP:", error);
         }
@@ -58,8 +58,10 @@ const Home = () => {
         setHabits((prevHabits) => {
             const updatedHabits = prevHabits.map((habit) => {
                 if (habit.id === id) {
-                    // Only mark bonus if habit transitions from incomplete to complete.
                     const newDone = Math.min(habit.done + add, habit.goal);
+                    if (newDone === habit.goal && habit.done < habit.goal) {
+                        fetchXP();
+                    }
 
                     return {
                         ...habit,
@@ -76,13 +78,13 @@ const Home = () => {
     return (
         <motion.main initial="initial" animate="in" exit="out" variants={pageVariants}>
             <motion.section variants={sectionVariants}>
-                <DailyProgress progress={calculateProgress()} habits={habits.length} xp={xp} />
+                <DailyProgress progress={calculateProgress()} habits={habits.length} xp={dailyXp} />
             </motion.section>
             <motion.section variants={sectionVariants}>
                 <StreakProgress streak={streak} isCompleted={calculateProgress() == 100} />
             </motion.section>
             <motion.section variants={sectionVariants}>
-                <DailyHabits activeHabits={habits} setHabitProgress={setHabitProgress} />
+                <DailyHabits activeHabits={habits} setHabitProgress={setHabitProgress} updateXP={fetchXP} />
             </motion.section>
             <motion.section variants={sectionVariants}>
                 <StatsTeaser />

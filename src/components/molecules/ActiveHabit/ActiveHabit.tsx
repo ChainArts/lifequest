@@ -34,13 +34,17 @@ const calulateStreakXP = (streak: number) => {
     return baseXP * multiplier;
 };
 
-const ActiveHabit = ({ habit, setHabitProgress }: { habit: ActiveHabitProps; setHabitProgress: (id: string, add: number) => void }) => {
+const ActiveHabit = ({ habit, setHabitProgress, updateXP }: { habit: ActiveHabitProps; setHabitProgress: (id: string, add: number) => void; updateXP: () => void; }) => {
     const [circles, setCircles] = useState<{ id: string }[]>([]);
     const { id, title, goal, done, icon, color, unit } = habit;
 
     const handleAdd = async () => {
         setHabitProgress(id, 1);
-        await updateHabitProgress(id, done + 1);
+        const newProgress = done + 1;
+        await updateHabitProgress(id, newProgress);
+        if (newProgress >= goal) {
+            updateXP();
+        }
         const timestamp = Date.now();
         const newCircles = [{ id: `${timestamp}` }];
         setCircles((prev) => [...prev, ...newCircles]);
@@ -48,16 +52,17 @@ const ActiveHabit = ({ habit, setHabitProgress }: { habit: ActiveHabitProps; set
 
     // Call this function to update habit progress in the backend.
     const updateHabitProgress = async (habitLogId: string, newProgress: number) => {
+        const xp = 50;
         try {
-            await invoke("update_habit_log", { id: habitLogId, progress: newProgress });
-
-            if (newProgress == goal) {
-                await invoke("update_habit_log", { id: habitLogId, completed: true });
-                await invoke("update_habit_log", { id: habitLogId, xp_earned: 50 });
-            } else {
-                await invoke("update_habit_log", { id: habitLogId, completed: false });
+            const updateData: any = { id: habitLogId, progress: newProgress, exp: 0 };
+            updateData.completed = newProgress === goal;
+        
+            if (newProgress === goal) {
+                updateData.exp = xp;
             }
-
+        
+            await invoke("update_habit_log", updateData);
+        
             console.log("Habit progress updated");
         } catch (error) {
             console.error("Failed to update habit progress:", error);
