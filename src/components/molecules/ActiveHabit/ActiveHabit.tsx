@@ -52,13 +52,12 @@ const ActiveHabit = ({ habit, setHabitProgress, updateXP }: { habit: ActiveHabit
 
     // Call this function to update habit progress in the backend.
     const updateHabitProgress = async (habitLogId: string, newProgress: number) => {
-        const xp = 50;
         try {
             const updateData: any = { id: habitLogId, progress: newProgress, exp: 0 };
             updateData.completed = newProgress === goal;
         
             if (newProgress === goal) {
-                updateData.exp = xp;
+                updateData.exp = calulateStreakXP(1);
             }
         
             await invoke("update_habit_log", updateData);
