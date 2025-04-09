@@ -31,6 +31,7 @@ pub struct HabitLog {
     pub date: String,
     pub completed: bool,
     pub xp_earned: Number,
+    pub progress: Number,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<String>,
 }

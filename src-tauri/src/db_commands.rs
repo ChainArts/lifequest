@@ -77,41 +77,83 @@ pub async fn get_todays_habits(today_index: Number) -> surrealdb::Result<serde_j
 
 #[tauri::command]
 pub async fn sync_habit_log(today_index: Number) -> surrealdb::Result<serde_json::Value> {
-    // Use chrono to get today's date as "YYYY-MM-DD".
     let today_str = Local::now().format("%Y-%m-%d").to_string();
 
-    // Query the habit table to retrieve all active habits for today.
+    // Query active habits for today.
     let mut res = LOCAL_DB
         .query("SELECT * FROM habit WHERE array::at(week_days, $index) = true")
         .bind(("index", today_index))
         .await?;
     let active_habits: Vec<schema::HabitWithId> = res.take(0)?;
 
-    // For each active habit...
-    for habit in &active_habits {
-        let query = "SELECT * FROM habit_log WHERE habit_id = $habit_id AND date = $date";
+    let mut output = Vec::new();
+    // For each active habit, get its log and merge completed and progress.
+    for habit in active_habits {
         let mut log_res = LOCAL_DB
-            .query(query)
+            .query("SELECT * FROM habit_log WHERE habit_id = $habit_id AND date = $date")
             .bind(("habit_id", habit.id.to_string()))
             .bind(("date", today_str.clone()))
             .await?;
-        let logs: Vec<schema::HabitLog> = log_res.take(0)?;
+        let mut logs: Vec<schema::HabitLog> = log_res.take(0)?;
 
-        // If no log exists for this habit for today, insert a new log.
-        if logs.is_empty() {
+        let log_entry = if logs.is_empty() {
+            // Create a new log if none exists.
             let new_log = schema::HabitLog {
                 habit_id: habit.id.to_string(),
                 date: today_str.clone(),
                 data: None,
+                progress: 0.into(),
                 completed: false,
-                xp_earned: Number::from(0),
+                xp_earned: 0.into(),
             };
-            println!("Creating new log: {:?}", new_log);
-            let inserted_logs: Vec<schema::HabitLog> =
+            let _inserted_logs: Vec<schema::HabitLog> =
                 LOCAL_DB.insert("habit_log").content(json!(new_log)).await?;
-            println!("Inserted new log: {:?}", inserted_logs);
+            new_log
+        } else {
+            logs.remove(0)
+        };
+
+        // Serialize habit and add completed and progress.
+        let mut habit_json = serde_json::to_value(&habit).unwrap();
+        if let Some(obj) = habit_json.as_object_mut() {
+            obj.insert("completed".to_string(), json!(log_entry.completed));
+            obj.insert("progress".to_string(), json!(log_entry.progress));
         }
+        output.push(habit_json);
     }
-    // Return all habit log entries for today's active habits.
-    Ok(json!(active_habits))
+    Ok(json!(output))
+}
+
+//update habit log with id and either completed, data, xp_earned or progress
+#[tauri::command]
+pub async fn update_habit_log(
+    id: String,
+    completed: Option<bool>,
+    progress: Option<Number>,
+    data: Option<String>, 
+    xp_earned: Option<Number>,
+) -> surrealdb::Result<()> {
+    let mut update_data = json!({});
+    
+    if let Some(completed) = completed {
+        update_data["completed"] = json!(completed);
+    }
+    if let Some(progress) = progress {
+        update_data["progress"] = json!(progress);
+    }
+    if let Some(data) = data {
+        update_data["data"] = json!(data);
+    }
+    if let Some(xp_earned) = xp_earned {
+        update_data["xp_earned"] = json!(xp_earned);
+    }
+    
+    // Update habit_log where habit_id is "habit:{id}"
+    println!("Updating habit log with id: {:?}", id);
+    let _res = LOCAL_DB
+        .query("UPDATE habit_log MERGE $update_data WHERE habit_id = $habit_id")
+        .bind(("update_data", update_data))
+        .bind(("habit_id", format!("habit:{}", id)))
+        .await?;
+    Ok(())
 }
