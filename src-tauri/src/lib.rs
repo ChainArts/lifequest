@@ -44,7 +44,6 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
-            db_commands::greet,
             db_commands::insert_habit,
             db_commands::get_habits,
             db_commands::update_habit,

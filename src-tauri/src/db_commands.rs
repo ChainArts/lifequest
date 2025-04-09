@@ -5,11 +5,6 @@ use serde_json::Number;
 
 use crate::db::LOCAL_DB;
 
-#[tauri::command]
-pub fn greet(user: schema::GoogleUser) -> String {
-    format!("Hello, {} ({})", user.name, user.email)
-}
-
 //insert into surrealdb
 #[tauri::command]
 pub async fn insert_habit(values: schema::Habit) -> surrealdb::Result<()> {
@@ -58,7 +53,14 @@ pub async fn get_single_habit(id: String) -> surrealdb::Result<serde_json::Value
 
 #[tauri::command]
 pub async fn delete_habit(id: String) -> surrealdb::Result<()> {
-    println!("Deleting habit: {:?}", id);
+    println!("Deleting habit and related logs for habit id: {:?}", id);
+    // Delete related habit log entries using a delete query on habit_log table
+    let _logs_deleted = LOCAL_DB
+        .query("DELETE FROM habit_log WHERE habit_id = $habit_id")
+        .bind(("habit_id", format!("habit:{}", id)))
+        .await?;
+
+    // Now delete the habit itself
     let _res: Option<schema::Habit> = LOCAL_DB.delete(("habit", id)).await?;
     Ok(())
 }
@@ -109,8 +111,8 @@ pub async fn sync_habit_log(today_index: Number) -> surrealdb::Result<serde_json
             };
             // changed from print! to println! to flush output immediately
             println!("Creating new log: {:?}", new_log);
-            let inserted_logs: Vec<schema::HabitLog> = LOCAL_DB
-                .insert("habit_log").content(json!(new_log)).await?;
+            let inserted_logs: Vec<schema::HabitLog> =
+                LOCAL_DB.insert("habit_log").content(json!(new_log)).await?;
             // Optionally change this print! to println! as well
             println!("Inserted new log: {:?}", inserted_logs);
             final_logs.extend(inserted_logs);
