@@ -19,6 +19,10 @@ pub struct Habit {
     pub color: String,
     pub tracking: bool,
     pub xp: Number,
+    pub highest_streak: Number,
+    pub current_streak: Number,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_completed: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -29,18 +33,18 @@ pub struct HabitWithId {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct Schedule {
+pub struct HabitLog {
+    pub habit_id: String,
     pub date: String,
-    pub habit_id: Thing,
-    pub done: Number,
-    pub goal: Number,
-    pub received_reward: bool,
-    pub data: Number,
+    pub completed: bool,
+    pub xp_earned: Number,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct ScheduleWithId {
+pub struct HabitLogWithId {
     #[serde(flatten)]
-    pub schedule: Schedule,
+    pub habit_log: HabitLog,
     pub id: Thing,
 }

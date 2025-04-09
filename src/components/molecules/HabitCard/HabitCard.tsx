@@ -16,6 +16,9 @@ export interface HabitCardProps {
     icon: string;
     color: string;
     tracking: boolean;
+    highest_streak: number;
+    current_streak: number;
+    last_completed?: string;
     xp: number;
 }
 
