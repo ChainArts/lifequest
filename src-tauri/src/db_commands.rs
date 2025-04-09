@@ -2,6 +2,7 @@ mod schema;
 use chrono::Local;
 use serde_json::json;
 use serde_json::Number;
+use surrealdb::sql::Thing;
 
 use crate::db::LOCAL_DB;
 
@@ -66,12 +67,14 @@ pub async fn delete_habit(id: String) -> surrealdb::Result<()> {
 }
 
 #[tauri::command]
-pub async fn increase_habit_xp(id: String, xp: Number) -> surrealdb::Result<()> {
-    println!("Increasing habit xp for id: {:?} by {:?}", id, xp);
+pub async fn increase_habit_xp(id: String, exp: Number) -> surrealdb::Result<()> {
+    println!("Increasing habit xp for id: {:?} by {:?}", (format!("habit:{}", id)), exp);
+    let thing = Thing::from(("habit", id.as_str())); 
+    
     let _res = LOCAL_DB
-        .query("UPDATE habit SET habit_xp = habit_xp + $xp WHERE id = $id")
-        .bind(("xp", xp))
-        .bind(("id", format!("habit:{}", id)))
+        .query("UPDATE habit SET habit_xp += $exp WHERE id = $id")
+        .bind(("exp", exp))
+        .bind(("id", thing))  // bind the thing instead of a raw string
         .await?;
     Ok(())
 }

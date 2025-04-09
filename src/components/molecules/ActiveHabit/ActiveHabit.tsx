@@ -59,6 +59,10 @@ const ActiveHabit = ({ habit, setHabitProgress, updateXP }: { habit: ActiveHabit
 
             if (newProgress === goal) {
                 updateData.exp = calulateStreakXP(habit.current_streak);
+                await invoke("increase_habit_xp", {
+                    id: habit.id,
+                    exp: updateData.exp,
+                });
             }
 
             await invoke("update_habit_log", updateData);
