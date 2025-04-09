@@ -66,6 +66,20 @@ pub async fn delete_habit(id: String) -> surrealdb::Result<()> {
 }
 
 #[tauri::command]
+pub async fn get_xp_for_today() -> surrealdb::Result<serde_json::Value> {
+    let today_str = Local::now().format("%Y-%m-%d").to_string();
+    let mut res = LOCAL_DB
+        .query("math::sum(SELECT VALUE xp_earned FROM habit_log WHERE date = $date)")
+        .bind(("date", today_str))
+        .await?;
+    // Directly extract the total as an Option<i64>
+    let total: Option<i64> = res.take(0)?;
+    println!("Total XP for today: {:?}", total.unwrap_or(0));
+    // Return the number, using 0 as a default if total is None
+    Ok(json!(total.unwrap_or(0)))
+}
+
+#[tauri::command]
 pub async fn get_todays_habits(today_index: Number) -> surrealdb::Result<serde_json::Value> {
     let mut res = LOCAL_DB
         .query("SELECT * FROM habit WHERE array::at(week_days, $index) = true")

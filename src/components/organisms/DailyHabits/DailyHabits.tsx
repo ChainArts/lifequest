@@ -6,10 +6,10 @@ import Card from "../../molecules/Card/Card";
 
 type DailyHabitsProps = {
     activeHabits: ActiveHabitProps[];
-    setHabitDone: (id: string, add: number) => void;
+    setHabitProgress: (id: string, add: number) => void;
 };
 
-const DailyHabits = ({ activeHabits, setHabitDone }: DailyHabitsProps) => {
+const DailyHabits = ({ activeHabits, setHabitProgress }: DailyHabitsProps) => {
     return (
         <section className="container">
             <IconContext.Provider value={{ className: "daily-habits__icons" }}>
@@ -26,7 +26,7 @@ const DailyHabits = ({ activeHabits, setHabitDone }: DailyHabitsProps) => {
                 ) : (
                     <div className="daily-habits__list">
                         {activeHabits.map((habit, index) => (
-                            <ActiveHabit key={index} habit={habit} setHabitDone={setHabitDone} />
+                            <ActiveHabit key={index} habit={habit} setHabitProgress={setHabitProgress} />
                         ))}
                     </div>
                 )}
