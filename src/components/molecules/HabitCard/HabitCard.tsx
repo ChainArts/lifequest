@@ -22,11 +22,23 @@ export interface HabitCardProps {
     habit_xp: number;
 }
 
-const HabitCard = ({ id, title, goal, unit, week_days, icon, color }: HabitCardProps) => {
-    const streak = 5;
+const calculateLevel = (xp: number): number => {
+    return Math.floor((Math.sqrt(1 + (8 * xp) / 10) - 1) / 2);
+};
+
+const calculateProgressToNextLevel = (xp: number): number => {
+    const level = calculateLevel(xp);
+
+    const xpForCurrentLevel = (10 * level * (level + 1)) / 2;
+    const xpForNextLevel = (10 * (level + 1) * (level + 2)) / 2;
+
+    const progress = ((xp - xpForCurrentLevel) / (xpForNextLevel - xpForCurrentLevel)) * 100;
+
+    return Math.floor(progress);
+};
+
+const HabitCard = ({ id, title, goal, unit, week_days, icon, color, current_streak, habit_xp }: HabitCardProps) => {
     const activeDays = week_days.map((day) => (day ? "1" : "0")).join("");
-    const nextlevelXp = 100;
-    const currentXp = 50;
     //calculate lighter shade of color
     const colorLight = color + "DD";
 
@@ -59,7 +71,7 @@ const HabitCard = ({ id, title, goal, unit, week_days, icon, color }: HabitCardP
                             </div>
 
                             <span className="fst--upper-heading">
-                                <AiFillFire /> {streak}
+                                <AiFillFire /> {current_streak}
                             </span>
                         </div>
                         <div className="habit-card__progress">
@@ -73,10 +85,10 @@ const HabitCard = ({ id, title, goal, unit, week_days, icon, color }: HabitCardP
                                 </div>
                                 <div>
                                     <span className="fst--upper-heading">LVL</span>
-                                    <span className="habit-card__level">12</span>
+                                    <span className="habit-card__level">{calculateLevel(habit_xp)}</span>
                                 </div>
                             </div>
-                            <LinearProgress goal={nextlevelXp} done={currentXp} />
+                            <LinearProgress goal={100} done={calculateProgressToNextLevel(habit_xp)} />
                         </div>
                     </div>
                 </Card>

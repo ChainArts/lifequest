@@ -14,6 +14,7 @@ export type ActiveHabitProps = {
     icon: string;
     done: number;
     color: string;
+    current_streak: number;
 };
 
 const calulateStreakXP = (streak: number) => {
@@ -34,7 +35,7 @@ const calulateStreakXP = (streak: number) => {
     return baseXP * multiplier;
 };
 
-const ActiveHabit = ({ habit, setHabitProgress, updateXP }: { habit: ActiveHabitProps; setHabitProgress: (id: string, add: number) => void; updateXP: () => void; }) => {
+const ActiveHabit = ({ habit, setHabitProgress, updateXP }: { habit: ActiveHabitProps; setHabitProgress: (id: string, add: number) => void; updateXP: () => void }) => {
     const [circles, setCircles] = useState<{ id: string }[]>([]);
     const { id, title, goal, done, icon, color, unit } = habit;
 
@@ -55,13 +56,13 @@ const ActiveHabit = ({ habit, setHabitProgress, updateXP }: { habit: ActiveHabit
         try {
             const updateData: any = { id: habitLogId, progress: newProgress, exp: 0 };
             updateData.completed = newProgress === goal;
-        
+
             if (newProgress === goal) {
-                updateData.exp = calulateStreakXP(1);
+                updateData.exp = calulateStreakXP(habit.current_streak);
             }
-        
+
             await invoke("update_habit_log", updateData);
-        
+
             console.log("Habit progress updated");
         } catch (error) {
             console.error("Failed to update habit progress:", error);

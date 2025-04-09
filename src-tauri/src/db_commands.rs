@@ -66,6 +66,17 @@ pub async fn delete_habit(id: String) -> surrealdb::Result<()> {
 }
 
 #[tauri::command]
+pub async fn increase_habit_xp(id: String, xp: Number) -> surrealdb::Result<()> {
+    println!("Increasing habit xp for id: {:?} by {:?}", id, xp);
+    let _res = LOCAL_DB
+        .query("UPDATE habit SET habit_xp = habit_xp + $xp WHERE id = $id")
+        .bind(("xp", xp))
+        .bind(("id", format!("habit:{}", id)))
+        .await?;
+    Ok(())
+}
+
+#[tauri::command]
 pub async fn get_xp_for_today() -> surrealdb::Result<serde_json::Value> {
     let today_str = Local::now().format("%Y-%m-%d").to_string();
     let mut res = LOCAL_DB
