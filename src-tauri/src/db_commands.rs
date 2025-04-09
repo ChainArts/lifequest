@@ -87,9 +87,6 @@ pub async fn sync_habit_log(today_index: Number) -> surrealdb::Result<serde_json
         .await?;
     let active_habits: Vec<schema::HabitWithId> = res.take(0)?;
 
-    // Vector to store all habit log entries we find or create.
-    let mut final_logs: Vec<schema::HabitLog> = Vec::new();
-
     // For each active habit...
     for habit in &active_habits {
         let query = "SELECT * FROM habit_log WHERE habit_id = $habit_id AND date = $date";
@@ -109,18 +106,12 @@ pub async fn sync_habit_log(today_index: Number) -> surrealdb::Result<serde_json
                 completed: false,
                 xp_earned: Number::from(0),
             };
-            // changed from print! to println! to flush output immediately
             println!("Creating new log: {:?}", new_log);
             let inserted_logs: Vec<schema::HabitLog> =
                 LOCAL_DB.insert("habit_log").content(json!(new_log)).await?;
-            // Optionally change this print! to println! as well
             println!("Inserted new log: {:?}", inserted_logs);
-            final_logs.extend(inserted_logs);
-        } else {
-            // Log entries for today already exist, so add them to our result vector.
-            final_logs.extend(logs);
         }
     }
     // Return all habit log entries for today's active habits.
-    Ok(json!(final_logs))
+    Ok(json!(active_habits))
 }
