@@ -4,6 +4,7 @@ import { HiPlus, HiCheck } from "react-icons/hi";
 import { cubicBezier, motion } from "motion/react";
 import LinearProgress from "../../atoms/LinearProgress/LinearProgress";
 import FluentEmoji from "../../../lib/FluentEmoji";
+import { invoke } from "@tauri-apps/api/core";
 
 export type ActiveHabitProps = {
     id: string;
@@ -19,11 +20,22 @@ const ActiveHabit = ({ habit, setHabitDone }: { habit: ActiveHabitProps; setHabi
     const [circles, setCircles] = useState<{ id: string }[]>([]);
     const { id, title, goal, done, icon, color, unit } = habit;
 
-    const handleAdd = () => {
+    const handleAdd = async () => {
         setHabitDone(id, 1);
+        await updateHabitProgress(id, done + 1);
         const timestamp = Date.now();
         const newCircles = [{ id: `${timestamp}` }];
         setCircles((prev) => [...prev, ...newCircles]);
+    };
+
+    // Call this function to update habit progress in the backend.
+    const updateHabitProgress = async (habitLogId: string, newProgress: number) => {
+        try {
+            await invoke('update_habit_log', { id: habitLogId, progress: newProgress });
+            console.log('Habit progress updated');
+        } catch (error) {
+            console.error('Failed to update habit progress:', error);
+        }
     };
 
     // Remove a circle after its animation completes
@@ -56,7 +68,7 @@ const ActiveHabit = ({ habit, setHabitDone }: { habit: ActiveHabitProps; setHabi
                     </div>
                     {!finished ? (
                         <motion.div layout>
-                            <motion.button className="habit__add" onClick={handleAdd}>
+                            <motion.button className="habit__add" onTap={handleAdd}>
                                 <HiPlus />
                                 {circles.map((circle) => (
                                     <motion.div

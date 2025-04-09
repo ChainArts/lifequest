@@ -37,16 +37,15 @@ const Home = () => {
 
     const fetchHabits = async () => {
         try {
-            const habits: HabitCardProps[] = await invoke("get_todays_habits", { todayIndex: today });
-
+            const habits: HabitCardProps[] = await invoke("sync_habit_log", { todayIndex: today });
             const transformedHabits = habits.map((habit: any) => ({
                 ...habit,
                 id: habit.id.id.String,
-                done: 0,
+                done: habit.progress,
             }));
             setHabits(transformedHabits as ActiveHabitProps[]);
         } catch (error) {
-            console.error(error);
+            console.error("Error fetching habits:", error);
         }
     };
 
