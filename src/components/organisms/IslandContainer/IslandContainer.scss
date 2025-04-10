@@ -1,0 +1,18 @@
+.island-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100svh;
+    transition: transform 0.5s var(--ease);
+    transform: translateY(-15rem);
+
+    &.island-container--active {
+        transform: translateY(0);
+        transition-delay: 0.25s;
+    }
+}
+
+.island-container__canvas {
+    height: 100%;
+}

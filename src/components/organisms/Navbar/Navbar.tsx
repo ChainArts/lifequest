@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import "./Navbar.scss";
-import { HiOutlineBookmark, HiOutlineBadgeCheck, HiOutlineUser, HiOutlineShoppingBag } from "react-icons/hi";
+import { HiOutlineBookmark, HiOutlineBadgeCheck, HiOutlineUser } from "react-icons/hi";
+import { PiIsland } from "react-icons/pi";
 import { IconContext } from "react-icons";
 import { AnimatePresence } from "motion/react";
 
@@ -23,9 +24,9 @@ const Navbar = () => {
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to="/shop" className={({ isActive }) => (isActive ? "active navbar-link" : "navbar-link")}>
-                                <HiOutlineShoppingBag />
-                                Shop
+                            <NavLink to="/island" className={({ isActive }) => (isActive ? "active navbar-link" : "navbar-link")}>
+                                <PiIsland />
+                                Island
                             </NavLink>
                         </li>
                         <li>
