@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Number;
 use surrealdb::sql::Thing;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Habit {
     pub title: String,
     pub goal: Number,
@@ -18,7 +18,7 @@ pub struct Habit {
     pub last_completed: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct HabitWithId {
     #[serde(flatten)]
     pub habit: Habit,
