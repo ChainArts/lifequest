@@ -176,8 +176,11 @@ pub async fn update_habit_log(
     }
     println!("Updating habit log with id: {:?}", id);
     println!("Update data: {:?}", update_data);
+
+    let today_str = Local::now().format("%Y-%m-%d").to_string();
     let _res = LOCAL_DB
-        .query("UPDATE habit_log MERGE $update_data WHERE habit_id = $habit_id")
+        .query("UPDATE habit_log MERGE $update_data WHERE habit_id = $habit_id AND date = $date")
+        .bind(("date", today_str))
         .bind(("update_data", update_data))
         .bind(("habit_id", format!("habit:{}", id)))
         .await?;

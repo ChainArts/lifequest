@@ -1,11 +1,11 @@
-import { Formik, Form, Field, ErrorMessage, useFormikContext } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import "../HabitForm/HabitForm.scss";
 import { HiOutlineX } from "react-icons/hi";
 import { Sheet } from "react-modal-sheet";
 import { invoke } from "@tauri-apps/api/core";
 import { ActiveHabitProps } from "../../molecules/ActiveHabit/ActiveHabit";
-import { BiSolidUpArrow, BiSolidDownArrow, BiSolidRightArrow } from "react-icons/bi";
+import { BiSolidUpArrow, BiSolidDownArrow } from "react-icons/bi";
 
 type HabitFormProps = {
     setOpen: (value: boolean) => void;
@@ -32,10 +32,9 @@ const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess }: HabitForm
     const onSubmit = async (values: { [key: string]: number }) => {
         for (const habit of habits) {
             try {
-                await invoke("update_habit", {
-                    values: { done: values[habit.id] },
-                    id: habit.id,
-                });
+                await invoke("update_habit_log", { id: habit.id, progress: values[habit.id] });
+
+                console.log(`Habit ${habit.id} was updatec with value ${values[habit.id]}`);
             } catch (error) {
                 console.error(`Error updating habit ${habit.id}:`, error);
             }
