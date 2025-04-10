@@ -104,6 +104,23 @@ pub async fn get_todays_habits(today_index: Number) -> surrealdb::Result<serde_j
 }
 
 #[tauri::command]
+pub async fn schedule_habit_for_today(id: String) -> surrealdb::Result<()> {
+    let today_str: String = Local::now().format("%Y-%m-%d").to_string();
+    let new_log = schema::HabitLog {
+        habit_id: format!("habit:{}", id),
+        date: today_str.clone(),
+        data: None,
+        progress: 0.into(),
+        completed: false,
+        exp: 0.into(),
+    };
+    println!("Adding new habit log: {:?}", new_log);
+    let _res: Vec<schema::HabitLog> =
+        LOCAL_DB.insert("habit_log").content(json!(new_log)).await?;
+    Ok(())
+}
+
+#[tauri::command]
 pub async fn sync_habit_log(today_index: Number) -> surrealdb::Result<serde_json::Value> {
     let today_str = Local::now().format("%Y-%m-%d").to_string();
 

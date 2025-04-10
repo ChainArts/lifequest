@@ -175,6 +175,15 @@ const AddActiveHabit = ({ habits, addActiveHabitOpen, setAddActiveHabitOpen }: A
         }
     };
 
+    const scheduleHabit = async (id: string) => {
+        try {
+            await invoke("schedule_habit_for_today", { id });
+            setAddActiveHabitOpen(false);
+        } catch (error) {
+            console.error("Failed to schedule habit:", error);
+        }
+    };
+
     useEffect(() => {
         fetchInactiveHabits();
     }, []);
@@ -185,19 +194,22 @@ const AddActiveHabit = ({ habits, addActiveHabitOpen, setAddActiveHabitOpen }: A
                 <Sheet.Header />
                 <Sheet.Content>
                     <Sheet.Scroller>
-                        <div className="container form-container">
-                            <fieldset>
-                                <div className="form-box">
-                                    {inactiveHabits.length === 0 && <div className="form-upper-heading"></div>}
-                                    {inactiveHabits.map((habit) => (
-                                        <label htmlFor={habit.id} key={habit.id}>
-                                            <div className="form-upper-heading">{habit.title}</div>
-                                            <Field id={habit.id} name={habit.id} type="checkbox" />
-                                        </label>
-                                    ))}
-                                </div>
-                            </fieldset>
-                        </div>
+                        {inactiveHabits.length === 0 ? (
+                            <div className="container form-upper-heading ">No additional Habits were found</div>
+                        ) : (
+                            <div className="container form-container">
+                                <fieldset>
+                                    <div className="form-box">
+                                        {inactiveHabits.map((habit) => (
+                                            <label htmlFor={habit.id} key={habit.id}>
+                                                <div className="form-upper-heading">{habit.title}</div>
+                                                <Field id={habit.id} name={habit.id} type="checkbox" onClick={() => scheduleHabit(habit.id)} />
+                                            </label>
+                                        ))}
+                                    </div>
+                                </fieldset>
+                            </div>
+                        )}
                     </Sheet.Scroller>
                 </Sheet.Content>
             </Sheet.Container>
