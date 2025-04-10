@@ -10,9 +10,10 @@ type DailyHabitsProps = {
     activeHabits: ActiveHabitProps[];
     setHabitProgress: (id: string, add: number) => void;
     updateXP: () => void;
+    fetchHabits: () => void;
 };
 
-const DailyHabits = ({ activeHabits, setHabitProgress, updateXP }: DailyHabitsProps) => {
+const DailyHabits = ({ activeHabits, setHabitProgress, updateXP, fetchHabits }: DailyHabitsProps) => {
     const [openEdit, setOpenEdit] = useState(false);
     return (
         <section className="container">
@@ -42,7 +43,7 @@ const DailyHabits = ({ activeHabits, setHabitProgress, updateXP }: DailyHabitsPr
                     </div>
                 )}
             </IconContext.Provider>
-            <DailyHabitsEdit setOpen={setOpenEdit} isOpen={openEdit} habits={activeHabits} onSubmitSuccess={() => setOpenEdit(false)} />
+            <DailyHabitsEdit setOpen={setOpenEdit} isOpen={openEdit} habits={activeHabits} onSubmitSuccess={() => setOpenEdit(false)} fetchHabits={fetchHabits} />
         </section>
     );
 };

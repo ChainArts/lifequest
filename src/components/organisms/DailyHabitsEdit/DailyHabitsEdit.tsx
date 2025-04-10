@@ -4,18 +4,20 @@ import "../HabitForm/HabitForm.scss";
 import { HiOutlineX } from "react-icons/hi";
 import { Sheet } from "react-modal-sheet";
 import { invoke } from "@tauri-apps/api/core";
-import { ActiveHabitProps } from "../../molecules/ActiveHabit/ActiveHabit";
+import { ActiveHabitProps, calulateStreakXP } from "../../molecules/ActiveHabit/ActiveHabit";
 import { BiSolidUpArrow, BiSolidDownArrow } from "react-icons/bi";
+import { use, useEffect, useState } from "react";
 
 type HabitFormProps = {
     setOpen: (value: boolean) => void;
     isOpen: boolean;
     habits: ActiveHabitProps[];
     onSubmitSuccess?: () => void;
+    fetchHabits: () => void;
 };
 
-const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess }: HabitFormProps) => {
-    // Build initial values dynamically: each habit's id maps to its "done" value.
+const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess, fetchHabits }: HabitFormProps) => {
+    const [addActiveHabitOpen, setAddActiveHabitOpen] = useState(false);
     const initialValues = habits.reduce((values, habit) => {
         return { ...values, [habit.id]: habit.done };
     }, {} as { [key: string]: number });
@@ -32,7 +34,18 @@ const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess }: HabitForm
     const onSubmit = async (values: { [key: string]: number }) => {
         for (const habit of habits) {
             try {
-                await invoke("update_habit_log", { id: habit.id, progress: values[habit.id] });
+                const updateData: any = { id: habit.id, progress: values[habit.id], exp: 0 };
+                updateData.completed = values[habit.id] === habit.goal;
+
+                if (values[habit.id] === habit.goal) {
+                    updateData.exp = calulateStreakXP(habit.current_streak);
+                    await invoke("increase_habit_xp", {
+                        id: habit.id,
+                        exp: updateData.exp,
+                    });
+                }
+
+                await invoke("update_habit_log", updateData);
 
                 console.log(`Habit ${habit.id} was updatec with value ${values[habit.id]}`);
             } catch (error) {
@@ -41,6 +54,7 @@ const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess }: HabitForm
         }
         if (onSubmitSuccess) {
             onSubmitSuccess();
+            fetchHabits();
         }
         setOpen(false);
     };
@@ -119,7 +133,15 @@ const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess }: HabitForm
                                             </div>
                                         </fieldset>
                                     </div>
-                                    <button className="form-action-button">Add Habit for today</button>
+                                    <button
+                                        className="form-action-button"
+                                        onClick={() => {
+                                            setAddActiveHabitOpen(true);
+                                        }}
+                                    >
+                                        Add Habit for today
+                                    </button>
+                                    <AddActiveHabit addActiveHabitOpen={addActiveHabitOpen} setAddActiveHabitOpen={setAddActiveHabitOpen} habits={habits} />
                                 </Sheet.Scroller>
                             </Sheet.Content>
                         </Sheet.Container>
@@ -128,6 +150,59 @@ const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess }: HabitForm
                 </Form>
             )}
         </Formik>
+    );
+};
+
+type AddActiveHabitProps = {
+    addActiveHabitOpen: boolean;
+    setAddActiveHabitOpen: (value: boolean) => void;
+    habits: ActiveHabitProps[];
+};
+const AddActiveHabit = ({ habits, addActiveHabitOpen, setAddActiveHabitOpen }: AddActiveHabitProps) => {
+    const [inactiveHabits, setInactiveHabits] = useState<ActiveHabitProps[]>([]);
+    const fetchInactiveHabits = async () => {
+        try {
+            const allHabits = (await invoke("get_habits", {})) as any[];
+            const transformedHabits = allHabits.map((habit: any) => ({
+                ...habit,
+                id: habit.id.id.String,
+            }));
+            const inactiveHabits = transformedHabits.filter((habit) => !habits.some((h) => h.id === habit.id));
+            setInactiveHabits(inactiveHabits);
+        } catch (error) {
+            console.error("Failed to fetch inactive habits:", error);
+            return [];
+        }
+    };
+
+    useEffect(() => {
+        fetchInactiveHabits();
+    }, []);
+
+    return (
+        <Sheet isOpen={addActiveHabitOpen} onClose={() => setAddActiveHabitOpen(false)} detent="content-height">
+            <Sheet.Container>
+                <Sheet.Header />
+                <Sheet.Content>
+                    <Sheet.Scroller>
+                        <div className="container form-container">
+                            <fieldset>
+                                <div className="form-box">
+                                    {inactiveHabits.length === 0 && <div className="form-upper-heading"></div>}
+                                    {inactiveHabits.map((habit) => (
+                                        <label htmlFor={habit.id} key={habit.id}>
+                                            <div className="form-upper-heading">{habit.title}</div>
+                                            <Field id={habit.id} name={habit.id} type="checkbox" />
+                                        </label>
+                                    ))}
+                                </div>
+                            </fieldset>
+                        </div>
+                    </Sheet.Scroller>
+                </Sheet.Content>
+            </Sheet.Container>
+            <Sheet.Backdrop onTap={() => setAddActiveHabitOpen(false)} />
+        </Sheet>
     );
 };
 

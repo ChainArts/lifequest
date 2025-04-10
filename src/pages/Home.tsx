@@ -40,9 +40,13 @@ const Home = () => {
         }
     };
 
-    useEffect(() => {
+    const refresh = () => {
         fetchHabits();
         fetchXP();
+    };
+
+    useEffect(() => {
+        refresh();
     }, []);
 
     const calculateProgress = (): number => {
@@ -84,7 +88,7 @@ const Home = () => {
                 <StreakProgress streak={streak} isCompleted={calculateProgress() == 100} />
             </motion.section>
             <motion.section variants={sectionVariants}>
-                <DailyHabits activeHabits={habits} setHabitProgress={setHabitProgress} updateXP={fetchXP} />
+                <DailyHabits activeHabits={habits} setHabitProgress={setHabitProgress} updateXP={fetchXP} fetchHabits={refresh} />
             </motion.section>
             <motion.section variants={sectionVariants}>
                 <StatsTeaser />
