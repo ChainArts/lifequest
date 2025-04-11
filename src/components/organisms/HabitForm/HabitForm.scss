@@ -39,6 +39,10 @@
     }
 }
 
+.number-input-box {
+    position: relative;
+}
+
 .arrow {
     font-size: 0.5rem;
     color: var(--disabled);
@@ -48,7 +52,7 @@
 .arrow-buttons {
     z-index: 50;
     position: absolute;
-    top: 7px;
+    top: 5px;
     right: var(--gap);
     display: flex;
     flex-direction: column;

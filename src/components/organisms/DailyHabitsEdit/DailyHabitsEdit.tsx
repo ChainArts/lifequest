@@ -6,7 +6,9 @@ import { Sheet } from "react-modal-sheet";
 import { invoke } from "@tauri-apps/api/core";
 import { ActiveHabitProps, calulateStreakXP } from "../../molecules/ActiveHabit/ActiveHabit";
 import { BiSolidUpArrow, BiSolidDownArrow } from "react-icons/bi";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import Button from "../../atoms/Button/Button";
+import AddActiveHabit from "./AddActiveHabits";
 
 type HabitFormProps = {
     setOpen: (value: boolean) => void;
@@ -90,42 +92,44 @@ const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess, fetchHabits
                                                 {habits.map((habit) => (
                                                     <label htmlFor={habit.id} key={habit.id}>
                                                         <div className="form-upper-heading">
-                                                            <span className="fst--upper-heading">
+                                                            <span className="fst--upper-heading gray">
                                                                 {habit.goal} {habit.unit}
                                                             </span>
-                                                            {habit.title}
+                                                            <span className="fst--card-title">{habit.title}</span>
                                                         </div>
-                                                        <Field
-                                                            id={habit.id}
-                                                            name={habit.id} // should correspond to initialValues key
-                                                            type="number"
-                                                            inputMode="numeric"
-                                                            min={0}
-                                                            max={habit.goal}
-                                                        />
-                                                        <div className="arrow-buttons">
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => {
-                                                                    const currentValue = values[habit.id] ?? 0;
-                                                                    if (currentValue < habit.goal) {
-                                                                        setFieldValue(habit.id, currentValue + 1);
-                                                                    }
-                                                                }}
-                                                            >
-                                                                <BiSolidUpArrow />
-                                                            </button>
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => {
-                                                                    const currentValue = values[habit.id] ?? 0;
-                                                                    if (currentValue > 0) {
-                                                                        setFieldValue(habit.id, currentValue - 1);
-                                                                    }
-                                                                }}
-                                                            >
-                                                                <BiSolidDownArrow />
-                                                            </button>
+                                                        <div className="number-input-box">
+                                                            <Field
+                                                                id={habit.id}
+                                                                name={habit.id} // should correspond to initialValues key
+                                                                type="number"
+                                                                inputMode="numeric"
+                                                                min={0}
+                                                                max={habit.goal}
+                                                            />
+                                                            <div className="arrow-buttons">
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => {
+                                                                        const currentValue = values[habit.id] ?? 0;
+                                                                        if (currentValue < habit.goal) {
+                                                                            setFieldValue(habit.id, currentValue + 1);
+                                                                        }
+                                                                    }}
+                                                                >
+                                                                    <BiSolidUpArrow />
+                                                                </button>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => {
+                                                                        const currentValue = values[habit.id] ?? 0;
+                                                                        if (currentValue > 0) {
+                                                                            setFieldValue(habit.id, currentValue - 1);
+                                                                        }
+                                                                    }}
+                                                                >
+                                                                    <BiSolidDownArrow />
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                         <ErrorMessage name={habit.id} component="div" className="error invisible" />
                                                     </label>
@@ -133,15 +137,15 @@ const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess, fetchHabits
                                             </div>
                                         </fieldset>
                                     </div>
-                                    <button
+                                    <Button
                                         className="form-action-button"
                                         onClick={() => {
                                             setAddActiveHabitOpen(true);
                                         }}
                                     >
                                         Add Habit for today
-                                    </button>
-                                    <AddActiveHabit addActiveHabitOpen={addActiveHabitOpen} setAddActiveHabitOpen={setAddActiveHabitOpen} habits={habits} />
+                                    </Button>
+                                    <AddActiveHabit addActiveHabitOpen={addActiveHabitOpen} setAddActiveHabitOpen={setAddActiveHabitOpen} habits={habits} fetchHabits={fetchHabits} />
                                 </Sheet.Scroller>
                             </Sheet.Content>
                         </Sheet.Container>
@@ -150,71 +154,6 @@ const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess, fetchHabits
                 </Form>
             )}
         </Formik>
-    );
-};
-
-type AddActiveHabitProps = {
-    addActiveHabitOpen: boolean;
-    setAddActiveHabitOpen: (value: boolean) => void;
-    habits: ActiveHabitProps[];
-};
-const AddActiveHabit = ({ habits, addActiveHabitOpen, setAddActiveHabitOpen }: AddActiveHabitProps) => {
-    const [inactiveHabits, setInactiveHabits] = useState<ActiveHabitProps[]>([]);
-    const fetchInactiveHabits = async () => {
-        try {
-            const allHabits = (await invoke("get_habits", {})) as any[];
-            const transformedHabits = allHabits.map((habit: any) => ({
-                ...habit,
-                id: habit.id.id.String,
-            }));
-            const inactiveHabits = transformedHabits.filter((habit) => !habits.some((h) => h.id === habit.id));
-            setInactiveHabits(inactiveHabits);
-        } catch (error) {
-            console.error("Failed to fetch inactive habits:", error);
-            return [];
-        }
-    };
-
-    const scheduleHabit = async (id: string) => {
-        try {
-            await invoke("schedule_habit_for_today", { id });
-            setAddActiveHabitOpen(false);
-        } catch (error) {
-            console.error("Failed to schedule habit:", error);
-        }
-    };
-
-    useEffect(() => {
-        fetchInactiveHabits();
-    }, []);
-
-    return (
-        <Sheet isOpen={addActiveHabitOpen} onClose={() => setAddActiveHabitOpen(false)} detent="content-height">
-            <Sheet.Container>
-                <Sheet.Header />
-                <Sheet.Content>
-                    <Sheet.Scroller>
-                        {inactiveHabits.length === 0 ? (
-                            <div className="container form-upper-heading ">No additional Habits were found</div>
-                        ) : (
-                            <div className="container form-container">
-                                <fieldset>
-                                    <div className="form-box">
-                                        {inactiveHabits.map((habit) => (
-                                            <label htmlFor={habit.id} key={habit.id}>
-                                                <div className="form-upper-heading">{habit.title}</div>
-                                                <Field id={habit.id} name={habit.id} type="checkbox" onClick={() => scheduleHabit(habit.id)} />
-                                            </label>
-                                        ))}
-                                    </div>
-                                </fieldset>
-                            </div>
-                        )}
-                    </Sheet.Scroller>
-                </Sheet.Content>
-            </Sheet.Container>
-            <Sheet.Backdrop onTap={() => setAddActiveHabitOpen(false)} />
-        </Sheet>
     );
 };
 

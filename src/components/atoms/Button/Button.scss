@@ -1,0 +1,16 @@
+.button {
+    background-color: var(--purple-dark);
+    color: var(--text-invert);
+    border-radius: 2rem;
+    min-width: 200px;
+    padding: 0.5rem 1rem;
+}
+
+.button__container {
+    position: absolute;
+    bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
