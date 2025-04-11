@@ -117,7 +117,7 @@ const IslandContainer = ({ location }: { location: string }) => {
                 <Island position={[0, 0, 0]} scale={20} />
                 {chickens.map((chicken) => chicken)}
             </Canvas>
-            <AnimatePresence mode="sync">{isActive && <IslandMenu />}</AnimatePresence>
+            <AnimatePresence mode="wait">{isActive && <IslandMenu />}</AnimatePresence>
         </section>
     );
 };
