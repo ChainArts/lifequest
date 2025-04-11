@@ -104,19 +104,75 @@ pub async fn get_todays_habits(today_index: Number) -> surrealdb::Result<serde_j
 }
 
 #[tauri::command]
+pub async fn schedule_habit_for_today(id: String) -> surrealdb::Result<()> {
+    let today_str: String = Local::now().format("%Y-%m-%d").to_string();
+    let new_log = schema::HabitLog {
+        habit_id: format!("habit:{}", id),
+        date: today_str.clone(),
+        data: None,
+        progress: 0.into(),
+        completed: false,
+        exp: 0.into(),
+    };
+    println!("Adding new habit log: {:?}", new_log);
+    let _res: Vec<schema::HabitLog> =
+        LOCAL_DB.insert("habit_log").content(json!(new_log)).await?;
+    Ok(())
+}
+
+#[tauri::command]
 pub async fn sync_habit_log(today_index: Number) -> surrealdb::Result<serde_json::Value> {
     let today_str = Local::now().format("%Y-%m-%d").to_string();
 
-    // Query active habits for today.
+    // 1. Get all habit logs for today
+    let mut log_res = LOCAL_DB
+        .query("SELECT * FROM habit_log WHERE date = $date")
+        .bind(("date", today_str.clone()))
+        .await?;
+    let logs: Vec<schema::HabitLog> = log_res.take(0)?;
+    
+    // 2. Query active habits for today based on schedule
     let mut res = LOCAL_DB
         .query("SELECT * FROM habit WHERE array::at(week_days, $index) = true")
         .bind(("index", today_index))
         .await?;
     let active_habits: Vec<schema::HabitWithId> = res.take(0)?;
-
+    
+    // Create a set of habit IDs that are scheduled for today
+    let mut habit_ids = std::collections::HashSet::new();
+    for habit in &active_habits {
+        habit_ids.insert(habit.id.to_string());
+    }
+    
+    // 3. Find habits that have logs for today but aren't in the active list
+    let mut additional_habits = Vec::new();
+    let mut habit_log_ids = Vec::new();
+    
+    for log in &logs {
+        // Extract the ID part from "habit:xxx" format
+        if let Some(habit_id) = log.habit_id.strip_prefix("habit:") {
+            if !habit_ids.contains(&format!("habit:{}", habit_id)) {
+                habit_log_ids.push(habit_id.to_string());
+            }
+        }
+    }
+    
+    // If we found additional habit logs, fetch those habits
+    if !habit_log_ids.is_empty() {
+        for id in habit_log_ids {
+            let res: Option<schema::HabitWithId> = LOCAL_DB.select(("habit", id.clone())).await?;
+            if let Some(habit) = res {
+                additional_habits.push(habit);
+            }
+        }
+    }
+    
+    // Combine scheduled habits with habits that have logs for today
+    let all_habits = [active_habits, additional_habits].concat();
+    
     let mut output = Vec::new();
-    // For each active habit, get its log and merge completed and progress.
-    for habit in active_habits {
+    // Process all habits
+    for habit in all_habits {
         let mut log_res = LOCAL_DB
             .query("SELECT * FROM habit_log WHERE habit_id = $habit_id AND date = $date")
             .bind(("habit_id", habit.id.to_string()))
@@ -125,7 +181,7 @@ pub async fn sync_habit_log(today_index: Number) -> surrealdb::Result<serde_json
         let mut logs: Vec<schema::HabitLog> = log_res.take(0)?;
 
         let log_entry = if logs.is_empty() {
-            // Create a new log if none exists.
+            // Create a new log if none exists
             let new_log = schema::HabitLog {
                 habit_id: habit.id.to_string(),
                 date: today_str.clone(),
@@ -141,7 +197,7 @@ pub async fn sync_habit_log(today_index: Number) -> surrealdb::Result<serde_json
             logs.remove(0)
         };
 
-        // Serialize habit and add completed and progress.
+        // Serialize habit and add completed and progress
         let mut habit_json = serde_json::to_value(&habit).unwrap();
         if let Some(obj) = habit_json.as_object_mut() {
             obj.insert("completed".to_string(), json!(log_entry.completed));
@@ -176,8 +232,11 @@ pub async fn update_habit_log(
     }
     println!("Updating habit log with id: {:?}", id);
     println!("Update data: {:?}", update_data);
+
+    let today_str = Local::now().format("%Y-%m-%d").to_string();
     let _res = LOCAL_DB
-        .query("UPDATE habit_log MERGE $update_data WHERE habit_id = $habit_id")
+        .query("UPDATE habit_log MERGE $update_data WHERE habit_id = $habit_id AND date = $date")
+        .bind(("date", today_str))
         .bind(("update_data", update_data))
         .bind(("habit_id", format!("habit:{}", id)))
         .await?;

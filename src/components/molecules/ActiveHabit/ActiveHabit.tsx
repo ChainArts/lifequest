@@ -17,7 +17,7 @@ export type ActiveHabitProps = {
     current_streak: number;
 };
 
-const calulateStreakXP = (streak: number) => {
+export const calulateStreakXP = (streak: number) => {
     const thresholds = [3, 7, 14, 21, 30, 45, 60, 100, 150];
     const baseXP = 10;
     let multiplier = 1;
@@ -66,8 +66,6 @@ const ActiveHabit = ({ habit, setHabitProgress, updateXP }: { habit: ActiveHabit
             }
 
             await invoke("update_habit_log", updateData);
-
-            console.log("Habit progress updated");
         } catch (error) {
             console.error("Failed to update habit progress:", error);
         }

@@ -150,6 +150,10 @@
         border-bottom: 1px solid var(--progress-bg-round);
     }
 
+    .form-box__item {
+        display: flex;
+        justify-content: space-between;
+    }
     label {
         display: flex;
         flex-wrap: wrap;
@@ -161,6 +165,18 @@
         margin-bottom: 0;
         color: var(--text-baset);
         gap: var(--gap);
+    }
+
+    .form-upper-heading {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        gap: 0.5rem;
+        padding: 0.5rem 0;
+
+        & span {
+            text-transform: none;
+        }
     }
 
     input,
@@ -342,4 +358,8 @@ input {
     h2 {
         display: none !important;
     }
+}
+
+.invisible {
+    display: none !important;
 }

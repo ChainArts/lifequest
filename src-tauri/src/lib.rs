@@ -54,6 +54,7 @@ pub fn run() {
             db_commands::update_habit_log,
             db_commands::get_xp_for_today,
             db_commands::increase_habit_xp,
+            db_commands::schedule_habit_for_today,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
