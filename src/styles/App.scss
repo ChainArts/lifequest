@@ -19,6 +19,7 @@
     // ui
 
     --background-base: #12151a;
+    --background-base-trans: #12151aaa;
     --background-layer: #1c2028;
     --background-layer-sec: #3c4953;
     --background-layer-light: #22252d;
@@ -57,6 +58,7 @@
     --text-light: #66747e;
 
     --background-base: #f6f8ff;
+    --background-base-trans: #f6f8ffaa;
     --background-layer: #ffffff;
     --background-layer-sec: #e3ecff;
     --background-layer-light:  #ffffff;
@@ -110,7 +112,7 @@ body {
 main {
     position: relative;
     padding-bottom: var(--navbar-height);
-    min-height: 66svh;
+    min-height: 100svh;
     height: 100%;
     margin-top: 33svh;
     background-color: var(--background-base);
