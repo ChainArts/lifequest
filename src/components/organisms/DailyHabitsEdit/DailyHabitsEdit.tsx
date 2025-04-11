@@ -24,7 +24,6 @@ const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess, fetchHabits
         return { ...values, [habit.id]: habit.done };
     }, {} as { [key: string]: number });
 
-    // Dynamically build the validation schema based on each habit's properties.
     const schemaFields = habits.reduce((acc, habit) => {
         acc[habit.id] = yup.number().typeError("Must be a number").min(0, "Value cannot be negative").max(habit.goal, `Cannot exceed goal of ${habit.goal}`).required("Progress is required");
         return acc;
@@ -32,7 +31,6 @@ const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess, fetchHabits
 
     const validationSchema = yup.object().shape(schemaFields);
 
-    // Handle form submission: update each habit's "done" value via the Tauri backend.
     const onSubmit = async (values: { [key: string]: number }) => {
         for (const habit of habits) {
             try {
@@ -100,11 +98,17 @@ const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess, fetchHabits
                                                         <div className="number-input-box">
                                                             <Field
                                                                 id={habit.id}
-                                                                name={habit.id} // should correspond to initialValues key
+                                                                name={habit.id}
                                                                 type="number"
                                                                 inputMode="numeric"
                                                                 min={0}
                                                                 max={habit.goal}
+                                                                // Set value within the range if it is outside the range
+                                                                onBlur={(e: { target: { value: any } }) => {
+                                                                    const userValue = Number(e.target.value) || 0;
+                                                                    const newValue = Math.max(0, Math.min(userValue, habit.goal));
+                                                                    setFieldValue(habit.id, newValue);
+                                                                }}
                                                             />
                                                             <div className="arrow-buttons">
                                                                 <button
