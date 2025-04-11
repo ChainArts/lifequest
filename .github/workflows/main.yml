@@ -1,0 +1,84 @@
+name: Android Build Pipeline for Tauri 2.0
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # Set up environment variables for Android tooling
+      ANDROID_SDK_ROOT: ${{ runner.temp }}/android-sdk
+      JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64
+      # Make sure Java & Android tools are on PATH
+      PATH: ${{ env.JAVA_HOME }}/bin:${{ env.ANDROID_SDK_ROOT }}/cmdline-tools/latest/bin:${{ env.ANDROID_SDK_ROOT }}/platform-tools:${{ env.PATH }}
+    steps:
+      # Check out your repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Set up Node.js if you are using a frontend (React, Vue, etc.)
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # (Optional) Cache your node_modules to speed up subsequent builds
+      - name: Cache Node Modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Install your Node dependencies and build the frontend
+      - name: Install and Build Frontend
+        run: |
+          npm install
+          npm run build
+
+      # Set up the Rust toolchain with the Android target added. 
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          # Add the Android target triple (for example, aarch64-linux-android).
+          target: aarch64-linux-android
+          override: true
+
+      # Download and install the Android SDK Command-line Tools.
+      - name: Install Android SDK
+        run: |
+          mkdir -p $ANDROID_SDK_ROOT
+          wget https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip -O cmdline-tools.zip
+          unzip -q cmdline-tools.zip -d $ANDROID_SDK_ROOT
+          # The extracted folder might be named "cmdline-tools"; move it to "latest" so the tools can be found.
+          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools/latest
+          mv $ANDROID_SDK_ROOT/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest
+          # Accept all licenses and install key components
+          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3"
+
+      # Install Android NDK. The NDK is required for cross-compiling native Rust code.
+      - name: Install Android NDK
+        run: |
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "ndk;21.4.7075529"
+          # Find the installed NDK folder and export it so Rust can pick it up:
+          export ANDROID_NDK_HOME=$(find $ANDROID_SDK_ROOT -maxdepth 2 -type d -name "ndk*")
+          echo "ANDROID_NDK_HOME=$ANDROID_NDK_HOME" >> $GITHUB_ENV
+
+      # If your Tauri configuration or Rust code requires other environment variables (such as signing details),
+      # set them here or use GitHub Secrets.
+      
+      # Finally, build the Tauri Android package.
+      # Ensure your tauri.conf.json (or equivalent) is configured to build for Android.
+      - name: Build Android Tauri App
+        run: |
+          # If needed, perform any extra rustup target installation:
+          rustup target add aarch64-linux-android
+          # Build your app using Tauri’s CLI command.
+          cargo tauri build --target aarch64-linux-android
