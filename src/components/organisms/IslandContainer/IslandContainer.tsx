@@ -50,7 +50,7 @@ const ClampCamera = ({ controlsRef, minZ, maxZ }: { controlsRef: React.RefObject
 
 const CameraLerp = ({ location, camRef }: { location: string; camRef: React.RefObject<any> }) => {
     // Define the target position once
-    const targetPosition = useMemo(() => new THREE.Vector3(40, 10, 0), []);
+    const targetPosition = new THREE.Vector3(40, 10, 0);
     useFrame(() => {
         if (camRef.current && location !== "/island") {
             // Lerp toward the targetPosition with an interpolation factor (e.g., 0.1)
@@ -64,7 +64,7 @@ const IslandContainer = ({ location }: { location: string }) => {
     const navigate = useNavigate();
     const [degraded, degrade] = useState(false);
     const controlsRef = useRef<any>(null);
-    const [isActive, setIsActive] = useState(false);
+    const [isActive, setIsActive] = useState(location === "/island");
     const camRef = useRef<any>(null);
 
     const chickens = useMemo(() => {
@@ -104,9 +104,8 @@ const IslandContainer = ({ location }: { location: string }) => {
             <Canvas className="island-container__canvas" shadows dpr={[1, 2]} gl={{ alpha: false, stencil: false, depth: false, powerPreference: "high-performance" }}>
                 {/* <Stats /> */}
                 <PerspectiveCamera ref={camRef} makeDefault position={[40, 10, 0]} fov={50} />
-                <CameraLerp location={location} camRef={camRef} />
                 <ClampCamera controlsRef={controlsRef} minZ={minZ} maxZ={maxZ} />
-                {isActive && <MapControls ref={controlsRef} enableRotate={false} enableDamping dampingFactor={0.05} enableZoom={false} />}
+                <MapControls ref={controlsRef} enabled={isActive} enableRotate={false} enableDamping dampingFactor={0.05} enableZoom={false} />
                 <EffectComposer>
                     <SMAA />
                     <Vignette eskil={false} offset={0.1} darkness={0.5} />
@@ -116,6 +115,7 @@ const IslandContainer = ({ location }: { location: string }) => {
                 <pointLight position={[-10, 15, 20]} decay={0} intensity={6} color={"#ffeebb"} shadow-mapSize-width={2048} shadow-mapSize-height={2048} castShadow />
                 <Island position={[0, 0, 0]} scale={20} />
                 {chickens.map((chicken) => chicken)}
+                <CameraLerp location={location} camRef={camRef} />
             </Canvas>
             <AnimatePresence mode="wait">{isActive && <IslandMenu />}</AnimatePresence>
         </section>
