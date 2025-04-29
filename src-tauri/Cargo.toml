@@ -27,7 +27,7 @@ surrealdb = { version = "2.2.2", features = ["kv-rocksdb"] }
 dotenv = "0.15.0"
 winapi = { version = "0.3", features = ["winbase"] }
 surrealdb-migrations = "2.2.1"
-chrono = "0.4.40"
+chrono = "0.4.41"
 
 [profile.release]
 lto = true
