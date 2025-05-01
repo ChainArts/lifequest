@@ -3,14 +3,11 @@ mod db_commands;
 use dotenv::dotenv;
 use std::env;
 use surrealdb::engine::local::RocksDb;
-use surrealdb::engine::remote::ws::Wss;
-use surrealdb::opt::auth::Root;
 use tauri::Manager;
 
-pub async fn connect_db() -> surrealdb::Result<()> {
+pub async fn connect_db() {
     dotenv().ok();
     run();
-    Ok(())
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -40,28 +37,6 @@ pub fn run() {
                     .await
                     .unwrap();
                 println!("✅ Local DB v{:?}", db::LOCAL_DB.version().await.unwrap());
-
-                // 4. External WSS connect → signin → namespace/db → version
-                let addr = dotenv::var("EXTERNAL_ADDRESS").unwrap();
-                let user = dotenv::var("EXTERNAL_USERNAME").unwrap();
-                let pass = dotenv::var("EXTERNAL_PASSWORD").unwrap();
-                db::EXTERNAL_DB.connect::<Wss>(&addr).await.unwrap();
-                db::EXTERNAL_DB
-                    .signin(Root {
-                        username: &user,
-                        password: &pass,
-                    })
-                    .await
-                    .unwrap();
-                db::EXTERNAL_DB
-                    .use_ns("dev")
-                    .use_db("lifequest")
-                    .await
-                    .unwrap();
-                println!(
-                    "✅ External DB v{:?}",
-                    db::EXTERNAL_DB.version().await.unwrap()
-                );
             });
             Ok(())
         })
