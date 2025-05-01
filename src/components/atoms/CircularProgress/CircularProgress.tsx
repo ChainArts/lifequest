@@ -22,8 +22,7 @@ const CircularProgress = ({ progress }: CircularProgressProps) => {
     const maxRadius = 61;
 
     const dashArray = 2 * Math.PI * radius;
-    const dashOffset =
-        dashArray - (dashArray * (maxRadius * (progress / 100))) / 100;
+    const dashOffset = dashArray - (dashArray * (maxRadius * (animatedNumber / 100))) / 100;
 
     useEffect(() => {
         let start = previousProgress;
@@ -32,14 +31,9 @@ const CircularProgress = ({ progress }: CircularProgressProps) => {
         const startTimestamp = performance.now();
 
         const animate = (timestamp: number) => {
-            const progressTime = Math.min(
-                (timestamp - startTimestamp) / duration,
-                1
-            );
+            const progressTime = Math.min((timestamp - startTimestamp) / duration, 1);
             const easedProgress = easeOutCubic(progressTime);
-            const currentNumber = Math.round(
-                start + (end - start) * easedProgress
-            );
+            const currentNumber = Math.round(start + (end - start) * easedProgress);
             setAnimatedNumber(currentNumber);
 
             if (progressTime < 1) {
@@ -56,13 +50,7 @@ const CircularProgress = ({ progress }: CircularProgressProps) => {
     return (
         <svg width={size * 2} height={size * 1.41}>
             <defs>
-                <linearGradient
-                    id="gradient"
-                    x1="0%"
-                    y1="0%"
-                    x2="100%"
-                    y2="100%"
-                >
+                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" style={{ stopColor: "#bbe5ff" }} />
                     <stop offset="100%" style={{ stopColor: "#9a98ef" }} />
                 </linearGradient>
@@ -91,18 +79,8 @@ const CircularProgress = ({ progress }: CircularProgressProps) => {
                 stroke="url(#gradient)"
             />
 
-            <text
-                x={size}
-                y={size}
-                textAnchor="middle"
-                className="circle-progress__number"
-            >{`${animatedNumber}%`}</text>
-            <text
-                x={size}
-                y={size + 22}
-                textAnchor="middle"
-                className="fst--upper-heading purple"
-            >
+            <text x={size} y={size} textAnchor="middle" className="circle-progress__number">{`${animatedNumber}%`}</text>
+            <text x={size} y={size + 22} textAnchor="middle" className="fst--upper-heading purple">
                 finished
             </text>
         </svg>
