@@ -51,37 +51,36 @@ const HabitDetail = () => {
     if (!habit) return <div>Loading habit details...</div>;
 
     return (
-        <motion.main initial="initial" animate="in" exit="out" variants={pageVariants} className="container">
-            <motion.section variants={sectionVariants}>
-                <div className="back" onClick={() => navigate("/habits")}>
-                    Back
-                </div>
-                <HabitStats icon={habit.icon} xp={habit.habit_xp} title={habit.title} />
-            </motion.section>
-            <motion.section variants={sectionVariants}>
-                <HabitSettings setOpen={(value: boolean) => setOpen(value)} />
-            </motion.section>
-            <motion.section variants={sectionVariants}>
-                <HabitHeatmap />
-            </motion.section>
-            <motion.section variants={sectionVariants}>
-                <HabitGraph />
-            </motion.section>
-            <motion.section variants={sectionVariants}>
-                {habit && (
-                    <button className="delete" onClick={() => deleteHabit(id as string)}>
-                        Delete
-                    </button>
-                )}
-                <section className="container">
-                    <HabitForm setOpen={setOpen} isOpen={isOpen} mode="edit" onSubmitSuccess={() => id && fetchHabitDetail(id)} initialValues={habit} id={id} />
-                </section>
-
-                <div className="relative">
-                    <ActionButton onClick={() => setOpen(true)} icon={<HiPencil />} />
-                </div>
-            </motion.section>
-        </motion.main>
+        <>
+            <motion.main initial="initial" animate="in" exit="out" variants={pageVariants} className="container">
+                <motion.section variants={sectionVariants}>
+                    <div className="back" onClick={() => navigate("/habits")}>
+                        Back
+                    </div>
+                    <HabitStats icon={habit.icon} xp={habit.habit_xp} title={habit.title} />
+                </motion.section>
+                <motion.section variants={sectionVariants}>
+                    <HabitSettings setOpen={(value: boolean) => setOpen(value)} />
+                </motion.section>
+                <motion.section variants={sectionVariants}>
+                    <HabitHeatmap />
+                </motion.section>
+                <motion.section variants={sectionVariants}>
+                    <HabitGraph />
+                </motion.section>
+                <motion.section variants={sectionVariants}>
+                    {habit && (
+                        <button className="delete" onClick={() => deleteHabit(id as string)}>
+                            Delete
+                        </button>
+                    )}
+                    <section className="container">
+                        <HabitForm setOpen={setOpen} isOpen={isOpen} mode="edit" onSubmitSuccess={() => id && fetchHabitDetail(id)} initialValues={habit} id={id} />
+                    </section>
+                </motion.section>
+            </motion.main>
+            <ActionButton onClick={() => setOpen(true)} icon={<HiPencil />} />
+        </>
     );
 };
 

@@ -25,15 +25,17 @@ const Habits = () => {
         fetchHabits();
     }, []);
     return (
-        <motion.main initial="initial" animate="in" exit="out" variants={pageVariants}>
-            <motion.section variants={sectionVariants}>
-                <HabitCards setOpen={setIsHabitFormOpen} habitList={habitList} />
-            </motion.section>
-            <section className="container">
-                <HabitForm setOpen={setIsHabitFormOpen} isOpen={isHabitFormOpen} mode="create" onSubmitSuccess={fetchHabits} />
-            </section>
+        <>
             <ActionButton onClick={() => setIsHabitFormOpen(true)} icon={<HiPlus />} />
-        </motion.main>
+            <motion.main initial="initial" animate="in" exit="out" variants={pageVariants}>
+                <motion.section variants={sectionVariants}>
+                    <HabitCards setOpen={setIsHabitFormOpen} habitList={habitList} />
+                </motion.section>
+                <section className="container">
+                    <HabitForm setOpen={setIsHabitFormOpen} isOpen={isHabitFormOpen} mode="create" onSubmitSuccess={fetchHabits} />
+                </section>
+            </motion.main>
+        </>
     );
 };
 export default Habits;

@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "lifequest",
+        "title": "Lifequest",
         "width": 393,
         "height": 800,
         "theme": "Dark",

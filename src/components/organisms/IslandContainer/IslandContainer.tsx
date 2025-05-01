@@ -68,6 +68,7 @@ const IslandContainer = ({ location }: { location: string }) => {
     const controlsRef = useRef<any>(null);
     const [isActive, setIsActive] = useState(location === "/island");
     const camRef = useRef<any>(null);
+    const [dpr, setDpr] = useState(1);
 
     const chickens = useMemo(() => {
         const chickenArray = [];
@@ -103,7 +104,7 @@ const IslandContainer = ({ location }: { location: string }) => {
 
     return (
         <section className={`island-container ${isActive ? "island-container--active" : ""}`} onClick={!isActive ? () => handleIsActive() : undefined}>
-            <Canvas className="island-container__canvas" shadows frameloop="demand" dpr={1} gl={{ alpha: false, stencil: false, depth: false, powerPreference: "high-performance" }}>
+            <Canvas className="island-container__canvas" shadows frameloop="demand" dpr={dpr} gl={{ alpha: false, stencil: false, depth: false, powerPreference: "high-performance" }}>
                 {/* <Stats /> */}
                 <PerspectiveCamera ref={camRef} makeDefault position={[40, 10, 0]} fov={50} />
                 <ClampCamera controlsRef={controlsRef} minZ={minZ} maxZ={maxZ} />
@@ -112,7 +113,7 @@ const IslandContainer = ({ location }: { location: string }) => {
                     <SMAA />
                     <Vignette eskil={false} offset={0.1} darkness={0.5} />
                 </EffectComposer>
-                <PerformanceMonitor onDecline={() => degrade(true)} />
+                <PerformanceMonitor onChange={({ factor }) => setDpr(Math.round(0.5 + 1.5 * factor))} onDecline={() => degrade(true)} />
                 <Environment near={0.01} far={300} frames={degraded ? 1 : Infinity} resolution={2048} backgroundRotation={[0, 0, 0]} files="/models/skybox.hdr" background backgroundIntensity={1.5} environmentIntensity={1.25} backgroundBlurriness={0.05} />
                 <pointLight position={[-10, 15, 20]} decay={0} intensity={6} color={"#ffeebb"} shadow-mapSize-width={2048} shadow-mapSize-height={2048} castShadow />
                 <Island position={[0, 0, 0]} scale={20} />
