@@ -1,4 +1,4 @@
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, invalidate, useFrame } from "@react-three/fiber";
 import { Environment, MapControls, PerformanceMonitor, PerspectiveCamera, useGLTF } from "@react-three/drei";
 import "./IslandContainer.scss";
 import { EffectComposer, SMAA, Vignette } from "@react-three/postprocessing";
@@ -38,6 +38,7 @@ const Chicken = (props: any) => {
 
 const ClampCamera = ({ controlsRef, minZ, maxZ }: { controlsRef: React.RefObject<any>; minZ: number; maxZ: number }) => {
     useFrame(() => {
+        invalidate();
         if (controlsRef.current) {
             const camera = controlsRef.current.object;
             camera.position.z = Math.max(minZ, Math.min(maxZ, camera.position.z));
@@ -52,6 +53,7 @@ const CameraLerp = ({ location, camRef }: { location: string; camRef: React.RefO
     // Define the target position once
     const targetPosition = new THREE.Vector3(40, 10, 0);
     useFrame(() => {
+        invalidate();
         if (camRef.current && location !== "/island") {
             // Lerp toward the targetPosition with an interpolation factor (e.g., 0.1)
             camRef.current.position.lerp(targetPosition, 0.1);
@@ -101,7 +103,7 @@ const IslandContainer = ({ location }: { location: string }) => {
 
     return (
         <section className={`island-container ${isActive ? "island-container--active" : ""}`} onClick={!isActive ? () => handleIsActive() : undefined}>
-            <Canvas className="island-container__canvas" shadows dpr={[1, 2]} gl={{ alpha: false, stencil: false, depth: false, powerPreference: "high-performance" }}>
+            <Canvas className="island-container__canvas" shadows frameloop="demand" dpr={1} gl={{ alpha: false, stencil: false, depth: false, powerPreference: "high-performance" }}>
                 {/* <Stats /> */}
                 <PerspectiveCamera ref={camRef} makeDefault position={[40, 10, 0]} fov={50} />
                 <ClampCamera controlsRef={controlsRef} minZ={minZ} maxZ={maxZ} />
@@ -123,3 +125,6 @@ const IslandContainer = ({ location }: { location: string }) => {
 };
 
 export default IslandContainer;
+
+useGLTF.preload("/models/island.glb");
+useGLTF.preload("/models/mobs/chicken_balloon.glb");
