@@ -7,7 +7,7 @@ interface HeadlineProps {
 }
 
 const Headline = ({ children, level, style }: HeadlineProps) => {
-    const Tag = `h${level}` as keyof JSX.IntrinsicElements;
+    const Tag: React.ElementType = `h${level}`;
     return <Tag className={`headline fst--${style}-heading`}>{children}</Tag>;
 }
 

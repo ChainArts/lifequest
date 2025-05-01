@@ -5,36 +5,10 @@ use std::env;
 use surrealdb::engine::local::RocksDb;
 use surrealdb::engine::remote::ws::Wss;
 use surrealdb::opt::auth::Root;
+use tauri::Manager;
 
 pub async fn connect_db() -> surrealdb::Result<()> {
     dotenv().ok();
-    db::LOCAL_DB.connect::<RocksDb>("../db/test.db").await?;
-    db::LOCAL_DB.use_ns("dev").use_db("lifequest").await?;
-
-    println!("Connected to local db");
-
-    let external_address = env::var("EXTERNAL_ADDRESS").expect("EXTERNAL_ADDRESS not set");
-    let external_username = env::var("EXTERNAL_USERNAME").expect("EXTERNAL_USERNAME not set");
-    let external_password = env::var("EXTERNAL_PASSWORD").expect("EXTERNAL_PASSWORD not set");
-
-    db::EXTERNAL_DB.connect::<Wss>(&external_address).await?;
-    println!("Connected to external db");
-    db::EXTERNAL_DB
-        .signin(Root {
-            username: &external_username,
-            password: &external_password,
-        })
-        .await?;
-
-    db::EXTERNAL_DB.use_ns("dev").use_db("lifequest").await?;
-
-    // Test Local DB connection using get to status
-    let status = db::LOCAL_DB.version().await?;
-    println!("Local DB status: {:?}", status);
-
-    // Test External DB connection using get to status
-    let status = db::EXTERNAL_DB.version().await?;
-    println!("External DB status: {:?}", status);
     run();
     Ok(())
 }
@@ -42,6 +16,55 @@ pub async fn connect_db() -> surrealdb::Result<()> {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .setup(|app| {
+            let handle = app.handle().clone();
+            tauri::async_runtime::spawn(async move {
+                // 1. Resolve a writable data directory everywhere
+                let base = handle
+                    .path()
+                    .app_local_data_dir()
+                    .expect("couldn't resolve app-local-data-dir");
+
+                // 2. Create both the parent AND the surrealdb folder
+                let db_folder = base.join("surrealdb");
+                std::fs::create_dir_all(&db_folder).expect("failed to create SurrealDB directory");
+
+                // 3. Local RocksDB connect → namespace/db → version
+                db::LOCAL_DB
+                    .connect::<RocksDb>(db_folder.to_str().unwrap())
+                    .await
+                    .expect("local DB connect failed");
+                db::LOCAL_DB
+                    .use_ns("dev")
+                    .use_db("lifequest")
+                    .await
+                    .unwrap();
+                println!("✅ Local DB v{:?}", db::LOCAL_DB.version().await.unwrap());
+
+                // 4. External WSS connect → signin → namespace/db → version
+                let addr = dotenv::var("EXTERNAL_ADDRESS").unwrap();
+                let user = dotenv::var("EXTERNAL_USERNAME").unwrap();
+                let pass = dotenv::var("EXTERNAL_PASSWORD").unwrap();
+                db::EXTERNAL_DB.connect::<Wss>(&addr).await.unwrap();
+                db::EXTERNAL_DB
+                    .signin(Root {
+                        username: &user,
+                        password: &pass,
+                    })
+                    .await
+                    .unwrap();
+                db::EXTERNAL_DB
+                    .use_ns("dev")
+                    .use_db("lifequest")
+                    .await
+                    .unwrap();
+                println!(
+                    "✅ External DB v{:?}",
+                    db::EXTERNAL_DB.version().await.unwrap()
+                );
+            });
+            Ok(())
+        })
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             db_commands::insert_habit,

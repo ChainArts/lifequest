@@ -6,7 +6,7 @@ import { Sheet } from "react-modal-sheet";
 import { invoke } from "@tauri-apps/api/core";
 import { ActiveHabitProps, calulateStreakXP } from "../../molecules/ActiveHabit/ActiveHabit";
 import { BiSolidUpArrow, BiSolidDownArrow } from "react-icons/bi";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Button from "../../atoms/Button/Button";
 import AddActiveHabit from "./AddActiveHabits";
 
