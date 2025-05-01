@@ -8,6 +8,7 @@ import { AnimatePresence } from "motion/react";
 import Navbar from "./components/organisms/Navbar/Navbar";
 import IslandContainer from "./components/organisms/IslandContainer/IslandContainer";
 import Island from "./pages/Island";
+import { HabitsProvider } from "./lib/HabitsContext";
 
 function App() {
     const location = useLocation();
@@ -15,17 +16,19 @@ function App() {
     const isLoggedIn = true; //location.pathname !== "/";
     return (
         <>
-            {isLoggedIn && <IslandContainer location={location.pathname} />}
-            <AnimatePresence mode="wait">
-                <Routes location={location} key={location.pathname}>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/habits" element={<Habits />} />
-                    <Route path="habits/:id" element={<HabitDetail />} />
-                    <Route path="/island" element={<Island />} />
-                    <Route path="/profile" element={<Profile />} />
-                </Routes>
-            </AnimatePresence>
-            {isLoggedIn && <Navbar />}
+            <HabitsProvider>
+                {isLoggedIn && <IslandContainer location={location.pathname} />}
+                <AnimatePresence mode="wait">
+                    <Routes location={location} key={location.pathname}>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/habits" element={<Habits />} />
+                        <Route path="habits/:id" element={<HabitDetail />} />
+                        <Route path="/island" element={<Island />} />
+                        <Route path="/profile" element={<Profile />} />
+                    </Routes>
+                </AnimatePresence>
+                {isLoggedIn && <Navbar />}
+            </HabitsProvider>
         </>
     );
 }

@@ -2,28 +2,15 @@ import { pageVariants, sectionVariants } from "../components/atoms/PageTransitio
 import { motion } from "motion/react";
 import HabitCards from "../components/organisms/HabitCards/HabitCards";
 import ActionButton from "../components/atoms/ActionButton/ActionButton";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import HabitForm from "../components/organisms/HabitForm/HabitForm";
-import { HabitCardProps } from "../components/molecules/HabitCard/HabitCard";
-import { invoke } from "@tauri-apps/api/core";
 import { HiPlus } from "react-icons/hi";
+import { useHabits } from "../lib/HabitsContext";
 
 const Habits = () => {
     const [isHabitFormOpen, setIsHabitFormOpen] = useState(false);
-    const [habitList, setHabitList] = useState<HabitCardProps[]>([]);
+    const { habitList, refreshHabits } = useHabits();
 
-    const fetchHabits = async () => {
-        try {
-            const habits = await invoke("get_habits");
-            setHabitList(habits as HabitCardProps[]);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    useEffect(() => {
-        fetchHabits();
-    }, []);
     return (
         <>
             <ActionButton onClick={() => setIsHabitFormOpen(true)} icon={<HiPlus />} />
@@ -32,10 +19,17 @@ const Habits = () => {
                     <HabitCards setOpen={setIsHabitFormOpen} habitList={habitList} />
                 </motion.section>
                 <section className="container">
-                    <HabitForm setOpen={setIsHabitFormOpen} isOpen={isHabitFormOpen} mode="create" onSubmitSuccess={fetchHabits} />
+                    <HabitForm
+                        setOpen={setIsHabitFormOpen}
+                        isOpen={isHabitFormOpen}
+                        mode="create"
+                        // 3) call shared refresh after you add a habit
+                        onSubmitSuccess={refreshHabits}
+                    />
                 </section>
             </motion.main>
         </>
     );
 };
+
 export default Habits;

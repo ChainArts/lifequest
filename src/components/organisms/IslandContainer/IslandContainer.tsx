@@ -88,14 +88,7 @@ const IslandContainer = ({ location }: { location: string }) => {
     };
 
     useEffect(() => {
-        if (location === "/island") {
-            setIsActive(true);
-        } else {
-            setIsActive(false);
-        }
-        return () => {
-            setIsActive(false);
-        };
+        setIsActive(location === "/island");
     }, [location]);
 
     // Define your boundaries
@@ -113,9 +106,9 @@ const IslandContainer = ({ location }: { location: string }) => {
                     <SMAA />
                     <Vignette eskil={false} offset={0.1} darkness={0.5} />
                 </EffectComposer>
-                <PerformanceMonitor onChange={({ factor }) => setDpr(Math.round(0.5 + 1.5 * factor))} onDecline={() => degrade(true)} />
-                <Environment near={0.01} far={300} frames={degraded ? 1 : Infinity} resolution={2048} backgroundRotation={[0, 0, 0]} files="/models/skybox.hdr" background backgroundIntensity={1.5} environmentIntensity={1.25} backgroundBlurriness={0.05} />
-                <pointLight position={[-10, 15, 20]} decay={0} intensity={6} color={"#ffeebb"} shadow-mapSize-width={2048} shadow-mapSize-height={2048} castShadow />
+                <PerformanceMonitor onChange={({ factor }) => setDpr(Math.round(0.5 + 1 * factor))} onDecline={() => degrade(true)} />
+                <Environment near={0.01} far={300} frames={degraded ? 1 : Infinity} resolution={512} backgroundRotation={[0, 0, 0]} files="/models/skybox.hdr" background backgroundIntensity={1.5} environmentIntensity={1.25} backgroundBlurriness={0.05} />
+                <pointLight position={[-10, 15, 20]} decay={0} intensity={6} color={"#ffeebb"} shadow-mapSize-width={1536} shadow-mapSize-height={1536} castShadow />
                 <Island position={[0, 0, 0]} scale={20} />
                 {chickens.map((chicken) => chicken)}
                 <CameraLerp location={location} camRef={camRef} />
