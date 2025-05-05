@@ -3,7 +3,6 @@ mod db_commands;
 use dotenv::dotenv;
 use std::env;
 use surrealdb::engine::local::RocksDb;
-use tauri::Manager;
 
 pub async fn connect_db() {
     dotenv().ok();
@@ -17,8 +16,7 @@ pub fn run() {
             let handle = app.handle().clone();
             tauri::async_runtime::spawn(async move {
                 // 1. Resolve a writable data directory everywhere
-                let base = handle
-                    .path()
+                let base = tauri::Manager::path(&handle)
                     .app_local_data_dir()
                     .expect("couldn't resolve app-local-data-dir");
 

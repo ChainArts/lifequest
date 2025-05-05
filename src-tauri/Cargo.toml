@@ -23,7 +23,7 @@ tauri-plugin-opener = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tokio = { version = "1.44.2", features = ["full"] }
-surrealdb = { version = "2.2.2", features = ["kv-rocksdb"] }
+surrealdb = { version = "2.3.0", features = ["kv-rocksdb"] }
 dotenv = "0.15.0"
 winapi = { version = "0.3", features = ["winbase"] }
 chrono = "0.4.41"
@@ -31,7 +31,7 @@ chrono = "0.4.41"
 [profile.release]
 lto = true
 strip = true
-opt-level = 3
+opt-level = 'z'
 panic = 'abort'
 codegen-units = 1
 
