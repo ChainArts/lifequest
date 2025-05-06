@@ -1,4 +1,4 @@
-import { invalidate, useFrame } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
@@ -14,7 +14,6 @@ const FloatingObject = ({ amplitude, frequency, children } : FloatingObjectProps
     const groupRef = useRef<THREE.Group>(null);
     const initialOffset = useMemo(() => (Math.random() - 0.5) * amplitude, [amplitude]);
     useFrame(({ clock }) => {
-        invalidate();
         if (groupRef.current) {
             groupRef.current.position.y = initialOffset + Math.sin(clock.elapsedTime * frequency) * amplitude;
         }
