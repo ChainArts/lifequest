@@ -1,0 +1,65 @@
+@keyframes plop {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    60% {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.popup {
+    position: absolute;
+    background-color: var(--background-layer-sec);
+    border-radius: var(--radius);
+    padding: 0.75rem;
+    bottom: 30px;
+    left: 0;
+    width: fit-content;
+    max-width: 600px;
+    min-width: 200px;
+    box-shadow: var(--box-shadow);
+    display: none;
+    z-index: 100;
+    text-transform: none;
+    line-height: 1.4;
+
+    pointer-events: none;
+
+    opacity: 0;
+    transform-origin: center center;
+    transition: none;
+
+    &.open {
+        animation: plop 0.3s ease-out forwards;
+        display: block;
+        opacity: 1;
+    }
+}
+
+.info-trigger {
+    position: relative;
+    .tool-arrow {
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid var(--background-layer-sec);
+        top: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+.backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000; /* transparent but catches clicks */
+    background: transparent;
+    cursor: default;
+}

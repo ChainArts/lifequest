@@ -49,6 +49,11 @@
     cursor: pointer;
 }
 
+legend {
+    display: flex;
+    gap: var(--gap);
+}
+
 .arrow-buttons {
     z-index: 50;
     position: absolute;

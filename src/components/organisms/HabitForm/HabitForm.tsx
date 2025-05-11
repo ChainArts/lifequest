@@ -7,6 +7,8 @@ import { useState } from "react";
 import EmojiPicker, { Categories } from "emoji-picker-react";
 import { invoke } from "@tauri-apps/api/core";
 import { BiSolidUpArrow, BiSolidDownArrow, BiSolidRightArrow } from "react-icons/bi";
+import InfoBlob from "../../atoms/InfoBlob/InfoBlob";
+import { Tooltip } from "react-tooltip";
 
 const habitSchema = yup.object().shape({
     title: yup.string().required("name is required"),
@@ -126,7 +128,10 @@ const HabitForm = ({ id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }
                                         </fieldset>
 
                                         <fieldset>
-                                            <legend>Define your Goal</legend>
+                                            <legend>
+                                                Define your Goal
+                                                <InfoBlob text="Example: '10' and 'pages' - read 10 pages per day to successfully complete this habit" />
+                                            </legend>
                                             <div className="form-box">
                                                 <label htmlFor="goal">
                                                     Quantity
@@ -150,7 +155,9 @@ const HabitForm = ({ id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }
                                         </fieldset>
 
                                         <fieldset>
-                                            <legend>Personalize your Habit</legend>
+                                            <legend>
+                                                Personalize your Habit <InfoBlob text="Customize the habits appearance" />
+                                            </legend>
                                             <div className="form-box">
                                                 <label htmlFor="icon" onClick={() => setEmojiPickerOpen(true)}>
                                                     Icon
@@ -189,7 +196,9 @@ const HabitForm = ({ id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }
                                         </fieldset>
 
                                         <fieldset>
-                                            <legend>Track your progress</legend>
+                                            <legend>
+                                                Track your progress <InfoBlob text="When you complete the habit you will be prompted to enter your progress as a number" />
+                                            </legend>
                                             <div className="form-box">
                                                 <label htmlFor="tracking">
                                                     Enable
@@ -200,7 +209,9 @@ const HabitForm = ({ id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }
                                         </fieldset>
 
                                         <fieldset>
-                                            <legend>Choose Your Routine</legend>
+                                            <legend>
+                                                Choose Your Routine <InfoBlob text="Pick days for this habit to appear on the Start Page" />
+                                            </legend>
                                             <div className="form-box">
                                                 {weekDaysArr.map((day, index) => {
                                                     return (
