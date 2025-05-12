@@ -48,6 +48,7 @@ const HabitDetail: React.FC = () => {
         await invoke("delete_habit", { id });
         await refreshHabits();
         await refreshToday();
+        await refreshXp();
         navigate("/habits");
     };
 

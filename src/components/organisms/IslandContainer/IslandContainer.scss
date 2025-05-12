@@ -5,11 +5,15 @@
     right: 0;
     height: 100svh;
     transition: transform 0.5s var(--ease);
-    transform: translateY(-15rem);
+    
 
     &.island-container--active {
         transform: translateY(0);
         transition-delay: 0.25s;
+    }
+
+    @media screen and (max-width: 800px) {
+        transform: translateY(-15rem);
     }
 }
 

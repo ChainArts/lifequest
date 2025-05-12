@@ -9,7 +9,7 @@ import { useHabits } from "../lib/HabitsContext";
 
 const Habits = () => {
     const [isHabitFormOpen, setIsHabitFormOpen] = useState(false);
-    const { habitList, refreshHabits } = useHabits();
+    const { habitList, refreshHabits, refreshToday } = useHabits();
 
     return (
         <>
@@ -23,8 +23,7 @@ const Habits = () => {
                         setOpen={setIsHabitFormOpen}
                         isOpen={isHabitFormOpen}
                         mode="create"
-                        // 3) call shared refresh after you add a habit
-                        onSubmitSuccess={refreshHabits}
+                        onSubmitSuccess={() => { refreshHabits(); refreshToday(); }}
                     />
                 </section>
             </motion.main>

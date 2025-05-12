@@ -1,11 +1,12 @@
 import Headline from "../../atoms/Headline/Headline";
 import Card from "../../molecules/Card/Card";
 import "./StatsTeaser.scss";
+import { useHabits } from "../../../lib/HabitsContext";
+import { useUser } from "../../../lib/UserContext";
 
 const StatsTeaser = () => {
-    const streak = 3;
-    const longestStreak = 50;
-    const diaryEntries = 2;
+    const { habitCount } = useHabits();
+    const { user } = useUser();
     return (
         <section className="container">
             <Headline level={2} style="section">
@@ -16,7 +17,7 @@ const StatsTeaser = () => {
                     <span className="stats-teaser__streak-title">
                         Current Streak
                     </span>
-                    <span className="fst--big-number">{streak}</span>
+                    <span className="fst--big-number">{user?.current_streak}</span>
                     <span className="uppercase bold">days</span>
                 </Card>
                 <div className="stats-teaser__list">
@@ -27,18 +28,18 @@ const StatsTeaser = () => {
                         </div>
                         <div className="stats-teaser__list-item-value">
                             <span className="fst--big-number purple">
-                                {longestStreak}
+                                {user?.highest_streak}
                             </span>
                         </div>
                     </Card>
                     <Card className="stats-teaser__list-item">
                         <div className="stats-teaser__list-item-title fst--card-title">
-                            <span>Diary</span>
-                            <span>Entries</span>
+                            <span>Total</span>
+                            <span>Habits</span>
                         </div>
                         <div className="stats-teaser__list-item-value">
                             <span className="fst--big-number blue">
-                                {diaryEntries}
+                                {habitCount}
                             </span>
                         </div>
                     </Card>

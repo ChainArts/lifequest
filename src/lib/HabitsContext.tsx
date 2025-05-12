@@ -1,11 +1,13 @@
 // src/contexts/HabitsContext.tsx
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode, useMemo } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { HabitCardProps } from "../components/molecules/HabitCard/HabitCard";
+import { calulateStreakXP } from "./XP";
 
 export type ActiveHabitProps = Omit<HabitCardProps, "id"> & {
     id: string;
     done: number;
+    completed?: boolean;
 };
 
 type HabitsContextType = {
@@ -15,6 +17,7 @@ type HabitsContextType = {
     detailCache: Record<string, HabitCardProps>;
     getHabitById: (id: string, force?: boolean) => Promise<HabitCardProps>;
     refreshHabitById: (id: string) => Promise<HabitCardProps>;
+    habitCount: number;
 
     // today’s slice
     todayHabits: ActiveHabitProps[];
@@ -24,7 +27,7 @@ type HabitsContextType = {
     // actions
     refreshToday: () => Promise<void>;
     refreshXp: () => Promise<void>;
-    setHabitProgress: (id: string, add: number) => void;
+    updateHabitProgress: (habitLogId: string, add: number, currentStreak: number, goal: number) => Promise<boolean>;
 };
 
 const HabitsContext = createContext<HabitsContextType | undefined>(undefined);
@@ -38,6 +41,7 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
     const [todayHabits, setTodayHabits] = useState<ActiveHabitProps[]>([]);
     const [dailyXp, setDailyXp] = useState(0);
     const [streak, setStreak] = useState(0); // you can wire this up to your backend if you have one
+    const habitCount = useMemo(() => habitList.length, [habitList]);
 
     const refreshHabitById = async (id: string) => {
         const habit = (await invoke("get_single_habit", { id })) as HabitCardProps;
@@ -97,19 +101,46 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
         }
     };
 
-    // --- update local progress & XP when user ticks a habit ---
-    const setHabitProgress = (id: string, add: number) => {
-        setTodayHabits((prev) => {
-            return prev.map((h) => {
-                if (h.id !== id) return h;
-                const newDone = Math.min(h.done + add, h.goal);
-                // if they just hit the goal, bump XP
-                if (h.done < h.goal && newDone === h.goal) {
-                    refreshXp();
-                }
+    const updateHabitProgress = async (habitLogId: string, add: number, currentStreak: number, goal: number) => {
+        // 0) get previous “completed” state
+        const wasCompleted = (await invoke("get_habit_log_completed", { id: habitLogId })) as boolean;
+        // 1) bump local state
+        let newDone = 0;
+        setTodayHabits((prev) =>
+            prev.map((h) => {
+                if (h.id !== habitLogId) return h;
+                newDone = Math.min(h.done + add, h.goal);
                 return { ...h, done: newDone };
-            });
-        });
+            })
+        );
+
+        // 2) build payload
+        const completed = newDone === goal;
+        const isNewCompletion = completed && !wasCompleted;
+        const exp = isNewCompletion ? calulateStreakXP(currentStreak) : 0;
+
+        // only include exp/completed when we're newly completing
+        const payload: any = { id: habitLogId, progress: newDone };
+        if (isNewCompletion) {
+            payload.exp = exp;
+            payload.completed = true;
+        }
+
+        // 3) call backend
+
+        try {
+            if (isNewCompletion) {
+                await invoke("increase_habit_xp", { id: habitLogId, exp });
+                await refreshXp();
+                await refreshHabits();
+            }
+            // this now only ever updates `progress` (and newly‐earned XP/completed if applicable)
+            await invoke("update_habit_log", payload);
+        } catch (e) {
+            console.error("Failed to sync habit:", e);
+        }
+
+        return isNewCompletion; // return true if we got XP
     };
 
     // on mount, load everything
@@ -130,10 +161,11 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
                 streak,
                 refreshToday,
                 refreshXp,
-                setHabitProgress,
+                updateHabitProgress,
                 detailCache,
                 getHabitById,
                 refreshHabitById,
+                habitCount,
             }}
         >
             {children}

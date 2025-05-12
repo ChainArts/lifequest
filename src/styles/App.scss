@@ -114,8 +114,14 @@ main {
     padding-bottom: var(--navbar-height);
     min-height: 100svh;
     height: 100%;
+    width: 100%;
     margin-top: 33svh;
     background-color: var(--background-base);
+    @media screen and (min-width: 800px) {
+        background-color: var(--background-base-trans);
+        backdrop-filter: blur(10px);
+        
+    }
 
     &::before {
         content: "";
@@ -128,6 +134,13 @@ main {
         border-radius: 2rem 2rem 0 0;
         padding: 0.5rem 0;
     }
+
+    @media screen and (min-width: 800px) {
+        max-width: 800px;
+        padding: 0 1rem;
+        margin: 33svh auto 0 auto;
+    }
+    
 }
 
 button, a {
@@ -201,17 +214,4 @@ button, a {
 .back{
     color: var(--purple-dark);
     padding: 0.5rem 1rem 1rem 0.5rem;
-}
-
-
-@media screen and (min-width: 768px) {
-    .container {
-        padding: 0 1.5rem;
-    }
-}
-
-@media screen and (min-width: 1024px) {
-    .container {
-        padding: 0 2rem;
-    }
 }

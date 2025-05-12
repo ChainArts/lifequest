@@ -9,7 +9,7 @@ import { pageVariants, sectionVariants } from "../components/atoms/PageTransitio
 import { useHabits } from "../lib/HabitsContext";
 
 const Home = () => {
-    const { todayHabits, dailyXp, streak, refreshToday, refreshXp, setHabitProgress } = useHabits();
+    const { todayHabits, dailyXp, streak, refreshToday, refreshXp } = useHabits();
 
     const calculateProgress = () => {
         if (todayHabits.length === 0) return 0;
@@ -28,7 +28,7 @@ const Home = () => {
             </motion.section>
 
             <motion.section variants={sectionVariants}>
-                <DailyHabits activeHabits={todayHabits} setHabitProgress={setHabitProgress} updateXP={refreshXp} fetchHabits={refreshToday} />
+                <DailyHabits activeHabits={todayHabits} updateXP={refreshXp} fetchHabits={refreshToday} />
             </motion.section>
 
             <motion.section variants={sectionVariants}>

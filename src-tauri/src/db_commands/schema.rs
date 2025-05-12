@@ -42,3 +42,11 @@ pub struct HabitLogWithId {
     pub habit_log: HabitLog,
     pub id: Thing,
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct User {
+    pub exp: Number,
+    pub level: Number,
+    pub current_streak: Number,
+    pub highest_streak: Number,
+}

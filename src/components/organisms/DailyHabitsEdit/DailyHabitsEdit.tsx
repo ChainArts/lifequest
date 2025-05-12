@@ -3,12 +3,12 @@ import * as yup from "yup";
 import "../HabitForm/HabitForm.scss";
 import { HiOutlineX } from "react-icons/hi";
 import { Sheet } from "react-modal-sheet";
-import { invoke } from "@tauri-apps/api/core";
-import { ActiveHabitProps, calulateStreakXP } from "../../molecules/ActiveHabit/ActiveHabit";
+import { ActiveHabitProps } from "../../molecules/ActiveHabit/ActiveHabit";
 import { BiSolidUpArrow, BiSolidDownArrow } from "react-icons/bi";
 import { useState } from "react";
 import Button from "../../atoms/Button/Button";
 import AddActiveHabit from "./AddActiveHabits";
+import { useHabits } from "../../../lib/HabitsContext";
 
 type HabitFormProps = {
     setOpen: (value: boolean) => void;
@@ -20,6 +20,7 @@ type HabitFormProps = {
 
 const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess, fetchHabits }: HabitFormProps) => {
     const [addActiveHabitOpen, setAddActiveHabitOpen] = useState(false);
+    const { updateHabitProgress } = useHabits();
     const initialValues = habits.reduce((values, habit) => {
         return { ...values, [habit.id]: habit.done };
     }, {} as { [key: string]: number });
@@ -33,25 +34,20 @@ const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess, fetchHabits
 
     const onSubmit = async (values: { [key: string]: number }) => {
         for (const habit of habits) {
-            try {
-                const updateData: any = { id: habit.id, progress: values[habit.id], exp: 0 };
-                updateData.completed = values[habit.id] === habit.goal;
+            const progress = values[habit.id];
+            const delta = progress - habit.done;
 
-                if (values[habit.id] === habit.goal) {
-                    updateData.exp = calulateStreakXP(habit.current_streak);
-                    await invoke("increase_habit_xp", {
-                        id: habit.id,
-                        exp: updateData.exp,
-                    });
+            if (delta !== 0) {
+                try {
+                    // use context helper instead of raw invoke
+                    await updateHabitProgress(habit.id, delta, habit.current_streak, habit.goal);
+                    console.log(`Habit ${habit.id} updated by ${delta}`);
+                } catch (error) {
+                    console.error(`Error updating habit ${habit.id}:`, error);
                 }
-
-                await invoke("update_habit_log", updateData);
-
-                console.log(`Habit ${habit.id} was updatec with value ${values[habit.id]}`);
-            } catch (error) {
-                console.error(`Error updating habit ${habit.id}:`, error);
             }
         }
+
         if (onSubmitSuccess) {
             onSubmitSuccess();
             fetchHabits();

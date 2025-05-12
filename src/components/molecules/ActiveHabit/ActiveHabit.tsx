@@ -4,7 +4,9 @@ import { HiPlus, HiCheck } from "react-icons/hi";
 import { cubicBezier, motion } from "motion/react";
 import LinearProgress from "../../atoms/LinearProgress/LinearProgress";
 import FluentEmoji from "../../../lib/FluentEmoji";
-import { invoke } from "@tauri-apps/api/core";
+import { useHabits } from "../../../lib/HabitsContext";
+import { calulateStreakXP } from "../../../lib/XP";
+import { useUser } from "../../../lib/UserContext";
 
 export type ActiveHabitProps = {
     id: string;
@@ -17,58 +19,24 @@ export type ActiveHabitProps = {
     current_streak: number;
 };
 
-export const calulateStreakXP = (streak: number) => {
-    const thresholds = [3, 7, 14, 21, 30, 45, 60, 100, 150];
-    const baseXP = 10;
-    let multiplier = 1;
-
-    if (streak > thresholds[thresholds.length - 1]) return baseXP * thresholds.length;
-
-    for (const threshold of thresholds) {
-        if (streak > threshold) {
-            multiplier++;
-        } else {
-            break;
-        }
-    }
-
-    return baseXP * multiplier;
-};
-
-const ActiveHabit = ({ habit, setHabitProgress, updateXP }: { habit: ActiveHabitProps; setHabitProgress: (id: string, add: number) => void; updateXP: () => void }) => {
+const ActiveHabit = ({ habit, updateXP }: { habit: ActiveHabitProps; updateXP: () => void }) => {
     const [circles, setCircles] = useState<{ id: string }[]>([]);
-    const { id, title, goal, done, icon, color, unit } = habit;
+    const { id, title, goal, done, icon, color, unit, current_streak } = habit;
+    const { updateHabitProgress } = useHabits();
+    const { updateUser } = useUser();
 
     const handleAdd = async () => {
-        setHabitProgress(id, 1);
-        const newProgress = done + 1;
-        await updateHabitProgress(id, newProgress);
-        if (newProgress >= goal) {
-            updateXP();
+        const gotXp = (await updateHabitProgress(id, 1, current_streak, goal)) as boolean;
+        console.log("gotXp", gotXp);
+
+        if (gotXp) {
+            const earned = calulateStreakXP(current_streak);
+            await updateUser({ exp: earned }, "add");
         }
         const timestamp = Date.now();
         const newCircles = [{ id: `${timestamp}` }];
         setCircles((prev) => [...prev, ...newCircles]);
-    };
-
-    // Call this function to update habit progress in the backend.
-    const updateHabitProgress = async (habitLogId: string, newProgress: number) => {
-        try {
-            const updateData: any = { id: habitLogId, progress: newProgress, exp: 0 };
-            updateData.completed = newProgress === goal;
-
-            if (newProgress === goal) {
-                updateData.exp = calulateStreakXP(habit.current_streak);
-                await invoke("increase_habit_xp", {
-                    id: habit.id,
-                    exp: updateData.exp,
-                });
-            }
-
-            await invoke("update_habit_log", updateData);
-        } catch (error) {
-            console.error("Failed to update habit progress:", error);
-        }
+        updateXP();
     };
 
     // Remove a circle after its animation completes

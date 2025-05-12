@@ -8,12 +8,11 @@ import DailyHabitsEdit from "../DailyHabitsEdit/DailyHabitsEdit";
 
 type DailyHabitsProps = {
     activeHabits: ActiveHabitProps[];
-    setHabitProgress: (id: string, add: number) => void;
     updateXP: () => void;
     fetchHabits: () => void;
 };
 
-const DailyHabits = ({ activeHabits, setHabitProgress, updateXP, fetchHabits }: DailyHabitsProps) => {
+const DailyHabits = ({ activeHabits, updateXP, fetchHabits }: DailyHabitsProps) => {
     const [openEdit, setOpenEdit] = useState(false);
     return (
         <section className="container">
@@ -38,7 +37,7 @@ const DailyHabits = ({ activeHabits, setHabitProgress, updateXP, fetchHabits }: 
                 ) : (
                     <div className="daily-habits__list">
                         {activeHabits.map((habit, index) => (
-                            <ActiveHabit key={index} habit={habit} setHabitProgress={setHabitProgress} updateXP={updateXP} />
+                            <ActiveHabit key={index} habit={habit} updateXP={updateXP} />
                         ))}
                     </div>
                 )}

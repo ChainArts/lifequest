@@ -9,15 +9,16 @@ import Navbar from "./components/organisms/Navbar/Navbar";
 import IslandContainer from "./components/organisms/IslandContainer/IslandContainer";
 import Island from "./pages/Island";
 import { HabitsProvider } from "./lib/HabitsContext";
+import { UserProvider } from "./lib/UserContext";
+import UserBar from "./components/organisms/UserBar/UserBar";
 
 function App() {
     const location = useLocation();
-    //TEMP CHECK FOR LOGGED IN
-    const isLoggedIn = true; //location.pathname !== "/";
     return (
-        <>
+        <UserProvider>
             <HabitsProvider>
-                {isLoggedIn && <IslandContainer location={location.pathname} />}
+                <UserBar />
+                <IslandContainer location={location.pathname} />
                 <AnimatePresence mode="wait">
                     <Routes location={location} key={location.pathname}>
                         <Route path="/" element={<Home />} />
@@ -27,9 +28,9 @@ function App() {
                         <Route path="/profile" element={<Profile />} />
                     </Routes>
                 </AnimatePresence>
-                {isLoggedIn && <Navbar />}
+                <Navbar />
             </HabitsProvider>
-        </>
+        </UserProvider>
     );
 }
 
