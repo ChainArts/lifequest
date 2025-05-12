@@ -7,6 +7,7 @@ import FluentEmoji from "../../../lib/FluentEmoji";
 import { useHabits } from "../../../lib/HabitsContext";
 import { calulateStreakXP } from "../../../lib/XP";
 import { useUser } from "../../../lib/UserContext";
+import { usePopOver } from "../../../lib/PopOverContext";
 
 export type ActiveHabitProps = {
     id: string;
@@ -22,9 +23,10 @@ export type ActiveHabitProps = {
 
 const ActiveHabit = ({ habit, updateXP }: { habit: ActiveHabitProps; updateXP: () => void }) => {
     const [circles, setCircles] = useState<{ id: string }[]>([]);
-    const { id, title, goal, done, icon, color, unit, current_streak } = habit;
+    const { id, title, goal, done, icon, color, unit, current_streak, tracking } = habit;
     const { updateHabitProgress } = useHabits();
     const { updateUser } = useUser();
+    const { openPopOver } = usePopOver();
 
     const handleAdd = async () => {
         const gotXp = (await updateHabitProgress(id, 1, current_streak, goal)) as boolean;
@@ -38,6 +40,16 @@ const ActiveHabit = ({ habit, updateXP }: { habit: ActiveHabitProps; updateXP: (
         const newCircles = [{ id: `${timestamp}` }];
         setCircles((prev) => [...prev, ...newCircles]);
         updateXP();
+
+        if (tracking && done + 1 === goal) {
+            console.log("open popover");
+            openPopOver(
+                <div className="tracking__popover">
+                    <p className="fst--card-title">Habit tracked!</p>
+                    <p className="fst--base">You have tracked this habit for today.</p>
+                </div>
+            );
+        }
     };
 
     // Remove a circle after its animation completes
