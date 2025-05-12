@@ -21,8 +21,8 @@ function App() {
                 <UserBar />
 
                 <IslandContainer location={location.pathname} />
-                <AnimatePresence mode="wait">
-                    <PopOverProvider>
+                <PopOverProvider>
+                    <AnimatePresence mode="wait">
                         <Routes location={location} key={location.pathname}>
                             <Route path="/" element={<Home />} />
                             <Route path="/habits" element={<Habits />} />
@@ -30,9 +30,9 @@ function App() {
                             <Route path="/island" element={<Island />} />
                             <Route path="/profile" element={<Profile />} />
                         </Routes>
-                    </PopOverProvider>
-                </AnimatePresence>
-                <Navbar />
+                    </AnimatePresence>
+                    <Navbar />
+                </PopOverProvider>
             </HabitsProvider>
         </UserProvider>
     );
