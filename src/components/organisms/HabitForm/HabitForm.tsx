@@ -8,7 +8,6 @@ import EmojiPicker, { Categories } from "emoji-picker-react";
 import { invoke } from "@tauri-apps/api/core";
 import { BiSolidUpArrow, BiSolidDownArrow, BiSolidRightArrow } from "react-icons/bi";
 import InfoBlob from "../../atoms/InfoBlob/InfoBlob";
-import { Tooltip } from "react-tooltip";
 
 const habitSchema = yup.object().shape({
     title: yup.string().required("name is required"),
