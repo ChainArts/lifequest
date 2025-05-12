@@ -201,7 +201,7 @@ const HabitForm = ({ id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }
                                             <div className="form-box">
                                                 <label htmlFor="tracking">
                                                     Enable
-                                                    <input id="tracking" name="tracking" type="checkbox" />
+                                                    <Field id="tracking" name="tracking" type="checkbox" />
                                                     <span className="toggle" />
                                                 </label>
                                             </div>

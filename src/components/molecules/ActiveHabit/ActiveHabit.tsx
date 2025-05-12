@@ -17,6 +17,7 @@ export type ActiveHabitProps = {
     done: number;
     color: string;
     current_streak: number;
+    tracking: boolean;
 };
 
 const ActiveHabit = ({ habit, updateXP }: { habit: ActiveHabitProps; updateXP: () => void }) => {
