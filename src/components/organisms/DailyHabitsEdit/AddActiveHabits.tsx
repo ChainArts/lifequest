@@ -3,6 +3,7 @@ import { Field } from "formik";
 import { useState, useEffect } from "react";
 import { Sheet } from "react-modal-sheet";
 import { ActiveHabitProps } from "../../molecules/ActiveHabit/ActiveHabit";
+import Card from "../../molecules/Card/Card";
 
 type AddActiveHabitProps = {
     addActiveHabitOpen: boolean;
@@ -48,7 +49,12 @@ const AddActiveHabit = ({ habits, addActiveHabitOpen, setAddActiveHabitOpen, fet
                 <Sheet.Content>
                     <Sheet.Scroller>
                         {inactiveHabits.length === 0 ? (
-                            <div className="container form-upper-heading ">No additional Habits were found</div>
+                            <div className="container form-upper-heading">
+                                <Card className="secondary no-habits" route="/habits">
+                                    <p className="fst--card-title">Create a new habit!</p>
+                                    <p className="fst--base">No additional habits where found</p>
+                                </Card>
+                            </div>
                         ) : (
                             <div className="container form-container">
                                 <fieldset>
