@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Sheet } from "react-modal-sheet";
 import { ActiveHabitProps } from "../../molecules/ActiveHabit/ActiveHabit";
 import Card from "../../molecules/Card/Card";
+import { useNavigate } from "react-router-dom";
 
 type AddActiveHabitProps = {
     addActiveHabitOpen: boolean;
@@ -12,6 +13,7 @@ type AddActiveHabitProps = {
     fetchHabits: () => void;
 };
 const AddActiveHabit = ({ habits, addActiveHabitOpen, setAddActiveHabitOpen, fetchHabits }: AddActiveHabitProps) => {
+    const navigate = useNavigate();
     const [inactiveHabits, setInactiveHabits] = useState<ActiveHabitProps[]>([]);
     const fetchInactiveHabits = async () => {
         try {
@@ -50,7 +52,7 @@ const AddActiveHabit = ({ habits, addActiveHabitOpen, setAddActiveHabitOpen, fet
                     <Sheet.Scroller>
                         {inactiveHabits.length === 0 ? (
                             <div className="container form-upper-heading">
-                                <Card className="secondary no-habits" route="/habits">
+                                <Card className="secondary no-habits" onClick={() => navigate("/habits", { state: { create: true } })}>
                                     <p className="fst--card-title">Create a new habit!</p>
                                     <p className="fst--base">No additional habits where found</p>
                                 </Card>

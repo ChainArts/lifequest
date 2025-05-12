@@ -6,9 +6,11 @@ import { useState } from "react";
 import HabitForm from "../components/organisms/HabitForm/HabitForm";
 import { HiPlus } from "react-icons/hi";
 import { useHabits } from "../lib/HabitsContext";
+import { useLocation } from "react-router-dom";
 
 const Habits = () => {
-    const [isHabitFormOpen, setIsHabitFormOpen] = useState(false);
+    const { state } = useLocation();
+    const [isHabitFormOpen, setIsHabitFormOpen] = useState(!!state?.create);
     const { habitList, refreshHabits, refreshToday } = useHabits();
 
     return (
