@@ -2,7 +2,7 @@ import { createContext, useContext, ReactNode, useState } from "react";
 import PopOver from "../components/atoms/PopOver/PopOver";
 
 interface PopOverContextType {
-    openPopOver: (content: ReactNode) => void;
+    openPopOver: (title: string, content: ReactNode) => void;
     close: () => void;
 }
 
@@ -10,11 +10,13 @@ const PopOverContext = createContext<PopOverContextType | undefined>(undefined);
 
 export const PopOverProvider = ({ children }: { children: ReactNode }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [title, setTitle] = useState<string>("");
     const [content, setContent] = useState<ReactNode>(null);
     const [key, setKey] = useState(0);
 
-    const openPopOver = (node: ReactNode) => {
-        setContent(node);
+    const openPopOver = (newTitle: string, newContent: ReactNode) => {
+        setTitle(newTitle);
+        setContent(newContent);
         setKey((k) => k + 1);
         setIsOpen(true);
     };
@@ -24,7 +26,11 @@ export const PopOverProvider = ({ children }: { children: ReactNode }) => {
     return (
         <PopOverContext.Provider value={{ openPopOver, close }}>
             {children}
-            {isOpen && <PopOver key={key}>{content}</PopOver>}
+            {isOpen && (
+                <PopOver title={title} key={key}>
+                    {content}
+                </PopOver>
+            )}
         </PopOverContext.Provider>
     );
 };

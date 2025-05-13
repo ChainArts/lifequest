@@ -15,12 +15,17 @@
 .popover__header {
     width: 100%;
     border-bottom: 1px solid var(--progress-bg-round);
-    margin-bottom: var(--gap);
-    padding: var(--gap);
+    margin-bottom: 1rem;
+    padding: 1rem;
     padding-top: 1rem;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
     color: var(--text-light);
+
+    h2 {
+        font-size: 1rem;
+    }
 
     svg {
         font-size: 1.25rem;
@@ -34,4 +39,6 @@
 
 .popover__content {
     padding: 1rem;
+
+    line-height: 1.4;
 }

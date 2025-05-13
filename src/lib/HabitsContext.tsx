@@ -26,7 +26,7 @@ type HabitsContextType = {
     // actions
     refreshToday: () => Promise<void>;
     refreshXp: () => Promise<void>;
-    updateHabitProgress: (habitLogId: string, add: number, currentStreak: number, goal: number, data?: number) => Promise<boolean>;
+    updateHabitProgress: (habitLogId: string, add?: number, currentStreak?: number, goal?: number, data?: number) => Promise<boolean>;
 };
 
 const HabitsContext = createContext<HabitsContextType | undefined>(undefined);
@@ -91,7 +91,7 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
         }
     };
 
-    const updateHabitProgress = async (habitLogId: string, add: number, currentStreak: number, goal: number, data?: number) => {
+    const updateHabitProgress = async (habitLogId: string, add?: number, currentStreak?: number, goal?: number, data?: number) => {
         // 0) get previous “completed” state
         const wasCompleted = (await invoke("get_habit_log_completed", { id: habitLogId })) as boolean;
         // 1) bump local state
@@ -99,7 +99,7 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
         setTodayHabits((prev) =>
             prev.map((h) => {
                 if (h.id !== habitLogId) return h;
-                newDone = Math.min(h.done + add, h.goal);
+                newDone = Math.min(h.done + (add ?? 0), h.goal);
                 return { ...h, done: newDone };
             })
         );
@@ -107,7 +107,7 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
         // 2) build payload
         const completed = newDone === goal;
         const isNewCompletion = completed && !wasCompleted;
-        const exp = isNewCompletion ? calulateStreakXP(currentStreak) : 0;
+        const exp = isNewCompletion ? calulateStreakXP(currentStreak ?? 0) : 0;
 
         // only include exp/completed when we're newly completing
         const payload: any = { id: habitLogId, progress: newDone, data: data };

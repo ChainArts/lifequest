@@ -3,7 +3,7 @@ import Card from "../../molecules/Card/Card";
 import { HiOutlineX } from "react-icons/hi";
 import "./PopOver.scss";
 
-const PopOver = ({ children }: { children: ReactNode }) => {
+const PopOver = ({ title, children }: { title: string; children: ReactNode }) => {
     const [isOpen, setIsOpen] = useState(true);
 
     if (!isOpen) {
@@ -15,6 +15,7 @@ const PopOver = ({ children }: { children: ReactNode }) => {
             <div onClick={(e) => e.stopPropagation()}>
                 <Card className="popover__card">
                     <div className="popover__header">
+                        <h2 className="popover__title">{title}</h2>
                         <button type="button" onClick={() => setIsOpen(false)}>
                             <HiOutlineX />
                         </button>

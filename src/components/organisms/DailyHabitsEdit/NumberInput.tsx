@@ -1,4 +1,3 @@
-import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
 import { Field } from "formik";
 import { HiMinus, HiPlus } from "react-icons/hi";
 

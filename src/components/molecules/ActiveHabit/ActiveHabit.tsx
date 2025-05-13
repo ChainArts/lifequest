@@ -8,6 +8,7 @@ import { useHabits } from "../../../lib/HabitsContext";
 import { calulateStreakXP } from "../../../lib/XP";
 import { useUser } from "../../../lib/UserContext";
 import { usePopOver } from "../../../lib/PopOverContext";
+import AddTrackingData from "../../organisms/DailyHabitsEdit/AddTrackingData";
 
 export type ActiveHabitProps = {
     id: string;
@@ -24,7 +25,7 @@ export type ActiveHabitProps = {
 
 const ActiveHabit = ({ habit, updateXP }: { habit: ActiveHabitProps; updateXP: () => void }) => {
     const [circles, setCircles] = useState<{ id: string }[]>([]);
-    const { id, title, goal, done, icon, color, unit, current_streak, tracking } = habit;
+    const { id, title, goal, done, icon, color, unit, current_streak, tracking, data } = habit;
     const { updateHabitProgress } = useHabits();
     const { updateUser } = useUser();
     const { openPopOver } = usePopOver();
@@ -42,14 +43,9 @@ const ActiveHabit = ({ habit, updateXP }: { habit: ActiveHabitProps; updateXP: (
         setCircles((prev) => [...prev, ...newCircles]);
         updateXP();
 
-        if (tracking && done + 1 === goal) {
+        if (tracking && data && done + 1 === goal) {
             console.log("open popover");
-            openPopOver(
-                <div className="tracking__popover">
-                    <p className="fst--card-title">Habit tracked!</p>
-                    <p className="fst--base">You have tracked this habit for today.</p>
-                </div>
-            );
+            openPopOver("Add Tracking Data", <AddTrackingData id={id} initialValue={data} name={title} />);
         }
     };
 
