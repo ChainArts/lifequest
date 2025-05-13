@@ -1,0 +1,45 @@
+.habit-settings__card {
+    .habit-settings__item {
+        padding: var(--gap);
+        display: flex;
+        justify-content: space-between;
+
+        &:not(:last-child) {
+            border-bottom: 1px solid var(--progress-bg-round);
+        }
+    }
+}
+
+.habit-card__week {
+    display: flex;
+    justify-content: flex-start;
+    gap: 0.25rem;
+    align-items: center;
+    font-size: 0.75rem;
+    color: var(--text-base);
+    border: 1px solid transparent;
+    margin-bottom: -0.5rem;
+
+    & .habit-card__day {
+        height: 1.125rem;
+        width: 1rem;
+        text-align: center;
+        padding-top: 3px;
+
+        &.active {
+            position: relative;
+
+            &::before {
+                position: absolute;
+                content: "";
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                border-radius: 2px;
+                background-color: var(--_card-color);
+                opacity: 0.25;
+            }
+        }
+    }
+}

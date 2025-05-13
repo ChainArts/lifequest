@@ -16,5 +16,11 @@
         gap: 0.25rem;
         text-align: center;
         line-height: 1.4;
+
+        svg {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            margin-bottom: -0.5rem;
+        }
     }
 }

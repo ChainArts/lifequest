@@ -6,6 +6,7 @@ import Card from "../../molecules/Card/Card";
 import { useState } from "react";
 import DailyHabitsEdit from "../DailyHabitsEdit/DailyHabitsEdit";
 import { useNavigate } from "react-router-dom";
+import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 
 type DailyHabitsProps = {
     activeHabits: ActiveHabitProps[];
@@ -37,6 +38,7 @@ const DailyHabits = ({ activeHabits, updateXP, fetchHabits }: DailyHabitsProps) 
                     <Card className="secondary no-habits" onClick={() => navigate("/habits", { state: { create: true } })}>
                         <p className="fst--card-title">No habits for today</p>
                         <p className="fst--base">Create a new habit or plan one for today!</p>
+                        <HiOutlineArrowNarrowRight />
                     </Card>
                 ) : (
                     <div className="daily-habits__list">

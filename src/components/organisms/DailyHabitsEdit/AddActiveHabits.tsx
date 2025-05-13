@@ -5,6 +5,7 @@ import { Sheet } from "react-modal-sheet";
 import { ActiveHabitProps } from "../../molecules/ActiveHabit/ActiveHabit";
 import Card from "../../molecules/Card/Card";
 import { useNavigate } from "react-router-dom";
+import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 
 type AddActiveHabitProps = {
     addActiveHabitOpen: boolean;
@@ -55,6 +56,7 @@ const AddActiveHabit = ({ habits, addActiveHabitOpen, setAddActiveHabitOpen, fet
                                 <Card className="secondary no-habits" onClick={() => navigate("/habits", { state: { create: true } })}>
                                     <p className="fst--card-title">Create a new habit!</p>
                                     <p className="fst--base">No additional habits where found</p>
+                                    <HiOutlineArrowNarrowRight />
                                 </Card>
                             </div>
                         ) : (

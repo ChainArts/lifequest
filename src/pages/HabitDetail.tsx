@@ -56,23 +56,23 @@ const HabitDetail: React.FC = () => {
 
     return (
         <>
-            <motion.main initial="initial" animate="in" exit="out" variants={pageVariants} className="container">
-                <motion.section variants={sectionVariants}>
+            <motion.main initial="initial" animate="in" exit="out" variants={pageVariants}>
+                <motion.section variants={sectionVariants} className="container">
                     <div className="back" onClick={() => navigate("/habits")}>
                         Back
                     </div>
-                    <HabitStats icon={habit.icon} xp={habit.habit_xp} title={habit.title} />
+                    <HabitStats icon={habit.icon} xp={habit.habit_xp} title={habit.title} color={habit.color} />
                 </motion.section>
-                <motion.section variants={sectionVariants}>
-                    <HabitSettings setOpen={setOpen} />
+                <motion.section variants={sectionVariants} className="container">
+                    <HabitSettings setOpen={setOpen} goal={habit.goal} unit={habit.unit} week_days={habit.week_days} tracking={habit.tracking} color={habit.color} />
                 </motion.section>
-                <motion.section variants={sectionVariants}>
+                <motion.section variants={sectionVariants} className="container">
                     <HabitHeatmap />
                 </motion.section>
-                <motion.section variants={sectionVariants}>
+                <motion.section variants={sectionVariants} className="container">
                     <HabitGraph />
                 </motion.section>
-                <motion.section variants={sectionVariants}>
+                <motion.section variants={sectionVariants} className="container">
                     <button className="delete" onClick={deleteHabit}>
                         Delete
                     </button>

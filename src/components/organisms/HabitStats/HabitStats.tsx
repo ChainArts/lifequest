@@ -3,10 +3,19 @@ import LinearProgress from "../../atoms/LinearProgress/LinearProgress";
 import Card from "../../molecules/Card/Card";
 import "./HabitStats.scss";
 
-const HabitStats = ({ icon, xp, title }: { icon: string; xp: number; title: String }) => {
+const HabitStats = ({ icon, xp, title, color }: { icon: string; xp: number; title: string; color: string }) => {
+    const colorLight = color + "DD";
     return (
         <div className="habit-stats">
-            <Card className="habit-stats__icon">
+            <Card
+                className="habit-stats__icon"
+                style={
+                    {
+                        "--_card-color": color,
+                        "--_card-color-light": colorLight,
+                    } as React.CSSProperties
+                }
+            >
                 <FluentEmoji emoji={icon} size={64} className="emoji" />
                 <span>{title}</span>
                 <LinearProgress done={xp} goal={100} />
