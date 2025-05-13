@@ -36,22 +36,18 @@ const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess, fetchHabits
 
     const onSubmit = async (values: HabitValues) => {
         for (const habit of habits) {
-            const { done } = values[habit.id];
-            const delta = done - (habit.done ?? 0);
-            if (delta !== 0) {
+            const { done, data } = values[habit.id];
+            const initialDone = habit.done ?? 0;
+            const initialData = habit.data ?? 0;
+            const doneDelta = done - initialDone;
+            const dataChanged = habit.tracking && data !== initialData;
+
+            if (doneDelta !== 0 || dataChanged) {
                 try {
-                    await updateHabitProgress(habit.id, delta, habit.current_streak, habit.goal);
-                    console.log(`Habit ${habit.id} updated by ${delta}`);
+                    await updateHabitProgress(habit.id, doneDelta, habit.current_streak, habit.goal, dataChanged ? data : undefined);
+                    console.log(`Habit ${habit.id} updated successfully.`, { doneDelta, dataChanged });
                 } catch (error) {
                     console.error(`Error updating habit ${habit.id}:`, error);
-                }
-            } else if (values[habit.id].data !== undefined && delta === 0) {
-                const data = values[habit.id].data;
-                try {
-                    await updateHabitProgress(habit.id, 0, habit.current_streak, habit.goal, data);
-                    console.log(`Habit ${habit.id} data updated to ${data}`);
-                } catch (error) {
-                    console.error(`Error updating habit ${habit.id} data:`, error);
                 }
             }
         }
