@@ -388,6 +388,7 @@ input {
         transition: outline 0.3s var(--ease);
         outline: 1px solid transparent;
         width: 80px;
+        padding: 0.75rem;
 
         &:has(+ .error) {
             outline: 1px solid var(--error);

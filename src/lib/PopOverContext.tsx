@@ -3,7 +3,7 @@ import PopOver from "../components/atoms/PopOver/PopOver";
 
 interface PopOverContextType {
     openPopOver: (title: string, content: ReactNode) => void;
-    close: () => void;
+    closePopOver: () => void;
 }
 
 const PopOverContext = createContext<PopOverContextType | undefined>(undefined);
@@ -21,10 +21,10 @@ export const PopOverProvider = ({ children }: { children: ReactNode }) => {
         setIsOpen(true);
     };
 
-    const close = () => setIsOpen(false);
+    const closePopOver = () => setIsOpen(false);
 
     return (
-        <PopOverContext.Provider value={{ openPopOver, close }}>
+        <PopOverContext.Provider value={{ openPopOver, closePopOver }}>
             {children}
             {isOpen && (
                 <PopOver title={title} key={key}>
