@@ -8,6 +8,7 @@ export type ActiveHabitProps = Omit<HabitCardProps, "id"> & {
     id: string;
     done: number;
     completed?: boolean;
+    data?: number;
 };
 
 type HabitsContextType = {
@@ -22,12 +23,10 @@ type HabitsContextType = {
     // today’s slice
     todayHabits: ActiveHabitProps[];
     dailyXp: number;
-    streak: number;
-
     // actions
     refreshToday: () => Promise<void>;
     refreshXp: () => Promise<void>;
-    updateHabitProgress: (habitLogId: string, add: number, currentStreak: number, goal: number) => Promise<boolean>;
+    updateHabitProgress: (habitLogId: string, add: number, currentStreak: number, goal: number, data?: number) => Promise<boolean>;
 };
 
 const HabitsContext = createContext<HabitsContextType | undefined>(undefined);
@@ -40,7 +39,6 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
     // today’s
     const [todayHabits, setTodayHabits] = useState<ActiveHabitProps[]>([]);
     const [dailyXp, setDailyXp] = useState(0);
-    const [streak, setStreak] = useState(0); // you can wire this up to your backend if you have one
     const habitCount = useMemo(() => habitList.length, [habitList]);
 
     const refreshHabitById = async (id: string) => {
@@ -75,6 +73,7 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
                 ...h,
                 id: h.id.id.String,
                 done: h.progress,
+                data: h.data,
             })) as ActiveHabitProps[];
             setTodayHabits(active);
         } catch (e) {
@@ -92,16 +91,7 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
         }
     };
 
-    const refreshStreak = async () => {
-        try {
-            const streak: number = (await invoke("get_streak", {})) as number;
-            setStreak(streak);
-        } catch (e) {
-            console.error("Failed to fetch streak", e);
-        }
-    };
-
-    const updateHabitProgress = async (habitLogId: string, add: number, currentStreak: number, goal: number) => {
+    const updateHabitProgress = async (habitLogId: string, add: number, currentStreak: number, goal: number, data?: number) => {
         // 0) get previous “completed” state
         const wasCompleted = (await invoke("get_habit_log_completed", { id: habitLogId })) as boolean;
         // 1) bump local state
@@ -120,7 +110,7 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
         const exp = isNewCompletion ? calulateStreakXP(currentStreak) : 0;
 
         // only include exp/completed when we're newly completing
-        const payload: any = { id: habitLogId, progress: newDone };
+        const payload: any = { id: habitLogId, progress: newDone, data: data };
         if (isNewCompletion) {
             payload.exp = exp;
             payload.completed = true;
@@ -148,7 +138,6 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
         refreshHabits();
         refreshToday();
         refreshXp();
-        refreshStreak();
     }, []);
 
     return (
@@ -158,7 +147,6 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
                 refreshHabits,
                 todayHabits,
                 dailyXp,
-                streak,
                 refreshToday,
                 refreshXp,
                 updateHabitProgress,

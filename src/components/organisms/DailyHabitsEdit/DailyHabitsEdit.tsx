@@ -1,14 +1,13 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as yup from "yup";
+import { Formik, Form, ErrorMessage } from "formik";
 import "../HabitForm/HabitForm.scss";
 import { HiOutlineX } from "react-icons/hi";
 import { Sheet } from "react-modal-sheet";
 import { ActiveHabitProps } from "../../molecules/ActiveHabit/ActiveHabit";
-import { BiSolidUpArrow, BiSolidDownArrow } from "react-icons/bi";
 import { useState } from "react";
 import Button from "../../atoms/Button/Button";
 import AddActiveHabit from "./AddActiveHabits";
 import { useHabits } from "../../../lib/HabitsContext";
+import NumberInput from "./NumberInput";
 
 type HabitFormProps = {
     setOpen: (value: boolean) => void;
@@ -17,46 +16,55 @@ type HabitFormProps = {
     onSubmitSuccess?: () => void;
     fetchHabits: () => void;
 };
+interface HabitValues {
+    [key: string]: {
+        done: number;
+        data: number;
+    };
+}
 
 const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess, fetchHabits }: HabitFormProps) => {
     const [addActiveHabitOpen, setAddActiveHabitOpen] = useState(false);
     const { updateHabitProgress } = useHabits();
-    const initialValues = habits.reduce((values, habit) => {
-        return { ...values, [habit.id]: habit.done };
-    }, {} as { [key: string]: number });
-
-    const schemaFields = habits.reduce((acc, habit) => {
-        acc[habit.id] = yup.number().typeError("Must be a number").min(0, "Value cannot be negative").max(habit.goal, `Cannot exceed goal of ${habit.goal}`).required("Progress is required");
+    const initialValues: HabitValues = habits.reduce((acc, habit) => {
+        acc[habit.id] = {
+            done: habit.done ?? 0,
+            data: habit.data ?? 0,
+        };
         return acc;
-    }, {} as { [key: string]: yup.NumberSchema<number, yup.AnyObject> });
+    }, {} as HabitValues);
 
-    const validationSchema = yup.object().shape(schemaFields);
-
-    const onSubmit = async (values: { [key: string]: number }) => {
+    const onSubmit = async (values: HabitValues) => {
         for (const habit of habits) {
-            const progress = values[habit.id];
-            const delta = progress - habit.done;
-
+            const { done } = values[habit.id];
+            const delta = done - (habit.done ?? 0);
             if (delta !== 0) {
                 try {
-                    // use context helper instead of raw invoke
                     await updateHabitProgress(habit.id, delta, habit.current_streak, habit.goal);
                     console.log(`Habit ${habit.id} updated by ${delta}`);
                 } catch (error) {
                     console.error(`Error updating habit ${habit.id}:`, error);
+                }
+            } else if (values[habit.id].data !== undefined && delta === 0) {
+                const data = values[habit.id].data;
+                try {
+                    await updateHabitProgress(habit.id, 0, habit.current_streak, habit.goal, data);
+                    console.log(`Habit ${habit.id} data updated to ${data}`);
+                } catch (error) {
+                    console.error(`Error updating habit ${habit.id} data:`, error);
                 }
             }
         }
 
         if (onSubmitSuccess) {
             onSubmitSuccess();
-            fetchHabits();
         }
+        fetchHabits();
         setOpen(false);
     };
 
     return (
-        <Formik initialValues={initialValues} validationSchema={validationSchema} enableReinitialize onSubmit={onSubmit}>
+        <Formik initialValues={initialValues} enableReinitialize onSubmit={onSubmit}>
             {({ values, setFieldValue, resetForm }) => (
                 <Form id="habitForm">
                     <Sheet isOpen={isOpen} onClose={() => setOpen(false)}>
@@ -81,63 +89,31 @@ const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess, fetchHabits
                             <Sheet.Content>
                                 <Sheet.Scroller>
                                     <div className="container form-container">
-                                        {habits.length !== 0 && (
-                                            <fieldset>
-                                                <div className="form-box">
-                                                    {habits.map((habit) => (
-                                                        <label htmlFor={habit.id} key={habit.id}>
+                                        {habits.length !== 0 &&
+                                            habits.map((habit) => (
+                                                <fieldset key={habit.id}>
+                                                    <div className="form-box">
+                                                        <label htmlFor={habit.id}>
                                                             <div className="form-upper-heading">
                                                                 <span className="fst--upper-heading gray">
                                                                     {habit.goal} {habit.unit}
                                                                 </span>
                                                                 <span className="fst--card-title">{habit.title}</span>
                                                             </div>
-                                                            <div className="number-input-box">
-                                                                <Field
-                                                                    id={habit.id}
-                                                                    name={habit.id}
-                                                                    type="number"
-                                                                    inputMode="numeric"
-                                                                    min={0}
-                                                                    max={habit.goal}
-                                                                    // Set value within the range if it is outside the range
-                                                                    onBlur={(e: { target: { value: any } }) => {
-                                                                        const userValue = Number(e.target.value) || 0;
-                                                                        const newValue = Math.max(0, Math.min(userValue, habit.goal));
-                                                                        setFieldValue(habit.id, newValue);
-                                                                    }}
-                                                                />
-                                                                <div className="arrow-buttons">
-                                                                    <button
-                                                                        type="button"
-                                                                        onClick={() => {
-                                                                            const currentValue = values[habit.id] ?? 0;
-                                                                            if (currentValue < habit.goal) {
-                                                                                setFieldValue(habit.id, currentValue + 1);
-                                                                            }
-                                                                        }}
-                                                                    >
-                                                                        <BiSolidUpArrow />
-                                                                    </button>
-                                                                    <button
-                                                                        type="button"
-                                                                        onClick={() => {
-                                                                            const currentValue = values[habit.id] ?? 0;
-                                                                            if (currentValue > 0) {
-                                                                                setFieldValue(habit.id, currentValue - 1);
-                                                                            }
-                                                                        }}
-                                                                    >
-                                                                        <BiSolidDownArrow />
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                            <ErrorMessage name={habit.id} component="div" className="error invisible" />
+                                                            <NumberInput id={`${habit.id}.done`} value={values[habit.id]?.done} setFieldValue={setFieldValue} maxValue={habit.goal} />
+                                                            <ErrorMessage name={`${habit.id}.done`} component="div" className="error invisible" />
                                                         </label>
-                                                    ))}
-                                                </div>
-                                            </fieldset>
-                                        )}
+
+                                                        {habit.tracking && (
+                                                            <label htmlFor={`${habit.id}_data`} className="tracking__popover">
+                                                                <span className="fst--upper-heading gray">Tracking Data</span>
+                                                                <NumberInput id={`${habit.id}.data`} value={values[habit.id]?.data} setFieldValue={setFieldValue} />
+                                                                <ErrorMessage name={`${habit.id}.data`} component="div" className="error invisible" />
+                                                            </label>
+                                                        )}
+                                                    </div>
+                                                </fieldset>
+                                            ))}
                                     </div>
                                     <Button
                                         className="form-action-button"

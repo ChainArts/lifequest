@@ -19,9 +19,8 @@ function App() {
         <UserProvider>
             <HabitsProvider>
                 <UserBar />
-
-                <IslandContainer location={location.pathname} />
                 <PopOverProvider>
+                    <IslandContainer location={location.pathname} />
                     <AnimatePresence mode="wait">
                         <Routes location={location} key={location.pathname}>
                             <Route path="/" element={<Home />} />
