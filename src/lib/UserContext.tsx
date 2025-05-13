@@ -53,12 +53,22 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     // Merge & send updates to backend, then refresh
     const updateUser = async (updates: Partial<User>, strategy: string) => {
         try {
+            const oldLevel = user!.level;
+            const newExp = updates.exp ?? user!.exp;
+            const { level: newLevel } = calculateLevel(newExp);
+
+            // start with either passed‐in coins or current coins
+            let newCoins = updates.coins ?? user!.coins;
+            // reward 100 coins on level up
+            if (newLevel > oldLevel) {
+                newCoins += 100;
+            }
             await invoke("update_user_data", {
-                exp: updates.exp ?? user!.exp,
-                level: calculateLevel(updates.exp ?? user!.exp).level,
+                exp: newExp,
+                level: newLevel,
                 current_streak: updates.current_streak ?? user!.current_streak,
                 highest_streak: updates.highest_streak ?? user!.highest_streak,
-                coins: updates.coins ?? user!.coins,
+                coins: newCoins,
                 strategy,
             });
             await refreshUser();
