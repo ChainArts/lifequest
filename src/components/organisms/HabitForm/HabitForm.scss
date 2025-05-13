@@ -376,3 +376,51 @@ input {
 .form-action-button {
     font-size: 1rem;
 }
+
+.number-increase-decrease {
+    position: relative;
+    display: flex;
+    gap: var(--gap);
+
+    input[type="number"] {
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        border-radius: var(--radius);
+        background-color: var(--progress-bg-round);
+        transition: outline 0.3s var(--ease);
+        outline: 1px solid transparent;
+        width: 80px;
+
+        &:has(+ .error) {
+            outline: 1px solid var(--error);
+        }
+
+        &:active,
+        &:focus {
+            outline: 1px solid var(--progress-bg-round);
+        }
+    }
+}
+
+.number-minus,
+.number-plus {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2rem;
+    width: 2rem;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--text-light);
+    border-radius: 50%;
+    background-color: var(--background-layer-sec);
+    transition: all 0.2s var(--ease);
+
+    svg {
+        color: var(--blue-dark);
+    }
+
+    &:hover {
+        background-color: var(--progress-bg-round);
+    }
+}

@@ -1,5 +1,6 @@
 import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
 import { Field } from "formik";
+import { HiMinus, HiPlus } from "react-icons/hi";
 
 interface NumberInputProps {
     value: number;
@@ -10,7 +11,19 @@ interface NumberInputProps {
 
 const NumberInput = ({ id, setFieldValue, value, maxValue }: NumberInputProps) => {
     return (
-        <div className="number-input-box">
+        <div className="number-increase-decrease">
+            <button
+                type="button"
+                className="number-minus"
+                onClick={() => {
+                    const currentValue = value ?? 0;
+                    if (currentValue > 0) {
+                        setFieldValue(id, currentValue - 1);
+                    }
+                }}
+            >
+                <HiMinus />
+            </button>
             <Field
                 id={id}
                 name={id}
@@ -25,30 +38,19 @@ const NumberInput = ({ id, setFieldValue, value, maxValue }: NumberInputProps) =
                     setFieldValue(id, bounded);
                 }}
             />
-            <div className="arrow-buttons">
-                <button
-                    type="button"
-                    onClick={() => {
-                        const currentValue = value ?? 0;
-                        if (!maxValue || currentValue < maxValue) {
-                            setFieldValue(id, currentValue + 1);
-                        }
-                    }}
-                >
-                    <BiSolidUpArrow />
-                </button>
-                <button
-                    type="button"
-                    onClick={() => {
-                        const currentValue = value ?? 0;
-                        if (currentValue > 0) {
-                            setFieldValue(id, currentValue - 1);
-                        }
-                    }}
-                >
-                    <BiSolidDownArrow />
-                </button>
-            </div>
+
+            <button
+                type="button"
+                className="number-plus"
+                onClick={() => {
+                    const currentValue = value ?? 0;
+                    if (!maxValue || currentValue < maxValue) {
+                        setFieldValue(id, currentValue + 1);
+                    }
+                }}
+            >
+                <HiPlus />
+            </button>
         </div>
     );
 };
