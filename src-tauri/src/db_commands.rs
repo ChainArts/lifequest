@@ -275,6 +275,7 @@ pub async fn init_user_data() -> surrealdb::Result<serde_json::Value> {
             level: 1.into(),
             current_streak: 0.into(),
             highest_streak: 0.into(),
+            coins: 0.into(),
         };
         // insert returns Vec<schema::User>, take the first element
         let mut inserted: Vec<schema::User> = LOCAL_DB
@@ -300,6 +301,7 @@ pub async fn update_user_data(
     level: Option<Number>,
     current_streak: Option<Number>,
     highest_streak: Option<Number>,
+    coins: Option<Number>,
     strategy: String, // "add" | "update" | "reset"
 ) -> surrealdb::Result<()> {
     println!("Updating user_data with strategy={}", strategy);
@@ -331,6 +333,12 @@ pub async fn update_user_data(
                     .bind(("h_streak", highest_streak))
                     .await?;
             }
+            if let Some(coins) = coins {
+                LOCAL_DB
+                    .query("UPDATE user SET coins += $coins")
+                    .bind(("coins", coins))
+                    .await?;
+            }
         }
         "reset_streak" => {
             // ignore incoming values – zero out only the current streak
@@ -343,6 +351,7 @@ pub async fn update_user_data(
             let mut upd = json!({});
             if let Some(exp) = exp { upd["exp"] = json!(exp); }
             if let Some(level) = level { upd["level"] = json!(level); }
+            if let Some(coins) = coins { upd["coins"] = json!(coins); }
             if let Some(current_streak) = current_streak {
                 upd["current_streak"] = json!(current_streak);
             }
@@ -357,5 +366,16 @@ pub async fn update_user_data(
         }
     }
 
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn reset_data () -> surrealdb::Result<()> {
+    println!("Resetting all data");
+    // Delete all habits and logs
+    let _res: Vec<schema::Habit> = LOCAL_DB.delete("habit").await?;
+    let _res: Vec<schema::HabitLog> = LOCAL_DB.delete("habit_log").await?;
+    // Reset user data
+    let _res: Vec<schema::User> = LOCAL_DB.delete("user").await?;
     Ok(())
 }
