@@ -191,9 +191,29 @@ legend {
     .error {
         padding-top: 0;
     }
+    input {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.25rem;
+        background: none;
+        font-size: 1rem;
+        text-align: end;
+        max-width: 10rem;
+        padding: var(--gap);
+        height: 2rem;
+
+        &[type="number"] {
+            padding-right: 1.5rem;
+            &::-webkit-inner-spin-button,
+            &::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                cursor: pointer;
+            }
+        }
+    }
 }
 
-input,
 .input {
     display: flex;
     align-items: center;

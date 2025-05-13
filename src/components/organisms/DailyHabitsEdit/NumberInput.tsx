@@ -31,6 +31,7 @@ const NumberInput = ({ id, setFieldValue, value, maxValue }: NumberInputProps) =
                 inputMode="numeric"
                 min={0}
                 max={maxValue}
+                className="input"
                 // Set value within the range if it is outside the range
                 onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
                     const userValue: number = Number(e.target.value) || 0;
