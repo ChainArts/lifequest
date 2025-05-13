@@ -55,6 +55,7 @@ pub fn run() {
             db_commands::init_user_data,
             db_commands::get_user_data,
             db_commands::update_user_data,
+            db_commands::reset_data,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

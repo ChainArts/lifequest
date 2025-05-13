@@ -17,13 +17,16 @@ export const calulateStreakXP = (streak: number) => {
 };
 
 export const calculateLevel = (xp: number) => {
-    const level = Math.floor((Math.sqrt(1 + xp) - 1) / 2);
+    // old zero-based level
+    const rawLevel = Math.floor((Math.sqrt(1 + xp) - 1) / 2);
 
-    const nextLevel = level + 1;
+    // expose a one-based level
+    const level = rawLevel + 1;
+    const nextRaw = rawLevel + 1;
 
-    // XP thresholds for current and next level
-    const xpForCurrentLevel = ((2 * level + 1) ** 2 - 1);
-    const xpForNextLevel = ((2 * nextLevel + 1) ** 2 - 1);
+    // XP thresholds for rawLevel and nextRaw
+    const xpForCurrentLevel = (2 * rawLevel + 1) ** 2 - 1;
+    const xpForNextLevel = (2 * nextRaw + 1) ** 2 - 1;
 
     return {
         level,

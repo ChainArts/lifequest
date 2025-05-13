@@ -49,4 +49,5 @@ pub struct User {
     pub level: Number,
     pub current_streak: Number,
     pub highest_streak: Number,
+    pub coins: Number,
 }

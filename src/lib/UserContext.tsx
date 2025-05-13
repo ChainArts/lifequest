@@ -10,6 +10,7 @@ export interface User {
     level: number;
     current_streak: number;
     highest_streak: number;
+    coins: number;
 }
 
 export interface UserXP {
@@ -57,6 +58,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 level: calculateLevel(updates.exp ?? user!.exp).level,
                 current_streak: updates.current_streak ?? user!.current_streak,
                 highest_streak: updates.highest_streak ?? user!.highest_streak,
+                coins: updates.coins ?? user!.coins,
                 strategy,
             });
             await refreshUser();
