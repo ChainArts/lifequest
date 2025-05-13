@@ -3,6 +3,38 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 60px;
+    padding: 0.75rem 0.5rem;
     z-index: 1;
+    display: flex;
+    justify-content: space-between;
+
+    & .user-bar__stats {
+        display: flex;
+        align-items: flex-end;
+        gap: 0.5rem;
+    }
+
+    .user-bar__level {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.2rem;
+        height: 2.2rem;
+        background-color: var(--purple-dark);
+        border-radius: 50%;
+        color: var(--text-invert);
+        font-size: 1rem;
+        font-weight: 700;
+        text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.25);
+    }
+
+    .user-bar__xp{
+        display: flex;
+        width: 8rem;
+        padding-bottom: 0.25rem;
+
+        .user-bar__xp-progress {
+            --_bar-height: 0.375rem;
+        }
+    }
 }
