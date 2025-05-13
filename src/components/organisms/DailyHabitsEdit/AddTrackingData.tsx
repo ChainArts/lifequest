@@ -11,9 +11,8 @@ type TrackingData = {
 };
 
 const AddTrackingData = ({ id, initialValue, name }: TrackingData) => {
-    const { updateHabitProgress } = useHabits();
+    const { updateHabitProgress, refreshToday } = useHabits();
     const { closePopOver } = usePopOver();
-
     const onSubmit = async (values: { data: number | undefined }) => {
         try {
             await updateHabitProgress(id, undefined, undefined, undefined, values.data);
@@ -21,7 +20,7 @@ const AddTrackingData = ({ id, initialValue, name }: TrackingData) => {
         } catch (error) {
             console.error(`Error updating habit ${id}:`, error);
         }
-
+        refreshToday();
         closePopOver();
     };
     return (
