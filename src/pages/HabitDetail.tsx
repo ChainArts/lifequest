@@ -13,11 +13,14 @@ import HabitGraph from "../components/organisms/HabitGraph/HabitGraph";
 import HabitForm from "../components/organisms/HabitForm/HabitForm";
 import ActionButton from "../components/atoms/ActionButton/ActionButton";
 import { HiPencil } from "react-icons/hi";
+import { HiOutlineTrash } from "react-icons/hi2";
+import { usePopOver } from "../lib/PopOverContext";
 
 const HabitDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { getHabitById, refreshHabitById, refreshHabits, refreshToday, refreshXp } = useHabits();
+    const { openPopOver, closePopOver } = usePopOver();
 
     const [habit, setHabit] = useState<HabitCardProps | null>(null);
     const [isOpen, setOpen] = useState(false);
@@ -52,15 +55,46 @@ const HabitDetail: React.FC = () => {
         navigate("/habits");
     };
 
+    const openDelete = () => {
+        openPopOver(
+            "Delete Habit",
+            <div>
+                <p className="fst--base">
+                    Are you sure you want to delete <strong>{habit ? habit.title : "this habit"}</strong>? This action cannot be undone.
+                </p>
+                <div className="button-container">
+                    <button className="cancel" onClick={() => closePopOver()}>
+                        Cancel
+                    </button>
+                    <button
+                        className="delete"
+                        onClick={() => {
+                            deleteHabit();
+                            closePopOver();
+                        }}
+                    >
+                        Delete
+                    </button>
+                </div>
+            </div>
+        );
+    };
+
     if (!habit) return <div>Loading habit details...</div>;
 
     return (
         <>
             <motion.main initial="initial" animate="in" exit="out" variants={pageVariants}>
                 <motion.section variants={sectionVariants} className="container">
-                    <div className="back" onClick={() => navigate("/habits")}>
-                        Back
+                    <div className="link-header">
+                        <div className="link primary" onClick={() => navigate("/habits")}>
+                            Back
+                        </div>
+                        <div className="link delete" onClick={openDelete}>
+                            <HiOutlineTrash />
+                        </div>
                     </div>
+
                     <HabitStats icon={habit.icon} xp={habit.habit_xp} title={habit.title} color={habit.color} />
                 </motion.section>
                 <motion.section variants={sectionVariants} className="container">
@@ -73,9 +107,6 @@ const HabitDetail: React.FC = () => {
                     <HabitGraph />
                 </motion.section>
                 <motion.section variants={sectionVariants} className="container">
-                    <button className="delete" onClick={deleteHabit}>
-                        Delete
-                    </button>
                     <section className="container">
                         <HabitForm setOpen={setOpen} isOpen={isOpen} mode="edit" initialValues={habit} id={id} onSubmitSuccess={handleEditSuccess} />
                     </section>

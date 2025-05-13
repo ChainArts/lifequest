@@ -38,6 +38,36 @@
 
 .popover__content {
     padding: 1rem;
-
+    color: var(--text-light);
     line-height: 1.4;
+    text-align: center;
+
+    .button-container {
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: row;
+        gap: 1rem;
+        width: 100%;
+        padding-top: 1rem;
+        border-top: 1px solid var(--progress-bg-round);
+        margin-top: 1rem;
+        button {
+            color: var(--text-invert);
+            border-radius: 50px;
+            width: 100%;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            background-color: var(--purple-dark);
+
+            &.delete {
+                background-color: var(--error);
+            }
+
+            &.cancel {
+                background-color: transparent;
+                outline: 1px solid var(--purple-dark);
+                color: var(--purple-dark);
+            }
+        }
+    }
 }

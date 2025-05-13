@@ -456,13 +456,4 @@ input {
     label {
         text-transform: none;
     }
-
-    button[type="submit"] {
-        padding: 0.5rem 1rem;
-        margin-top: 2rem;
-        color: var(--text-inverse);
-        background-color: var(--purple-dark);
-        border-radius: 50px;
-        min-width: 100%;
-    }
 }

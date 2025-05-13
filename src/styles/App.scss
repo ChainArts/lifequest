@@ -199,12 +199,23 @@ button, a {
     color: var(--text-light) !important;
 }
 
-.delete {
-    background-color: var(--error) !important;
-    padding: 0.5rem 1rem;
-    margin-top: 1rem;
-    border-radius: var(--radius);
-    width: 100%;
+.link-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;  
+    padding: 0 0.25rem;
+    
+    .primary {
+        color: var(--text-sec);
+    }
+
+    .delete {
+        color: var(--error);
+
+        svg {
+            font-size: 1.25rem;
+        }
+    }
 }
 
 .pointer {

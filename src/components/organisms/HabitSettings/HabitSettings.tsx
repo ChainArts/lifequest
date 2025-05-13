@@ -13,6 +13,7 @@ interface HabitSettingsProps {
 
 const HabitSettings = ({ setOpen, goal, unit, week_days, tracking, color }: HabitSettingsProps) => {
     const days = ["M", "T", "W", "T", "F", "S", "S"];
+
     return (
         <>
             <div className="title-and-button">

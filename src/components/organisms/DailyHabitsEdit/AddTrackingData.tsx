@@ -36,9 +36,11 @@ const AddTrackingData = ({ id, initialValue, name }: TrackingData) => {
 
                         <NumberInput id={"data"} value={values.data ?? 0} setFieldValue={setFieldValue} />
 
-                        <button type="submit" className="form-action-button">
-                            Save
-                        </button>
+                        <div className="button-container ">
+                            <button type="submit" className="button">
+                                Save
+                            </button>
+                        </div>
                     </div>
                 </form>
             )}
