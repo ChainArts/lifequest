@@ -20,14 +20,24 @@ const HabitStats = ({ icon, xp, title, color }: { icon: string; xp: number; titl
                 <span>{title}</span>
                 <LinearProgress done={xp} goal={100} />
             </Card>
-            <div className="habit-stats__info-list">
-                <Card className="habit-stats__info">
-                    <span>XP</span>
-                    <span>{xp}</span>
+            <div className="stats-teaser__list">
+                <Card className="stats-teaser__list-item">
+                    <div className="stats-teaser__list-item-title fst--card-title">
+                        <span>Longest</span>
+                        <span>Streak</span>
+                    </div>
+                    <div className="stats-teaser__list-item-value">
+                        <span className="fst--big-number purple">1</span>
+                    </div>
                 </Card>
-                <Card className="habit-stats__info">
-                    <span>Level</span>
-                    <span>1</span>
+                <Card className="stats-teaser__list-item">
+                    <div className="stats-teaser__list-item-title fst--card-title">
+                        <span>Current</span>
+                        <span>Level</span>
+                    </div>
+                    <div className="stats-teaser__list-item-value">
+                        <span className="fst--big-number blue">1</span>
+                    </div>
                 </Card>
             </div>
         </div>

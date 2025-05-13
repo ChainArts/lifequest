@@ -59,7 +59,7 @@ const HabitCard = ({ id, title, goal, unit, week_days, icon, color, current_stre
                     }
                 >
                     <div className="habit-card__icon">
-                        <FluentEmoji emoji={icon} size={32} className="emoji" />
+                        <FluentEmoji emoji={icon} size={48} className="emoji" />
                     </div>
 
                     <div className="habit-card__content">
