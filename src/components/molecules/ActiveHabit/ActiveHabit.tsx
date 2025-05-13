@@ -7,6 +7,8 @@ import FluentEmoji from "../../../lib/FluentEmoji";
 import { useHabits } from "../../../lib/HabitsContext";
 import { calulateStreakXP } from "../../../lib/XP";
 import { useUser } from "../../../lib/UserContext";
+import { usePopOver } from "../../../lib/PopOverContext";
+import AddTrackingData from "../../organisms/DailyHabitsEdit/AddTrackingData";
 
 export type ActiveHabitProps = {
     id: string;
@@ -18,13 +20,15 @@ export type ActiveHabitProps = {
     color: string;
     current_streak: number;
     tracking: boolean;
+    data?: number;
 };
 
 const ActiveHabit = ({ habit, updateXP }: { habit: ActiveHabitProps; updateXP: () => void }) => {
     const [circles, setCircles] = useState<{ id: string }[]>([]);
-    const { id, title, goal, done, icon, color, unit, current_streak } = habit;
+    const { id, title, goal, done, icon, color, unit, current_streak, tracking, data } = habit;
     const { updateHabitProgress } = useHabits();
     const { updateUser } = useUser();
+    const { openPopOver } = usePopOver();
 
     const handleAdd = async () => {
         const gotXp = (await updateHabitProgress(id, 1, current_streak, goal)) as boolean;
@@ -38,6 +42,11 @@ const ActiveHabit = ({ habit, updateXP }: { habit: ActiveHabitProps; updateXP: (
         const newCircles = [{ id: `${timestamp}` }];
         setCircles((prev) => [...prev, ...newCircles]);
         updateXP();
+
+        if (tracking && data && done + 1 === goal) {
+            console.log("open popover");
+            openPopOver("Add Tracking Data", <AddTrackingData id={id} initialValue={data} name={title} />);
+        }
     };
 
     // Remove a circle after its animation completes

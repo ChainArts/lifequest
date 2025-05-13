@@ -11,6 +11,7 @@ import Island from "./pages/Island";
 import { HabitsProvider } from "./lib/HabitsContext";
 import { UserProvider } from "./lib/UserContext";
 import UserBar from "./components/organisms/UserBar/UserBar";
+import { PopOverProvider } from "./lib/PopOverContext";
 
 function App() {
     const location = useLocation();
@@ -18,17 +19,19 @@ function App() {
         <UserProvider>
             <HabitsProvider>
                 <UserBar />
-                <IslandContainer location={location.pathname} />
-                <AnimatePresence mode="wait">
-                    <Routes location={location} key={location.pathname}>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/habits" element={<Habits />} />
-                        <Route path="habits/:id" element={<HabitDetail />} />
-                        <Route path="/island" element={<Island />} />
-                        <Route path="/profile" element={<Profile />} />
-                    </Routes>
-                </AnimatePresence>
-                <Navbar />
+                <PopOverProvider>
+                    <IslandContainer location={location.pathname} />
+                    <AnimatePresence mode="wait">
+                        <Routes location={location} key={location.pathname}>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/habits" element={<Habits />} />
+                            <Route path="habits/:id" element={<HabitDetail />} />
+                            <Route path="/island" element={<Island />} />
+                            <Route path="/profile" element={<Profile />} />
+                        </Routes>
+                    </AnimatePresence>
+                    <Navbar />
+                </PopOverProvider>
             </HabitsProvider>
         </UserProvider>
     );

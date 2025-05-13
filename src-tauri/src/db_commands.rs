@@ -205,6 +205,7 @@ pub async fn sync_habit_log(today_index: Number) -> surrealdb::Result<serde_json
         if let Some(obj) = habit_json.as_object_mut() {
             obj.insert("completed".to_string(), json!(log_entry.completed));
             obj.insert("progress".to_string(), json!(log_entry.progress));
+            obj.insert("data".to_string(), json!(log_entry.data));
         }
         output.push(habit_json);
     }
@@ -217,7 +218,7 @@ pub async fn update_habit_log(
     exp: Option<Number>,
     completed: Option<bool>,
     progress: Option<Number>,
-    data: Option<String>,
+    data: Option<Number>,
 ) -> surrealdb::Result<()> {
     let mut update_data = json!({});
 

@@ -188,31 +188,31 @@ legend {
         }
     }
 
-    input,
-    .input {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.25rem;
-        background: none;
-        font-size: 1rem;
-        text-align: end;
-        max-width: 10rem;
-        padding: var(--gap);
-        height: 2rem;
-
-        &[type="number"] {
-            padding-right: 1.5rem;
-            &::-webkit-inner-spin-button,
-            &::-webkit-outer-spin-button {
-                -webkit-appearance: none;
-                cursor: pointer;
-            }
-        }
-    }
-
     .error {
         padding-top: 0;
+    }
+}
+
+input,
+.input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    background: none;
+    font-size: 1rem;
+    text-align: end;
+    max-width: 10rem;
+    padding: var(--gap);
+    height: 2rem;
+
+    &[type="number"] {
+        padding-right: 1.5rem;
+        &::-webkit-inner-spin-button,
+        &::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
     }
 }
 
@@ -375,4 +375,74 @@ input {
 
 .form-action-button {
     font-size: 1rem;
+}
+
+.number-increase-decrease {
+    position: relative;
+    display: flex;
+    gap: var(--gap);
+
+    input[type="number"] {
+        border-radius: var(--radius);
+        background-color: var(--progress-bg-round);
+        transition: outline 0.3s var(--ease);
+        outline: 1px solid transparent;
+        width: 80px;
+        padding: 0.75rem;
+
+        &:has(+ .error) {
+            outline: 1px solid var(--error);
+        }
+
+        &:active,
+        &:focus {
+            outline: 1px solid var(--progress-bg-round);
+        }
+    }
+}
+
+.number-minus,
+.number-plus {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2rem;
+    width: 2rem;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--text-light);
+    border-radius: 50%;
+    background-color: var(--background-layer-sec);
+    transition: all 0.2s var(--ease);
+
+    svg {
+        color: var(--blue-dark);
+    }
+
+    &:hover {
+        background-color: var(--progress-bg-round);
+    }
+}
+
+.small-form-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    margin-bottom: 0;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+
+    label {
+        text-transform: none;
+    }
+
+    button[type="submit"] {
+        padding: 0.5rem 1rem;
+        margin-top: 2rem;
+        color: var(--text-inverse);
+        background-color: var(--purple-dark);
+        border-radius: 50px;
+        min-width: 100%;
+    }
 }

@@ -16,6 +16,8 @@ type DailyHabitsProps = {
 const DailyHabits = ({ activeHabits, updateXP, fetchHabits }: DailyHabitsProps) => {
     const [openEdit, setOpenEdit] = useState(false);
     const navigate = useNavigate();
+
+    // console.log("activeHabits tracking", activeHabits[0].tracking);
     return (
         <section className="container">
             <IconContext.Provider value={{ className: "daily-habits__icons" }}>

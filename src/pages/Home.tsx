@@ -7,9 +7,11 @@ import DailyProgress from "../components/organisms/DailyProgress/DailyProgress";
 import { pageVariants, sectionVariants } from "../components/atoms/PageTransition/PageTransition";
 
 import { useHabits } from "../lib/HabitsContext";
+import { useUser } from "../lib/UserContext";
 
 const Home = () => {
-    const { todayHabits, dailyXp, streak, refreshToday, refreshXp } = useHabits();
+    const { todayHabits, dailyXp, refreshToday, refreshXp } = useHabits();
+    const { user } = useUser();
 
     const calculateProgress = () => {
         if (todayHabits.length === 0) return 0;
@@ -24,7 +26,7 @@ const Home = () => {
             </motion.section>
 
             <motion.section variants={sectionVariants}>
-                <StreakProgress streak={streak} isCompleted={calculateProgress() === 100} />
+                <StreakProgress streak={user ? user.current_streak : 0} isCompleted={calculateProgress() === 100} />
             </motion.section>
 
             <motion.section variants={sectionVariants}>

@@ -1,0 +1,43 @@
+.popover {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popover__header {
+    width: 100%;
+    border-bottom: 1px solid var(--progress-bg-round);
+    padding: 1rem;
+    padding-bottom: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-light);
+
+    h2 {
+        font-size: 1rem;
+    }
+
+    svg {
+        font-size: 1.25rem;
+    }
+}
+
+.popover__card {
+    padding: 0;
+    width: 300px;
+}
+
+.popover__content {
+    padding: 1rem;
+
+    line-height: 1.4;
+}
