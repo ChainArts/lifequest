@@ -24,7 +24,7 @@ function App() {
     return (
         <UserProvider>
             <HabitsProvider>
-                <ToastContainer position="top-center" autoClose={500000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" transition={ToastTransition} />
+                <ToastContainer position="top-center" autoClose={5000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" transition={ToastTransition} />
                 <UserBar />
                 <PopOverProvider>
                     <IslandContainer location={location.pathname} />
