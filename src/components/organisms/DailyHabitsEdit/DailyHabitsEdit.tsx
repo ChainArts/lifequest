@@ -8,6 +8,8 @@ import Button from "../../atoms/Button/Button";
 import AddActiveHabit from "./AddActiveHabits";
 import { useHabits } from "../../../lib/HabitsContext";
 import NumberInput from "./NumberInput";
+import { calulateStreakXP } from "../../../lib/XP";
+import { useUser } from "../../../lib/UserContext";
 
 type HabitFormProps = {
     setOpen: (value: boolean) => void;
@@ -26,6 +28,7 @@ interface HabitValues {
 const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess, fetchHabits }: HabitFormProps) => {
     const [addActiveHabitOpen, setAddActiveHabitOpen] = useState(false);
     const { updateHabitProgress } = useHabits();
+    const { incrementStreak, updateUser } = useUser();
     const initialValues: HabitValues = habits.reduce((acc, habit) => {
         acc[habit.id] = {
             done: habit.done ?? 0,
@@ -44,7 +47,12 @@ const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess, fetchHabits
 
             if (doneDelta !== 0 || dataChanged) {
                 try {
-                    await updateHabitProgress(habit.id, doneDelta, habit.current_streak, habit.goal, dataChanged ? data : undefined);
+                    const gotXp = (await updateHabitProgress(habit.id, doneDelta, habit.current_streak, habit.goal, dataChanged ? data : undefined)) as boolean;
+                    if (gotXp) {
+                        const earned = calulateStreakXP(habit.current_streak);
+                        await incrementStreak();
+                        await updateUser({ exp: earned }, "add");
+                    }
                     console.log(`Habit ${habit.id} updated successfully.`, { doneDelta, dataChanged });
                 } catch (error) {
                     console.error(`Error updating habit ${habit.id}:`, error);

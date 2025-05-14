@@ -50,4 +50,5 @@ pub struct User {
     pub current_streak: Number,
     pub highest_streak: Number,
     pub coins: Number,
+    pub last_streak: String,
 }

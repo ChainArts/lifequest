@@ -1,10 +1,10 @@
 mod schema;
 mod seed;
 use chrono::Local;
+use seed::seed_walking_data;
 use serde_json::json;
 use serde_json::Number;
 use surrealdb::sql::Thing;
-use seed::seed_walking_data;
 
 use crate::db::LOCAL_DB;
 
@@ -290,6 +290,7 @@ pub async fn init_user_data() -> surrealdb::Result<serde_json::Value> {
             current_streak: 0.into(),
             highest_streak: 0.into(),
             coins: 0.into(),
+            last_streak: "".to_string(),
         };
         // insert returns Vec<schema::User>, take the first element
         let mut inserted: Vec<schema::User> = LOCAL_DB
@@ -322,7 +323,18 @@ pub async fn update_user_data(
 
     match strategy.as_str() {
         "add" => {
-            // for each provided field, we increment
+            // 0) compute today as a string
+            let today_str = Local::now().format("%Y-%m-%d").to_string();
+
+            // 1) pull last_streak out of the DB
+            let mut streak_res = LOCAL_DB
+                .query("SELECT VALUE last_streak FROM user")
+                .await?;
+            let last_streak: Option<String> = streak_res.take(0)?;
+            // only allow a streak‐point if last_streak != today
+            let allow_streak = last_streak.as_deref() != Some(&today_str);
+
+            // 2) usual exp/level/coins increments
             if let Some(exp) = exp {
                 LOCAL_DB
                     .query("UPDATE user SET exp += $exp")
@@ -335,18 +347,26 @@ pub async fn update_user_data(
                     .bind(("level", level))
                     .await?;
             }
-            if let Some(current_streak) = currentstreak {
-                LOCAL_DB
-                    .query("UPDATE user SET current_streak += $c_streak")
-                    .bind(("c_streak", current_streak))
-                    .await?;
+
+            // 3) only bump current_streak & highest_streak if we haven’t yet today
+            if allow_streak {
+                if let Some(current_streak) = currentstreak {
+                    LOCAL_DB
+                        .query(
+                            "UPDATE user SET current_streak += $c_streak, last_streak = $today")
+                        .bind(("c_streak", current_streak))
+                        .bind(("today", today_str.clone()))
+                        .await?;
+                }
+                if let Some(highest_streak) = higheststreak {
+                    LOCAL_DB
+                        .query("UPDATE user SET highest_streak += $h_streak")
+                        .bind(("h_streak", highest_streak))
+                        .await?;
+                }
             }
-            if let Some(highest_streak) = higheststreak {
-                LOCAL_DB
-                    .query("UPDATE user SET highest_streak += $h_streak")
-                    .bind(("h_streak", highest_streak))
-                    .await?;
-            }
+
+            // 4) coins can always be added
             if let Some(coins) = coins {
                 LOCAL_DB
                     .query("UPDATE user SET coins += $coins")
@@ -361,24 +381,39 @@ pub async fn update_user_data(
                 .await?;
         }
         _ /* "update" or anything else */ => {
-            // full replace via MERGE for any provided fields
-            let mut upd = json!({});
-            if let Some(exp) = exp { upd["exp"] = json!(exp); }
-            if let Some(level) = level { upd["level"] = json!(level); }
-            if let Some(coins) = coins { upd["coins"] = json!(coins); }
-            if let Some(current_streak) = currentstreak {
-                upd["current_streak"] = json!(current_streak);
-            }
-            if let Some(highest_streak) = higheststreak {
-                upd["highest_streak"] = json!(highest_streak);
-            }
-            println!("MERGE update_data = {:?}", upd);
-            LOCAL_DB
-                .query("UPDATE user MERGE $upd")
-                .bind(("upd", upd))
+            let today_str = Local::now().format("%Y-%m-%d").to_string();
+            let mut streak_res = LOCAL_DB
+                .query("SELECT VALUE last_streak FROM user")
                 .await?;
+            let last_streak: Option<String> = streak_res.take(0)?;
+            let allow_streak = last_streak.as_deref() != Some(&today_str);
+
+            // 1) build our MERGE object
+            let mut upd = json!({});
+
+            if let Some(exp) = exp {upd["exp"] = json!(exp);}
+            if let Some(level) = level {upd["level"] = json!(level);}
+            if let Some(coins) = coins {upd["coins"] = json!(coins);
+        }
+
+    // 2) only merge streak fields when allowed
+            if allow_streak {
+                if let Some(c_streak) = currentstreak {
+                    upd["current_streak"] = json!(c_streak);
+            // record that we've applied today's streak
+            upd["last_streak"] = json!(today_str.clone());
+        }
+        if let Some(h_streak) = higheststreak {
+            upd["highest_streak"] = json!(h_streak);
         }
     }
+println!("MERGE update_data = {:?}", upd);
+    LOCAL_DB
+        .query("UPDATE user MERGE $upd")
+        .bind(("upd", upd))
+        .await?;
+            }
+        }
 
     Ok(())
 }
