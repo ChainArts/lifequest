@@ -8,14 +8,10 @@
 }
 
 .MuiDateCalendar-root {
-    padding: 0 !important;
+    padding: 0 var(--gap) !important;
     margin: 0 auto !important;
     width: 100% !important;
     max-width: 400px !important;
-
-    --toastify-color-light: var(--purple-dark) !important;
-    --toastify-color-info: var(--purple-dark) !important;
-    --toastify-color-dark: var(--purple-dark) !important;
 
     .MuiPickersCalendarHeader-root {
         color: var(--text) !important;
@@ -28,6 +24,7 @@
 
         .MuiButtonBase-root {
             color: var(--text) !important;
+            padding-top: 0.125rem !important;
         }
     }
 
@@ -35,8 +32,11 @@
         display: grid !important;
         grid-template-columns: repeat(7, 1fr) !important;
         padding: 0 1rem !important;
+        border-bottom: 1px solid var(--progress-bg-round) !important;
+        border-top: 1px solid var(--progress-bg-round) !important;
         span {
             color: var(--text-sec) !important;
+            padding-top: 0.125rem !important;
         }
     }
 

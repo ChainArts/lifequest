@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useHabits } from "../../../lib/HabitsContext";
 import { Sheet } from "react-modal-sheet";
 import { MdOutlineAutoGraph } from "react-icons/md";
+import { color } from "motion/react";
 
 const HabitGraph = ({ id }: { id: string }) => {
     const [open, setOpen] = useState(false);
@@ -74,8 +75,8 @@ const HabitGraph = ({ id }: { id: string }) => {
                             </linearGradient>
                         </defs>
 
-                        <CartesianGrid opacity={0.25} vertical={false} stroke="var(--blue-light)" />
-                        <XAxis dataKey="date" scale="point" tickFormatter={formatTick} tickLine={false} axisLine={false} minTickGap={16} tick={{ fill: "var(--text)" }} fontSize={"0.75rem"} />
+                        <CartesianGrid vertical={false} stroke="var(--progress-bg-round)" />
+                        <XAxis dataKey="date" scale="point" tickFormatter={formatTick} tickLine={false} axisLine={{ stroke: "var(--purple-dark)" }} minTickGap={16} tick={{ fill: "var(--text)" }} fontSize={"0.75rem"} />
                         <YAxis axisLine={false} tickSize={0} mirror={true} tick={{ fill: "var(--text)" }} dy={-8} fontSize={"0.75rem"} />
 
                         <Area type="monotone" dataKey="data" strokeWidth={1} stroke="url(#linearGradient)" fill="url(#areaGradient)" fillOpacity={1} />
