@@ -15,10 +15,8 @@ import { PopOverProvider } from "./lib/PopOverContext";
 import { ToastContainer, cssTransition } from "react-toastify";
 
 const ToastTransition = cssTransition({
-    
     enter: "Toastify_fadeIn",
     exit: "Toastify_fadeOut",
-    
 });
 
 function App() {
@@ -26,19 +24,7 @@ function App() {
     return (
         <UserProvider>
             <HabitsProvider>
-                <ToastContainer
-                position="top-center"
-                autoClose={5000}
-                hideProgressBar
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-                transition={ToastTransition}
-            />
+                <ToastContainer position="top-center" autoClose={500000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" transition={ToastTransition} />
                 <UserBar />
                 <PopOverProvider>
                     <IslandContainer location={location.pathname} />

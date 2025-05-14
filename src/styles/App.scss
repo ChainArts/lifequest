@@ -237,9 +237,12 @@ button, a {
 }
 
 .Toastify__toast-theme--light{
-    background: linear-gradient(115deg, var(--purple-dark) 0%, var(--blue-light) 100%);
+    background: linear-gradient(145deg, var(--purple-dark) 0%, var(--blue-light) 100%);
     color: var(--text-invert) !important;
-    font-size: 1.2rem !important;
+    font-size: 0.9rem !important;
+    max-width: 12rem !important;
+    border-radius: var(--radius) !important;
+    line-height: 1.2;
 }
 
 .Toastify__toast-icon{
@@ -249,7 +252,7 @@ button, a {
 .Toastify__toast{
     flex-direction: row !important;
     align-items: center !important;
-    gap: 1rem !important;
+    gap: 0.2rem !important;
     padding: 0.25 0.5rem !important;
 }
 
