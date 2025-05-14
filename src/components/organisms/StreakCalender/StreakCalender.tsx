@@ -3,11 +3,9 @@ import "./StreakCalender.scss";
 
 type StreakCalenderProps = {
     streak: number;
-    isCompleted: boolean;
 };
 
-const StreakCalender = ({ streak, isCompleted }: StreakCalenderProps) => {
-    console.log("StreakCalender", streak, isCompleted);
+const StreakCalender = ({ streak }: StreakCalenderProps) => {
     const today = new Date().getDay(); // 0 = Sunday, …, 6 = Saturday
     const days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 

@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { calculateLevel } from "../lib/XP";
 import { invoke } from "@tauri-apps/api/core";
+import { toast } from "react-toastify";
 
 //
 // 1) Define your User shape (match schema::User fields)
@@ -78,6 +79,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 if (levelDelta > 0) {
                     payload.level = levelDelta;
                     payload.coins = 100; // reward 100 coins per level-up
+                    toast.success(`Level up! You are now level ${newLvl} and earned 100 coins!`);
+                    
                 }
             } else {
                 // full replace

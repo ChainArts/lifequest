@@ -26,7 +26,7 @@ const Home = () => {
             </motion.section>
 
             <motion.section variants={sectionVariants}>
-                <StreakCalender streak={user ? user.current_streak : 0} isCompleted={calculateProgress() === 100} />
+                <StreakCalender streak={user ? user.current_streak : 0} />
             </motion.section>
 
             <motion.section variants={sectionVariants}>
