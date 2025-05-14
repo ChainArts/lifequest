@@ -7,6 +7,7 @@
     z-index: 1;
     display: flex;
     justify-content: space-between;
+    color: var(--text-invert);
 
     & .user-bar__stats {
         display: flex;
