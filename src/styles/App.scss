@@ -227,3 +227,55 @@ button, a {
     color: var(--purple-dark);
     padding: 0.5rem 1rem 1rem 0.5rem;
 }
+
+.Toastify__toast-theme--light{
+    background: linear-gradient(115deg, var(--purple-dark) 0%, var(--blue-light) 100%);
+    color: var(--text-invert) !important;
+    font-size: 1.2rem !important;
+}
+
+.Toastify__toast-icon{
+    --toastify-icon-color-success: var(--text-invert) !important;
+}
+
+.Toastify__toast{
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 1rem !important;
+    padding: 0.25 0.5rem !important;
+}
+
+.Toastify__close-button{
+    align-self: auto !important;
+    color: var(--text-invert) !important;
+}
+
+@keyframes Toastify__fadeIn{
+    0% {
+        transform: translateY(-10rem);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0) !important;
+        opacity: 1 ;
+    }
+}
+
+.Toastify_fadeOut{
+    animation: Toastify__fadeOut 0.3s var(--ease) both;
+}   
+
+@keyframes Toastify__fadeOut{
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-10rem);
+        opacity: 0;
+    }
+}
+
+.Toastify_fadeIn{
+    animation: Toastify__fadeIn 0.3s var(--ease) both;
+}

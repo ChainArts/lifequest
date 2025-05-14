@@ -24,13 +24,17 @@ pub async fn seed_walking_data() -> Result<()> {
         }))
         .await?;
 
-    let start_date = NaiveDate::from_ymd_opt(2025, 5, 14).unwrap();
+    let start_date = NaiveDate::from_ymd_opt(2025, 5, 13).unwrap();
 
     for days_ago in (0..30).rev() {
         let (progress_val, exp_val, calories) = {
             let mut rng = rand::rng();
             let completed = rng.random_bool(0.7);
-            let progress_val = if completed { 100 } else { rng.random_range(0..100) };
+            let progress_val = if completed {
+                100
+            } else {
+                rng.random_range(0..100)
+            };
             let exp_val = if completed { 10 } else { 0 };
             let calories = (progress_val / 10) * 200;
             (progress_val, exp_val, calories)
