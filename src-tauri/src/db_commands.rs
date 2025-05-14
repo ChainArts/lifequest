@@ -1,5 +1,8 @@
 mod schema;
 mod seed;
+
+
+use chrono::Duration;
 use chrono::Local;
 use seed::seed_walking_data;
 use serde_json::json;
@@ -428,4 +431,33 @@ pub async fn reset_data() -> surrealdb::Result<()> {
     let _res: Vec<schema::User> = LOCAL_DB.delete("user").await?;
     seed_walking_data().await?;
     Ok(())
+}
+
+#[tauri::command]
+pub async fn get_habit_log_data(id: String, days: Number) -> surrealdb::Result<serde_json::Value> {
+    // 1) compute today and start date
+    let today = Local::now().format("%Y-%m-%d").to_string();
+    let days_i64 = days.as_i64().unwrap_or(0);
+    let start_naive = Local::now()
+        .date_naive()
+        .checked_sub_signed(Duration::days(days_i64))
+        .unwrap();
+    let start_date = start_naive.format("%Y-%m-%d").to_string();
+
+    // 2) query date & data for logs between start_date and today
+    let mut res = LOCAL_DB
+        .query(
+            "SELECT date, data 
+             FROM habit_log 
+             WHERE date >= $start_date AND date <= $today AND habit_id = $habit_id 
+             ORDER BY date ASC",
+        )
+        .bind(("start_date", start_date))
+        .bind(("today", today))
+        .bind(("habit_id", format!("habit:{}", id)))
+        .await?;
+
+    // 3) collect into Vec<serde_json::Value> and return
+    let entries: Vec<serde_json::Value> = res.take(0)?;
+    Ok(serde_json::json!(entries))
 }

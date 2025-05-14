@@ -3,6 +3,7 @@ import { createContext, useContext, useState, useEffect, ReactNode, useMemo } fr
 import { invoke } from "@tauri-apps/api/core";
 import { HabitCardProps } from "../components/molecules/HabitCard/HabitCard";
 import { calulateStreakXP } from "./XP";
+export type HabitLogData = Array<{ date: string; data: number }>;
 
 export type ActiveHabitProps = Omit<HabitCardProps, "id"> & {
     id: string;
@@ -20,6 +21,7 @@ type HabitsContextType = {
     refreshHabitById: (id: string) => Promise<HabitCardProps>;
     habitCount: number;
 
+    fetchHabitLogData: (id: string, days: number) => Promise<HabitLogData | null>;
     // today’s slice
     todayHabits: ActiveHabitProps[];
     dailyXp: number;
@@ -52,6 +54,16 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
             return detailCache[id];
         }
         return await refreshHabitById(id);
+    };
+
+    const fetchHabitLogData = async (id: string, days: number) => {
+        try {
+            const data = (await invoke("get_habit_log_data", { id, days })) as HabitLogData;
+            return data;
+        } catch (e) {
+            console.error("Failed to fetch habit log data", e);
+            return null;
+        }
     };
 
     // --- FULL list fetch ---
@@ -154,6 +166,7 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
                 getHabitById,
                 refreshHabitById,
                 habitCount,
+                fetchHabitLogData,
             }}
         >
             {children}

@@ -1,4 +1,21 @@
-.habit-graph span{
+.habit-graph span {
     display: flex;
     justify-content: center;
+}
+
+.habit-graph__card {
+    line-height: 1.4;
+}
+
+.graph-icon {
+    width: 4rem;
+    height: 4rem;
+    margin-top: 1rem;
+    padding: var(--gap);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: var(--radius);
+    background-color: var(--progress-bg-round);
+    color: var(--text-light);
 }

@@ -1,19 +1,106 @@
 import Headline from "../../atoms/Headline/Headline";
 import Card from "../../molecules/Card/Card";
 import "./HabitGraph.scss";
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { format, set } from "date-fns";
+import { useEffect, useState } from "react";
+import { useHabits } from "../../../lib/HabitsContext";
+import { Sheet } from "react-modal-sheet";
+import { MdOutlineAutoGraph } from "react-icons/md";
 
-const HabitGraph = () => {
+const HabitGraph = ({ id }: { id: string }) => {
+    const [open, setOpen] = useState(false);
+    const [data, setData] = useState<{ date: string; data: number | null }[]>([]);
+    const { fetchHabitLogData } = useHabits();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!id) return;
+            const data = await fetchHabitLogData(id, 30);
+            if (data) {
+                setData(data);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const formatTick = (dateString: string) => {
+        const dateObj = new Date(dateString);
+        return format(dateObj, "dd.MM.");
+    };
+
+    const formatDate = (dateString: string) => {
+        const dateObj = new Date(dateString);
+        return format(dateObj, "dd.MM.yyyy");
+    };
+
+    if (data.length <= 1) {
+        return (
+            <>
+                <div className="title-and-button">
+                    <Headline level={1} style="section">
+                        Tracking Graph
+                    </Headline>
+                </div>
+                <Card className="habit-graph__card center" style={{ height: "240px" }}>
+                    <p className="fst--base">Not enough data to visualize your progress.</p>
+                    <p className="fst--base">Keep tracking your habit to see the graph.</p>
+                    <MdOutlineAutoGraph className="graph-icon" />
+                </Card>
+            </>
+        );
+    }
+
     return (
         <>
             <div className="title-and-button">
                 <Headline level={1} style="section">
                     Tracking Graph
                 </Headline>
+                <button onClick={() => setOpen(true)}>show history</button>
             </div>
             <Card className="habit-graph__card">
-                Soon TM
-                <div className="habit-graph__card__content">{/* Graph will be implemented here */}</div>
+                <ResponsiveContainer width="100%" height={240}>
+                    <AreaChart data={data} margin={{ top: 20, right: 4, left: 4, bottom: 0 }}>
+                        <defs>
+                            <linearGradient id="areaGradient" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0%" stopColor="#9a98ef" stopOpacity={0.25} />
+                                <stop offset="100%" stopColor="#9bc1ff" stopOpacity={0.25} />
+                            </linearGradient>
+
+                            <linearGradient id="linearGradient" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0%" stopColor="#9a98ef" stopOpacity={1} />
+                                <stop offset="100%" stopColor="#9bc1ff" stopOpacity={1} />
+                            </linearGradient>
+                        </defs>
+
+                        <CartesianGrid opacity={0.5} vertical={false} strokeOpacity={0.5} stroke="var(--blue-light)" />
+                        <XAxis dataKey="date" scale="point" tickFormatter={formatTick} tickLine={false} axisLine={false} minTickGap={4} tick={{ fill: "var(--purple-light)" }} fontSize={"0.825rem"} />
+                        <YAxis axisLine={false} tickSize={0} mirror={true} tick={{ fill: "var(--purple-light)" }} dy={-10} fontSize={"0.825rem"} />
+
+                        <Area type="monotone" dataKey="data" strokeWidth={2} stroke="url(#linearGradient)" fill="url(#areaGradient)" fillOpacity={1} />
+                    </AreaChart>
+                </ResponsiveContainer>
             </Card>
+
+            <Sheet isOpen={open} onClose={() => setOpen(false)} snapPoints={[800, 400, 0]} initialSnap={1}>
+                <Sheet.Container>
+                    <Sheet.Header />
+                    <Sheet.Content>
+                        <Sheet.Scroller>
+                            <div className="container">
+                                {data.map((d) => (
+                                    <div key={d.date} className="habit-settings__item ">
+                                        <span className="fst--base">{formatDate(d.date)}</span>
+                                        <span className="fst--base">{d.data !== null ? d.data : "---"}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </Sheet.Scroller>
+                    </Sheet.Content>
+                </Sheet.Container>
+                <Sheet.Backdrop onTap={() => setOpen(false)} />
+            </Sheet>
         </>
     );
 };
