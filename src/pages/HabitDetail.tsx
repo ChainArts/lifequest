@@ -104,7 +104,7 @@ const HabitDetail: React.FC = () => {
                     <HabitHeatmap />
                 </motion.section>
                 <motion.section variants={sectionVariants} className="container">
-                    <HabitGraph />
+                    <HabitGraph id={id ?? ""} />
                 </motion.section>
                 <motion.section variants={sectionVariants} className="container">
                     <section className="container">

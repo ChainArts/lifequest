@@ -3,29 +3,24 @@ import Card from "../../molecules/Card/Card";
 import "./HabitGraph.scss";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import { format } from "date-fns";
-import React from "react";
+import { useEffect, useState } from "react";
+import { useHabits } from "../../../lib/HabitsContext";
 
-const HabitGraph = () => {
-    const [open, setOpen] = React.useState(false);
-    const data = [
-        { date: "2025-01-01", data: 12 },
-        { date: "2025-01-02", data: 10 },
-        { date: "2025-01-03", data: 8 },
-        { date: "2025-01-07", data: 30 },
-        { date: "2025-01-08", data: 35 },
-        { date: "2025-01-09", data: null },
-        { date: "2025-01-10", data: 15 },
-        { date: "2025-01-11", data: 50 },
-        { date: "2025-01-12", data: 55 },
-        { date: "2025-01-13", data: 60 },
-        { date: "2025-01-14", data: 70 },
-        { date: "2025-01-15", data: 80 },
-        { date: "2025-01-16", data: 90 },
-        { date: "2025-01-17", data: 100 },
-        { date: "2025-01-18", data: 110 },
-        { date: "2025-01-19", data: 120 },
-        { date: "2025-01-20", data: 130 },
-    ];
+const HabitGraph = ({ id }: { id: string }) => {
+    const [open, setOpen] = useState(false);
+    const [data, setData] = useState<{ date: string; data: number | null }[]>([]);
+    const { fetchHabitLogData } = useHabits();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!id) return;
+            const data = await fetchHabitLogData(id, 30);
+            if (data) {
+                setData(data);
+            }
+        };
+        fetchData();
+    }, []);
 
     const formatTick = (dateString: string) => {
         const dateObj = new Date(dateString);
