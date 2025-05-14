@@ -74,11 +74,11 @@ const HabitGraph = ({ id }: { id: string }) => {
                             </linearGradient>
                         </defs>
 
-                        <CartesianGrid opacity={0.5} vertical={false} strokeOpacity={0.5} stroke="var(--blue-light)" />
-                        <XAxis dataKey="date" scale="point" tickFormatter={formatTick} tickLine={false} axisLine={false} minTickGap={4} tick={{ fill: "var(--purple-light)" }} fontSize={"0.825rem"} />
-                        <YAxis axisLine={false} tickSize={0} mirror={true} tick={{ fill: "var(--purple-light)" }} dy={-10} fontSize={"0.825rem"} />
+                        <CartesianGrid opacity={0.25} vertical={false} stroke="var(--blue-light)" />
+                        <XAxis dataKey="date" scale="point" tickFormatter={formatTick} tickLine={false} axisLine={false} minTickGap={16} tick={{ fill: "var(--text)" }} fontSize={"0.75rem"} />
+                        <YAxis axisLine={false} tickSize={0} mirror={true} tick={{ fill: "var(--text)" }} dy={-8} fontSize={"0.75rem"} />
 
-                        <Area type="monotone" dataKey="data" strokeWidth={2} stroke="url(#linearGradient)" fill="url(#areaGradient)" fillOpacity={1} />
+                        <Area type="monotone" dataKey="data" strokeWidth={1} stroke="url(#linearGradient)" fill="url(#areaGradient)" fillOpacity={1} />
                     </AreaChart>
                 </ResponsiveContainer>
             </Card>

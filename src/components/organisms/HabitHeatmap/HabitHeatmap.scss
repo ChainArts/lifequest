@@ -1,4 +1,53 @@
-.habit-heatmap span{
+.habit-heatmap span {
     display: flex;
     justify-content: center;
+}
+
+.habit-calendar__card {
+    padding: 0;
+}
+
+.MuiDateCalendar-root {
+    padding: 0 !important;
+    margin: 0 auto !important;
+    width: 100% !important;
+    max-width: 400px !important;
+
+    --toastify-color-light: var(--purple-dark) !important;
+    --toastify-color-info: var(--purple-dark) !important;
+    --toastify-color-dark: var(--purple-dark) !important;
+
+    .MuiPickersCalendarHeader-root {
+        color: var(--text) !important;
+    }
+
+    .MuiDayCalendar-weekContainer {
+        display: grid !important;
+        grid-template-columns: repeat(7, 1fr) !important;
+        padding: 0 1rem !important;
+
+        .MuiButtonBase-root {
+            color: var(--text) !important;
+        }
+    }
+
+    .MuiDayCalendar-header {
+        display: grid !important;
+        grid-template-columns: repeat(7, 1fr) !important;
+        padding: 0 1rem !important;
+        span {
+            color: var(--text-sec) !important;
+        }
+    }
+
+    .MuiPickersDay-today {
+        border: 1px solid var(--text-sec) !important;
+    }
+
+    .MuiPickersArrowSwitcher-root {
+        & svg {
+            color: var(--text) !important;
+            fill: var(--text) !important;
+        }
+    }
 }
