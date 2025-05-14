@@ -2,9 +2,11 @@ import Headline from "../../atoms/Headline/Headline";
 import Card from "../../molecules/Card/Card";
 import "./HabitGraph.scss";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { useEffect, useState } from "react";
 import { useHabits } from "../../../lib/HabitsContext";
+import { Sheet } from "react-modal-sheet";
+import { MdOutlineAutoGraph } from "react-icons/md";
 
 const HabitGraph = ({ id }: { id: string }) => {
     const [open, setOpen] = useState(false);
@@ -27,19 +29,35 @@ const HabitGraph = ({ id }: { id: string }) => {
         return format(dateObj, "dd.MM.");
     };
 
-    const modes = {
-        "0": "week",
-        "1": "month",
-        "2": "6 months",
+    const formatDate = (dateString: string) => {
+        const dateObj = new Date(dateString);
+        return format(dateObj, "dd.MM.yyyy");
     };
+
+    if (data.length <= 1) {
+        return (
+            <>
+                <div className="title-and-button">
+                    <Headline level={1} style="section">
+                        Tracking Graph
+                    </Headline>
+                </div>
+                <Card className="habit-graph__card center" style={{ height: "240px" }}>
+                    <p className="fst--base">Not enough data to visualize your progress.</p>
+                    <p className="fst--base">Keep tracking your habit to see the graph.</p>
+                    <MdOutlineAutoGraph className="graph-icon" />
+                </Card>
+            </>
+        );
+    }
 
     return (
         <>
             <div className="title-and-button">
                 <Headline level={1} style="section">
-                    Settings
+                    Tracking Graph
                 </Headline>
-                <button onClick={() => setOpen(true)}>show histroy</button>
+                <button onClick={() => setOpen(true)}>show history</button>
             </div>
             <Card className="habit-graph__card">
                 <ResponsiveContainer width="100%" height={240}>
@@ -64,6 +82,25 @@ const HabitGraph = ({ id }: { id: string }) => {
                     </AreaChart>
                 </ResponsiveContainer>
             </Card>
+
+            <Sheet isOpen={open} onClose={() => setOpen(false)} snapPoints={[800, 400, 0]} initialSnap={1}>
+                <Sheet.Container>
+                    <Sheet.Header />
+                    <Sheet.Content>
+                        <Sheet.Scroller>
+                            <div className="container">
+                                {data.map((d) => (
+                                    <div key={d.date} className="habit-settings__item ">
+                                        <span className="fst--base">{formatDate(d.date)}</span>
+                                        <span className="fst--base">{d.data !== null ? d.data : "---"}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </Sheet.Scroller>
+                    </Sheet.Content>
+                </Sheet.Container>
+                <Sheet.Backdrop onTap={() => setOpen(false)} />
+            </Sheet>
         </>
     );
 };
