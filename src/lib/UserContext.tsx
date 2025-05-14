@@ -2,6 +2,8 @@ import { createContext, useContext, useState, useEffect, ReactNode } from "react
 import { calculateLevel } from "../lib/XP";
 import { invoke } from "@tauri-apps/api/core";
 import { toast } from "react-toastify";
+import ToastLevelUp from "../components/atoms/ToastLevelUp/ToastLevelUp";
+import ToastStreakUpUser from "../components/atoms/ToastStreakUpUser/ToastStreakUpUser";
 
 //
 // 1) Define your User shape (match schema::User fields)
@@ -79,7 +81,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 if (levelDelta > 0) {
                     payload.level = levelDelta;
                     payload.coins = 100; // reward 100 coins per level-up
-                    toast.success(`Level up! You are now level ${newLvl} and earned 100 coins!`);
+                    toast.success(<ToastLevelUp level={newLvl} />);
                     
                 }
             } else {
@@ -91,7 +93,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
         // 2) handle streak fields
         if (updates.current_streak !== undefined) {
-            payload.currentstreak = strategy === "add" ? updates.current_streak : updates.current_streak;
+            payload.currentstreak = updates.current_streak;
         }
         if (updates.highest_streak !== undefined) {
             payload.higheststreak = updates.highest_streak;
@@ -111,11 +113,14 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         if (!user) return;
         try {
             const todayDone = await invoke("check_all_today_completed");
-            console.log("today_done", todayDone);
             if (todayDone) {
                 const newCurrent = user.current_streak + 1;
                 const newHighest = Math.max(user.highest_streak, newCurrent);
                 await updateUser({ current_streak: newCurrent, highest_streak: newHighest }, "update");
+
+                if (newCurrent > user.current_streak) {
+                    toast.success(<ToastStreakUpUser streak={newCurrent} isPb={newCurrent > user.highest_streak} />);
+                }
             }
         } catch (err) {
             console.error("streak update failed:", err);
