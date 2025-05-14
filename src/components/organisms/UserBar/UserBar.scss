@@ -57,4 +57,12 @@
             font-weight: 600;
         }
     }
+
+    .user-bar__streak{
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
 }

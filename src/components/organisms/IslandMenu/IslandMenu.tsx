@@ -68,22 +68,7 @@ const IslandMenu = () => {
             id: "chicken",
             name: "Chicken",
             thumbnail: chickenThumbnail,
-        },
-        {
-            id: "chicken",
-            name: "Chicken",
-            thumbnail: chickenThumbnail,
-        },
-        {
-            id: "chicken",
-            name: "Chicken",
-            thumbnail: chickenThumbnail,
-        },
-        {
-            id: "chicken",
-            name: "Chicken",
-            thumbnail: chickenThumbnail,
-        },
+        }
     ];
 
     return (

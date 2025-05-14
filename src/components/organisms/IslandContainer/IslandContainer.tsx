@@ -1,64 +1,16 @@
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, MapControls, PerformanceMonitor, PerspectiveCamera, useGLTF } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+import { Environment, MapControls, PerformanceMonitor, PerspectiveCamera } from "@react-three/drei";
 import "./IslandContainer.scss";
 import { EffectComposer, SMAA, Vignette } from "@react-three/postprocessing";
-import * as THREE from "three";
+import CameraLerp from "./CameraLerp";
+import ClampCamera from "./ClampCamera";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FloatingObject from "../../../lib/FloatingObject";
 import IslandMenu from "../IslandMenu/IslandMenu";
 import { AnimatePresence } from "motion/react";
-
-interface IslandProps {
-    position: [number, number, number];
-    scale: number;
-}
-
-const Island = (props: IslandProps) => {
-    const { scene } = useGLTF("/models/island.glb");
-    scene.scale.set(props.scale, props.scale, props.scale);
-    // add a shadow to the island
-    scene.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-            child.receiveShadow = true;
-            child.castShadow = true;
-        }
-    });
-    return <primitive object={scene} {...props} />;
-};
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Chicken = (props: any) => {
-    const originalScene = useGLTF("/models/mobs/chicken_balloon.glb").scene;
-    const clonedScene = useMemo(() => originalScene.clone(true), [originalScene]);
-
-    clonedScene.scale.set(0.3, 0.3, 0.3);
-    return <primitive object={clonedScene} {...props} />;
-};
-
-const ClampCamera = ({ controlsRef, minZ, maxZ }: { controlsRef: React.RefObject<any>; minZ: number; maxZ: number }) => {
-    useFrame(() => {
-        if (controlsRef.current) {
-            const camera = controlsRef.current.object;
-            camera.position.z = Math.max(minZ, Math.min(maxZ, camera.position.z));
-            controlsRef.current.target.z = Math.max(minZ, Math.min(maxZ, controlsRef.current.target.z));
-            controlsRef.current.update();
-        }
-    });
-    return null;
-};
-
-const CameraLerp = ({ location, camRef }: { location: string; camRef: React.RefObject<any> }) => {
-    // Define the target position once
-    const targetPosition = new THREE.Vector3(40, 10, 0);
-    useFrame(() => {
-        if (camRef.current && location !== "/island") {
-            // Lerp toward the targetPosition with an interpolation factor (e.g., 0.1)
-            camRef.current.position.lerp(targetPosition, 0.1);
-        }
-    });
-    return null;
-};
+import Island from "./Island";
+import Chicken from "./Chicken";
 
 const IslandContainer = ({ location }: { location: string }) => {
     const navigate = useNavigate();
@@ -81,7 +33,6 @@ const IslandContainer = ({ location }: { location: string }) => {
     }, []);
 
     const handleIsActive = () => {
-        setIsActive(!isActive);
         navigate("/island");
     };
 
@@ -132,6 +83,3 @@ const IslandContainer = ({ location }: { location: string }) => {
 };
 
 export default IslandContainer;
-
-useGLTF.preload("/models/island.glb");
-useGLTF.preload("/models/mobs/chicken_balloon.glb");
