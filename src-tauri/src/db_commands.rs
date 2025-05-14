@@ -1,8 +1,10 @@
 mod schema;
+mod seed;
 use chrono::Local;
 use serde_json::json;
 use serde_json::Number;
 use surrealdb::sql::Thing;
+use seed::seed_walking_data;
 
 use crate::db::LOCAL_DB;
 
@@ -259,7 +261,12 @@ pub async fn check_all_today_completed() -> surrealdb::Result<bool> {
 
 #[tauri::command]
 pub async fn check_all_yesterday_completed() -> surrealdb::Result<bool> {
-    let yesterday_str = Local::now().date_naive().pred_opt().unwrap().format("%Y-%m-%d").to_string();
+    let yesterday_str = Local::now()
+        .date_naive()
+        .pred_opt()
+        .unwrap()
+        .format("%Y-%m-%d")
+        .to_string();
     let mut res = LOCAL_DB
         .query("SELECT VALUE completed FROM habit_log WHERE date = $date")
         .bind(("date", yesterday_str))
@@ -312,7 +319,6 @@ pub async fn update_user_data(
     strategy: String, // "add" | "update" | "reset"
 ) -> surrealdb::Result<()> {
     println!("Updating user_data with strategy={}", strategy);
-    
 
     match strategy.as_str() {
         "add" => {
@@ -378,12 +384,13 @@ pub async fn update_user_data(
 }
 
 #[tauri::command]
-pub async fn reset_data () -> surrealdb::Result<()> {
+pub async fn reset_data() -> surrealdb::Result<()> {
     println!("Resetting all data");
     // Delete all habits and logs
     let _res: Vec<schema::Habit> = LOCAL_DB.delete("habit").await?;
     let _res: Vec<schema::HabitLog> = LOCAL_DB.delete("habit_log").await?;
     // Reset user data
     let _res: Vec<schema::User> = LOCAL_DB.delete("user").await?;
+    seed_walking_data().await?;
     Ok(())
 }
