@@ -48,6 +48,8 @@ pub fn run() {
             db_commands::get_todays_habits,
             db_commands::sync_habit_log,
             db_commands::get_habit_log_completed,
+            db_commands::check_all_today_completed,
+            db_commands::check_all_yesterday_completed,
             db_commands::update_habit_log,
             db_commands::get_xp_for_today,
             db_commands::increase_habit_xp,

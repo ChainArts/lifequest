@@ -17,22 +17,7 @@ pub async fn insert_habit(values: schema::Habit) -> surrealdb::Result<()> {
 #[tauri::command]
 pub async fn get_habits() -> surrealdb::Result<serde_json::Value> {
     let mut res = LOCAL_DB.query("SELECT * FROM habit").await?;
-
     let habits: Vec<schema::HabitWithId> = res.take(0)?;
-
-    // map over all habits and change the id to a string
-    // let habits: Vec<schema::HabitWithId> = habits.into_iter().map(|habit| {
-    //     schema::HabitWithId {
-    //         id: habit.id.to_string(),
-    //         title: habit.title,
-    //         goal: habit.goal,
-    //         unit: habit.unit,
-    //         week_days: habit.week_days,
-    //         icon: habit.icon,
-    //         color: habit.color,
-    //     }
-    // }).collect();
-
     Ok(json!(habits))
 }
 
@@ -262,6 +247,28 @@ pub async fn get_habit_log_completed(id: String) -> surrealdb::Result<bool> {
 }
 
 #[tauri::command]
+pub async fn check_all_today_completed() -> surrealdb::Result<bool> {
+    let today_str = Local::now().format("%Y-%m-%d").to_string();
+    let mut res = LOCAL_DB
+        .query("SELECT VALUE completed FROM habit_log WHERE date = $date")
+        .bind(("date", today_str))
+        .await?;
+    let completed: Vec<bool> = res.take(0)?;
+    Ok(completed.iter().all(|&c| c))
+}
+
+#[tauri::command]
+pub async fn check_all_yesterday_completed() -> surrealdb::Result<bool> {
+    let yesterday_str = Local::now().date_naive().pred_opt().unwrap().format("%Y-%m-%d").to_string();
+    let mut res = LOCAL_DB
+        .query("SELECT VALUE completed FROM habit_log WHERE date = $date")
+        .bind(("date", yesterday_str))
+        .await?;
+    let completed: Vec<bool> = res.take(0)?;
+    Ok(completed.iter().all(|&c| c))
+}
+
+#[tauri::command]
 pub async fn init_user_data() -> surrealdb::Result<serde_json::Value> {
     // 1) try to fetch the one-and-only user
     let mut res = LOCAL_DB.query("SELECT * FROM user LIMIT 1").await?;
@@ -299,12 +306,13 @@ pub async fn get_user_data() -> surrealdb::Result<serde_json::Value> {
 pub async fn update_user_data(
     exp: Option<Number>,
     level: Option<Number>,
-    current_streak: Option<Number>,
-    highest_streak: Option<Number>,
+    currentstreak: Option<Number>,
+    higheststreak: Option<Number>,
     coins: Option<Number>,
     strategy: String, // "add" | "update" | "reset"
 ) -> surrealdb::Result<()> {
     println!("Updating user_data with strategy={}", strategy);
+    
 
     match strategy.as_str() {
         "add" => {
@@ -321,13 +329,13 @@ pub async fn update_user_data(
                     .bind(("level", level))
                     .await?;
             }
-            if let Some(current_streak) = current_streak {
+            if let Some(current_streak) = currentstreak {
                 LOCAL_DB
                     .query("UPDATE user SET current_streak += $c_streak")
                     .bind(("c_streak", current_streak))
                     .await?;
             }
-            if let Some(highest_streak) = highest_streak {
+            if let Some(highest_streak) = higheststreak {
                 LOCAL_DB
                     .query("UPDATE user SET highest_streak += $h_streak")
                     .bind(("h_streak", highest_streak))
@@ -352,10 +360,10 @@ pub async fn update_user_data(
             if let Some(exp) = exp { upd["exp"] = json!(exp); }
             if let Some(level) = level { upd["level"] = json!(level); }
             if let Some(coins) = coins { upd["coins"] = json!(coins); }
-            if let Some(current_streak) = current_streak {
+            if let Some(current_streak) = currentstreak {
                 upd["current_streak"] = json!(current_streak);
             }
-            if let Some(highest_streak) = highest_streak {
+            if let Some(highest_streak) = higheststreak {
                 upd["highest_streak"] = json!(highest_streak);
             }
             println!("MERGE update_data = {:?}", upd);

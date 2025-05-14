@@ -26,7 +26,8 @@ export type DisplayUser = User & UserXP;
 interface UserContextType {
     user: DisplayUser | null;
     refreshUser: () => Promise<void>;
-    updateUser: (updates: Partial<User>, strategy: string) => Promise<void>;
+    updateUser: (updates: Partial<User>, strategy: "add" | "update" | "reset_streak") => Promise<void>;
+    incrementStreak: () => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -51,37 +52,97 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     };
 
     // Merge & send updates to backend, then refresh
-    const updateUser = async (updates: Partial<User>, strategy: string) => {
-        try {
-            const oldLevel = user!.level;
-            const newExp = updates.exp ?? user!.exp;
-            const { level: newLevel } = calculateLevel(newExp);
+    const updateUser = async (updates: Partial<User>, strategy: "add" | "update" | "reset_streak") => {
+        if (!user) return;
 
-            // start with either passed‐in coins or current coins
-            let newCoins = updates.coins ?? user!.coins;
-            // reward 100 coins on level up
-            if (newLevel > oldLevel) {
-                newCoins += 100;
+        // build a payload with only the keys we intend to change
+        const payload: {
+            exp?: number;
+            level?: number;
+            currentstreak?: number;
+            higheststreak?: number;
+            coins?: number;
+            strategy: string;
+        } = { strategy };
+
+        // 1) handle exp & level
+        if (updates.exp !== undefined) {
+            if (strategy === "add") {
+                // increment exp
+                payload.exp = updates.exp;
+                // figure out if we're leveling up
+                const oldTotal = user.exp;
+                const newTotal = oldTotal + updates.exp;
+                const { level: newLvl } = calculateLevel(newTotal);
+                const levelDelta = newLvl - user.level;
+                if (levelDelta > 0) {
+                    payload.level = levelDelta;
+                    payload.coins = 100; // reward 100 coins per level-up
+                }
+            } else {
+                // full replace
+                payload.exp = updates.exp;
+                payload.level = calculateLevel(updates.exp).level;
             }
-            await invoke("update_user_data", {
-                exp: newExp,
-                level: newLevel,
-                current_streak: updates.current_streak ?? user!.current_streak,
-                highest_streak: updates.highest_streak ?? user!.highest_streak,
-                coins: newCoins,
-                strategy,
-            });
+        }
+
+        // 2) handle streak fields
+        if (updates.current_streak !== undefined) {
+            payload.currentstreak = strategy === "add" ? updates.current_streak : updates.current_streak;
+        }
+        if (updates.highest_streak !== undefined) {
+            payload.higheststreak = updates.highest_streak;
+        }
+        
+
+        // 3) invoke and refresh
+        try {
+            await invoke("update_user_data", payload);
             await refreshUser();
         } catch (err) {
             console.error("failed to update user:", err);
         }
     };
 
+    const incrementStreak = async () => {
+        if (!user) return;
+        try {
+            const todayDone = await invoke("check_all_today_completed");
+            console.log("today_done", todayDone);
+            if (todayDone) {
+                const newCurrent = user.current_streak + 1;
+                const newHighest = Math.max(user.highest_streak, newCurrent);
+                await updateUser({ current_streak: newCurrent, highest_streak: newHighest }, "update");
+            }
+        } catch (err) {
+            console.error("streak update failed:", err);
+        }
+    };
+
+    const checkStreak = async () => {
+        if (!user) return;
+        try {
+            const yesterdayDone = await invoke("check_all_yesterday_completed");
+            console.log("yesterday_done", yesterdayDone);
+
+            // only reset if you already have a streak AND today isn't done
+            if (user.current_streak > 0 && !yesterdayDone) {
+                await updateUser({}, "reset_streak");
+            }
+        } catch (e) {
+            console.error("streak check failed:", e);
+        }
+    };
+
     useEffect(() => {
-        refreshUser();
+        (async () => {
+            await refreshUser();
+            await checkStreak();
+            await refreshUser();
+        })();
     }, []);
 
-    return <UserContext.Provider value={{ user, refreshUser, updateUser }}>{children}</UserContext.Provider>;
+    return <UserContext.Provider value={{ user, refreshUser, updateUser, incrementStreak }}>{children}</UserContext.Provider>;
 };
 
 //

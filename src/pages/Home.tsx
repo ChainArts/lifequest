@@ -2,7 +2,7 @@
 import { motion } from "motion/react";
 import StatsTeaser from "../components/organisms/StatsTeaser/StatsTeaser";
 import DailyHabits from "../components/organisms/DailyHabits/DailyHabits";
-import StreakProgress from "../components/organisms/StreakProgress/StreakProgress";
+import StreakCalender from "../components/organisms/StreakCalender/StreakCalender";
 import DailyProgress from "../components/organisms/DailyProgress/DailyProgress";
 import { pageVariants, sectionVariants } from "../components/atoms/PageTransition/PageTransition";
 
@@ -26,7 +26,7 @@ const Home = () => {
             </motion.section>
 
             <motion.section variants={sectionVariants}>
-                <StreakProgress streak={user ? user.current_streak : 0} isCompleted={calculateProgress() === 100} />
+                <StreakCalender streak={user ? user.current_streak : 0} isCompleted={calculateProgress() === 100} />
             </motion.section>
 
             <motion.section variants={sectionVariants}>

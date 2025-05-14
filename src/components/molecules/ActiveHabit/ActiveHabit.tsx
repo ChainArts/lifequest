@@ -6,7 +6,7 @@ import LinearProgress from "../../atoms/LinearProgress/LinearProgress";
 import FluentEmoji from "../../../lib/FluentEmoji";
 import { useHabits } from "../../../lib/HabitsContext";
 import { calulateStreakXP } from "../../../lib/XP";
-import { useUser } from "../../../lib/UserContext";
+import { useUser} from "../../../lib/UserContext";
 import { usePopOver } from "../../../lib/PopOverContext";
 import AddTrackingData from "../../organisms/DailyHabitsEdit/AddTrackingData";
 
@@ -27,7 +27,7 @@ const ActiveHabit = ({ habit, updateXP }: { habit: ActiveHabitProps; updateXP: (
     const [circles, setCircles] = useState<{ id: string }[]>([]);
     const { id, title, goal, done, icon, color, unit, current_streak, tracking, data } = habit;
     const { updateHabitProgress } = useHabits();
-    const { updateUser } = useUser();
+    const { updateUser, incrementStreak } = useUser();
     const { openPopOver } = usePopOver();
 
     const handleAdd = async () => {
@@ -36,6 +36,7 @@ const ActiveHabit = ({ habit, updateXP }: { habit: ActiveHabitProps; updateXP: (
 
         if (gotXp) {
             const earned = calulateStreakXP(current_streak);
+            await incrementStreak();
             await updateUser({ exp: earned }, "add");
         }
         const timestamp = Date.now();

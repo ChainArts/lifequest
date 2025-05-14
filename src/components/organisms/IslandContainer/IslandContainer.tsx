@@ -117,7 +117,6 @@ const IslandContainer = ({ location }: { location: string }) => {
                     onChange={({ factor }) => {
                         const newDpr = Math.round((0.5 + 1 * factor) * 10) / 10;
                         setDpr(newDpr);
-                        console.log(newDpr);
                     }}
                     onDecline={() => degrade(true)}
                 />
