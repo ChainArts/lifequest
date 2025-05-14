@@ -7,16 +7,17 @@ interface IslandProps {
 }
 
 const Island = (props: IslandProps) => {
-    const { scene } = useGLTF("/models/island.glb");
-    scene.scale.set(props.scale, props.scale, props.scale);
+    const originalScene = useGLTF("/models/island.glb").scene;
+    const clonedScene = originalScene.clone(true);
+    clonedScene.scale.set(props.scale, props.scale, props.scale);
     // add a shadow to the island
-    scene.traverse((child) => {
+    clonedScene.traverse((child) => {
         if (child instanceof THREE.Mesh) {
             child.receiveShadow = true;
             child.castShadow = true;
         }
     });
-    return <primitive object={scene} {...props} />;
+    return <primitive object={clonedScene} {...props} />;
 };
 
 export default Island;

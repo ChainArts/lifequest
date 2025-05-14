@@ -41,8 +41,8 @@ const IslandContainer = ({ location }: { location: string }) => {
     }, [location]);
 
     // Define your boundaries
-    const minZ = -10,
-        maxZ = 10;
+    const minZ = -50,
+        maxZ = 50;
 
     return (
         <section className={`island-container ${isActive ? "island-container--active" : ""}`} onClick={!isActive ? () => handleIsActive() : undefined}>
@@ -57,9 +57,10 @@ const IslandContainer = ({ location }: { location: string }) => {
                 }}
             >
                 {/* <Stats /> */}
-                <PerspectiveCamera ref={camRef} makeDefault position={[40, 10, 0]} fov={50} />
+                <PerspectiveCamera ref={camRef} makeDefault position={[40, 15, 0]} fov={50} />
+                <CameraLerp location={location} camRef={camRef} />
                 <ClampCamera controlsRef={controlsRef} minZ={minZ} maxZ={maxZ} />
-                <MapControls ref={controlsRef} enabled={isActive} enableRotate={false} enableDamping dampingFactor={0.05} minDistance={15} maxDistance={50} zoomSpeed={3} />
+                {isActive && <MapControls ref={controlsRef} enableRotate={false} enableDamping dampingFactor={0.05} minDistance={15} maxDistance={50} zoomSpeed={3} screenSpacePanning={false} />}
                 <EffectComposer>
                     <SMAA />
                     <Vignette eskil={false} offset={0.1} darkness={0.5} />
@@ -72,10 +73,10 @@ const IslandContainer = ({ location }: { location: string }) => {
                     onDecline={() => degrade(true)}
                 />
                 <Environment near={0.01} far={300} frames={degraded ? 1 : Infinity} resolution={512} backgroundRotation={[0, 0, 0]} files="/models/skybox.hdr" background backgroundIntensity={1.5} environmentIntensity={1.25} backgroundBlurriness={0.05} />
-                <pointLight position={[-10, 15, 20]} decay={0} intensity={6} color={"#ffeebb"} shadow-mapSize-width={2048} shadow-mapSize-height={2048} castShadow />
+                <pointLight position={[-30, 30, 30]} decay={0} intensity={6} color={"#ffeebb"} shadow-mapSize-width={2048} shadow-mapSize-height={2048} castShadow />
                 <Island position={[0, 0, 0]} scale={20} />
+                <Island position={[-10, 5, -10]} scale={20} />
                 {chickens.map((chicken) => chicken)}
-                <CameraLerp location={location} camRef={camRef} />
             </Canvas>
             <AnimatePresence mode="wait">{isActive && <IslandMenu />}</AnimatePresence>
         </section>

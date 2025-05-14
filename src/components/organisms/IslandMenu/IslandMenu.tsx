@@ -74,7 +74,7 @@ const IslandMenu = () => {
     return (
         <motion.div className="island-menu">
             <AnimatePresence mode="wait">
-                {!openPlaceMenu && !openShopMenu ? (
+                {!openPlaceMenu && !openShopMenu && (
                     <motion.div className="island-menu__buttons" variants={containerVariants} initial="initial" animate="animate" exit="exit">
                         <motion.span variants={islandMenuButtonVariants} className="island-menu__button" onClick={handleShopMenu}>
                             <PiShoppingCartFill />
@@ -83,7 +83,7 @@ const IslandMenu = () => {
                             <PiPawPrintFill />
                         </motion.span>
                     </motion.div>
-                ) : null}
+                )}
             </AnimatePresence>
             <AnimatePresence mode="wait">
                 {openPlaceMenu && (
