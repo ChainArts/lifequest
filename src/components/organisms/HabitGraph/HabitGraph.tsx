@@ -2,7 +2,7 @@ import Headline from "../../atoms/Headline/Headline";
 import Card from "../../molecules/Card/Card";
 import "./HabitGraph.scss";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
-import { format, set } from "date-fns";
+import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { useHabits } from "../../../lib/HabitsContext";
 import { Sheet } from "react-modal-sheet";
