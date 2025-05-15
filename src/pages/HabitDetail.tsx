@@ -95,7 +95,7 @@ const HabitDetail: React.FC = () => {
                         </div>
                     </div>
 
-                    <HabitStats icon={habit.icon} xp={habit.habit_xp} title={habit.title} color={habit.color} />
+                    <HabitStats {...habit} />
                 </motion.section>
                 <motion.section variants={sectionVariants} className="container">
                     <HabitSettings setOpen={setOpen} goal={habit.goal} unit={habit.unit} week_days={habit.week_days} tracking={habit.tracking} color={habit.color} />

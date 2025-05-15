@@ -20,7 +20,7 @@ const HabitGraph = ({ id }: { id: string }) => {
         const container = containerRef.current;
         if (!container) return;
         const btn = container.querySelector("button.active");
-        if (btn) {
+        if (btn && btn instanceof HTMLElement) {
             setSliderStyle({
                 left: btn.offsetLeft,
                 width: btn.offsetWidth,

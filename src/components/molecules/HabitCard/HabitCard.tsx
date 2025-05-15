@@ -6,6 +6,7 @@ import { NavLink } from "react-router-dom";
 import FluentEmoji from "../../../lib/FluentEmoji";
 import { motion } from "motion/react";
 import { sectionVariants as cardVariants } from "../../atoms/PageTransition/PageTransition";
+import { calculateLevel } from "../../../lib/XP";
 
 export interface HabitCardProps {
     id: { id: { String: string }; tb: string };
@@ -22,25 +23,11 @@ export interface HabitCardProps {
     habit_xp: number;
 }
 
-const calculateLevel = (xp: number): number => {
-    return Math.floor((Math.sqrt(1 + (8 * xp) / 10) - 1) / 2);
-};
-
-const calculateProgressToNextLevel = (xp: number): number => {
-    const level = calculateLevel(xp);
-
-    const xpForCurrentLevel = (10 * level * (level + 1)) / 2;
-    const xpForNextLevel = (10 * (level + 1) * (level + 2)) / 2;
-
-    const progress = ((xp - xpForCurrentLevel) / (xpForNextLevel - xpForCurrentLevel)) * 100;
-
-    return Math.floor(progress);
-};
-
 const HabitCard = ({ id, title, goal, unit, week_days, icon, color, current_streak, habit_xp }: HabitCardProps) => {
     const activeDays = week_days.map((day) => (day ? "1" : "0")).join("");
     //calculate lighter shade of color
     const colorLight = color + "DD";
+    const levelData = calculateLevel(habit_xp);
 
     //convert activeDays to array of boolean
     const activeDaysArray = activeDays.split("").map((day) => (day === "1" ? true : false));
@@ -85,10 +72,10 @@ const HabitCard = ({ id, title, goal, unit, week_days, icon, color, current_stre
                                 </div>
                                 <div>
                                     <span className="fst--upper-heading">LVL</span>
-                                    <span className="habit-card__level">{calculateLevel(habit_xp)}</span>
+                                    <span className="habit-card__level">{levelData.level}</span>
                                 </div>
                             </div>
-                            <LinearProgress goal={100} done={calculateProgressToNextLevel(habit_xp)} />
+                            <LinearProgress goal={levelData.goal} done={levelData.done} />
                         </div>
                     </div>
                 </Card>
