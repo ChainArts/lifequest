@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { useHabits } from "../../../lib/HabitsContext";
 import { Sheet } from "react-modal-sheet";
 import { MdOutlineAutoGraph } from "react-icons/md";
-import { color } from "motion/react";
 
 const HabitGraph = ({ id }: { id: string }) => {
     const [open, setOpen] = useState(false);

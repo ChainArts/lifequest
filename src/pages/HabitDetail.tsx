@@ -101,7 +101,7 @@ const HabitDetail: React.FC = () => {
                     <HabitSettings setOpen={setOpen} goal={habit.goal} unit={habit.unit} week_days={habit.week_days} tracking={habit.tracking} color={habit.color} />
                 </motion.section>
                 <motion.section variants={sectionVariants} className="container">
-                    <HabitHeatmap />
+                    {id && <HabitHeatmap id={id} />}
                 </motion.section>
                 <motion.section variants={sectionVariants} className="container">
                     {habit.tracking && id && <HabitGraph id={id} />}

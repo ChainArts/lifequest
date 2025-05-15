@@ -5,87 +5,48 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { DayCalendarSkeleton, LocalizationProvider, PickersDay } from "@mui/x-date-pickers";
 import Badge from "@mui/material/Badge";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
-
-function getRandomNumber(min: number, max: number) {
-    return Math.round(Math.random() * (max - min) + min);
-}
-
-function fakeFetch(date: dayjs.Dayjs, { signal }: { signal: AbortSignal }): Promise<{ daysToHighlight: number[] }> {
-    return new Promise((resolve, reject) => {
-        const timeout = setTimeout(() => {
-            const daysInMonth = date.daysInMonth();
-            const daysToHighlight = [1, 2, 3].map(() => getRandomNumber(1, daysInMonth));
-
-            resolve({ daysToHighlight });
-        }, 500);
-
-        signal.onabort = () => {
-            clearTimeout(timeout);
-            reject(new DOMException("aborted", "AbortError"));
-        };
-    });
-}
+import { useHabits } from "../../../lib/HabitsContext";
 
 function ServerDay(props: any) {
-    const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
+    const { highlightedDays = [], uncompletedDays = [], day, outsideCurrentMonth, ...other } = props;
 
-    const isSelected = !props.outsideCurrentMonth && highlightedDays.indexOf(props.day.date()) >= 0;
+    const isCompleted = !outsideCurrentMonth && highlightedDays.includes(day.date());
+    const isUncompleted = !outsideCurrentMonth && uncompletedDays.includes(day.date());
+
+    let badge: string | undefined;
+    if (isCompleted) badge = "";
+    else if (isUncompleted) badge = "❌";
 
     return (
-        <Badge key={props.day.toString()} overlap="circular" badgeContent={isSelected ? "🌚" : undefined}>
-            <PickersDay {...other} outsideCurrentMonth={outsideCurrentMonth} day={day} />
+        <Badge key={day.toString()} overlap="circular" badgeContent={badge}>
+            <PickersDay {...other} outsideCurrentMonth={outsideCurrentMonth} day={day} className={isCompleted ? "completed" : isUncompleted ? "uncompleted" : undefined} />
         </Badge>
     );
 }
 
-const HabitHeatmap = () => {
-    const requestAbortController = useRef<AbortController | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [highlightedDays, setHighlightedDays] = useState([1, 2, 15]);
+const HabitHeatmap = ({ id }: { id: string }) => {
+    const { getHabitCompleted } = useHabits();
+    const [isLoading, setIsLoading] = useState(true);
+    const [highlightedDays, setHighlightedDays] = useState<number[]>([]);
+    const [uncompletedDays, setUncompletedDays] = useState<number[]>([]);
+    const [startDay, setStartDay] = useState(() => dayjs().startOf("month").format("YYYY-MM-DD"));
+    const [endDay, setEndDay] = useState(() => dayjs().endOf("month").format("YYYY-MM-DD"));
 
-    interface FetchHighlightedDaysResult {
-        daysToHighlight: number[];
-    }
-
-    type FetchHighlightedDays = (date: dayjs.Dayjs) => void;
-
-    const fetchHighlightedDays: FetchHighlightedDays = (date) => {
-        const controller = new AbortController();
-        fakeFetch(date, {
-            signal: controller.signal,
-        })
-            .then(({ daysToHighlight }: FetchHighlightedDaysResult) => {
-                setHighlightedDays(daysToHighlight);
-                setIsLoading(false);
-            })
-            .catch((error: any) => {
-                // ignore the error if it's caused by `controller.abort`
-                if (error.name !== "AbortError") {
-                    throw error;
-                }
-            });
-
-        requestAbortController.current = controller;
-    };
     useEffect(() => {
-        fetchHighlightedDays(dayjs());
-        // abort request on unmount
-        return () => requestAbortController.current?.abort();
-    }, []);
-
-    const handleMonthChange = (date: dayjs.Dayjs) => {
-        if (requestAbortController.current) {
-            // make sure that you are aborting useless requests
-            // because it is possible to switch between months pretty quickly
-            requestAbortController.current.abort();
-        }
-
-        setIsLoading(true);
-        setHighlightedDays([]);
-        fetchHighlightedDays(date);
-    };
+        const fetchData = async () => {
+            setIsLoading(true);
+            const data = await getHabitCompleted(id, startDay, endDay);
+            if (data) {
+                setHighlightedDays(data.filter((d) => d.completed).map((d) => dayjs(d.date).date()));
+                const todayDate = dayjs().date();
+                setUncompletedDays(data.filter((d) => !d.completed && dayjs(d.date).date() !== todayDate).map((d) => dayjs(d.date).date()));
+            }
+            setIsLoading(false);
+        };
+        fetchData();
+    }, [getHabitCompleted, id, startDay, endDay]);
 
     return (
         <>
@@ -94,22 +55,25 @@ const HabitHeatmap = () => {
                     Activity Calendar
                 </Headline>
             </div>
+
             <Card className="habit-calendar__card">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DateCalendar
-                        onMonthChange={handleMonthChange}
-                        slots={{
-                            day: ServerDay,
-                        }}
+                        slots={{ day: ServerDay }}
                         slotProps={{
                             day: (ownerState: any) => ({
                                 ...ownerState,
                                 highlightedDays,
+                                uncompletedDays,
                             }),
                         }}
                         loading={isLoading}
                         disabled
                         renderLoading={() => <DayCalendarSkeleton />}
+                        onMonthChange={(month: dayjs.Dayjs) => {
+                            setStartDay(month.startOf("month").format("YYYY-MM-DD"));
+                            setEndDay(month.endOf("month").format("YYYY-MM-DD"));
+                        }}
                     />
                 </LocalizationProvider>
             </Card>

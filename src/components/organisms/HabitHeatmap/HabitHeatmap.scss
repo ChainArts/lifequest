@@ -7,6 +7,9 @@
     padding: 0;
 }
 
+.completed {
+    background-color: var(--purple-dark) !important;
+}
 .MuiDateCalendar-root {
     padding: 0 var(--gap) !important;
     margin: 0 auto !important;
@@ -20,7 +23,7 @@
     .MuiDayCalendar-weekContainer {
         display: grid !important;
         grid-template-columns: repeat(7, 1fr) !important;
-        padding: 0 1rem !important;
+        padding: 0 0.25rem !important;
 
         .MuiButtonBase-root {
             color: var(--text) !important;
@@ -28,10 +31,16 @@
         }
     }
 
+    .MuiBadge-badge {
+        transform: translate(3px, -4px) !important;
+        font-size: 0.5rem !important;
+    }
+
     .MuiDayCalendar-header {
         display: grid !important;
         grid-template-columns: repeat(7, 1fr) !important;
-        padding: 0 1rem !important;
+        padding: 0 0.25rem !important;
+
         border-bottom: 1px solid var(--progress-bg-round) !important;
         border-top: 1px solid var(--progress-bg-round) !important;
         span {
