@@ -12,17 +12,18 @@ const HabitGraph = ({ id }: { id: string }) => {
     const [open, setOpen] = useState(false);
     const [data, setData] = useState<{ date: string; data: number | null }[]>([]);
     const { fetchHabitLogData } = useHabits();
+    const [mode, setMode] = useState(14);
 
     useEffect(() => {
         const fetchData = async () => {
             if (!id) return;
-            const data = await fetchHabitLogData(id, 30);
+            const data = await fetchHabitLogData(id, mode);
             if (data) {
                 setData(data);
             }
         };
         fetchData();
-    }, []);
+    }, [mode]);
 
     const formatTick = (dateString: string) => {
         const dateObj = new Date(dateString);
@@ -60,6 +61,18 @@ const HabitGraph = ({ id }: { id: string }) => {
                 <button onClick={() => setOpen(true)}>show history</button>
             </div>
             <Card className="habit-graph__card">
+                <div className="graph-modes">
+                    <button className={`fst--card-title${mode === 14 ? " active" : ""}`} onClick={() => setMode(14)}>
+                        2 weeks
+                    </button>
+                    <button className={`fst--card-title${mode === 30 ? " active" : ""}`} onClick={() => setMode(30)}>
+                        30 days
+                    </button>
+
+                    <button className={`fst--card-title${mode === 90 ? " active" : ""}`} onClick={() => setMode(90)}>
+                        3 months
+                    </button>
+                </div>
                 <ResponsiveContainer width="100%" height={240}>
                     <AreaChart data={data} margin={{ top: 20, right: 4, left: 4, bottom: 0 }}>
                         <defs>

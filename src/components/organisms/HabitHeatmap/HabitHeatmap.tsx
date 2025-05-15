@@ -69,6 +69,7 @@ const HabitHeatmap = ({ id }: { id: string }) => {
                         }}
                         loading={isLoading}
                         disabled
+                        disableFuture={true}
                         renderLoading={() => <DayCalendarSkeleton />}
                         onMonthChange={(month: dayjs.Dayjs) => {
                             setStartDay(month.startOf("month").format("YYYY-MM-DD"));

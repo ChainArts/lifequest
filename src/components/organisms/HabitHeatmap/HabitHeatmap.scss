@@ -7,17 +7,22 @@
     padding: 0;
 }
 
-.completed {
-    background-color: var(--purple-dark) !important;
-}
 .MuiDateCalendar-root {
     padding: 0 var(--gap) !important;
     margin: 0 auto !important;
     width: 100% !important;
     max-width: 400px !important;
+    font-family: var(--font-family) !important;
 
     .MuiPickersCalendarHeader-root {
         color: var(--text) !important;
+        padding: 0 0.75rem !important;
+
+        .MuiPickersCalendarHeader-labelContainer .MuiPickersCalendarHeader-label {
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+            font-family: var(--font-family) !important;
+        }
     }
 
     .MuiDayCalendar-weekContainer {
@@ -36,6 +41,10 @@
         font-size: 0.5rem !important;
     }
 
+    .MuiPickersCalendarHeader-root {
+        margin-top: 0.75rem !important;
+    }
+
     .MuiDayCalendar-header {
         display: grid !important;
         grid-template-columns: repeat(7, 1fr) !important;
@@ -43,9 +52,10 @@
 
         border-bottom: 1px solid var(--progress-bg-round) !important;
         border-top: 1px solid var(--progress-bg-round) !important;
+
         span {
             color: var(--text-sec) !important;
-            padding-top: 0.125rem !important;
+            font-family: var(--font-family) !important;
         }
     }
 
@@ -56,7 +66,22 @@
     .MuiPickersArrowSwitcher-root {
         & svg {
             color: var(--text) !important;
-            fill: var(--text) !important;
         }
+
+        .Mui-disabled svg {
+            fill: var(--progress-bg-round) !important;
+        }
+    }
+
+    .MuiBadge-root .MuiButtonBase-root {
+        font-family: var(--font-family) !important;
+        margin: 1px 0 !important;
+        height: 2.125rem !important;
+        width: 2.125rem !important;
+    }
+
+    .completed {
+        background-color: var(--purple-light) !important;
+        background: linear-gradient(150deg, var(--purple-dark) -120%, transparent 200%) !important;
     }
 }
