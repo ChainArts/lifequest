@@ -1,12 +1,8 @@
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
-interface IslandProps {
-    position: [number, number, number];
-    scale: number;
-}
 
-const Island = (props: IslandProps) => {
+const Island = (props: any) => {
     const originalScene = useGLTF("/models/island.glb").scene;
     const clonedScene = originalScene.clone(true);
     clonedScene.scale.set(props.scale, props.scale, props.scale);

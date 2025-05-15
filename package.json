@@ -28,6 +28,7 @@
     "emoji-picker-react": "^4.12.2",
     "emoji-regex": "^10.4.0",
     "formik": "^2.4.6",
+    "gsap": "^3.13.0",
     "motion": "^12.7.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
