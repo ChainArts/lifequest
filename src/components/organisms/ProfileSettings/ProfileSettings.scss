@@ -1,0 +1,35 @@
+.profile__settings {
+    display: flex;
+    flex-direction: column;
+    padding-top: 1rem;
+
+    & > span {
+        margin-bottom: 1rem;
+        padding: 0 0.25rem;
+    }
+
+    .profile__settings_item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0.25rem;
+
+        &:not(:last-child) {
+            border-bottom: 1px solid var(--background-layer-sec);
+        }
+
+        &:last-child {
+            padding-bottom: 0.25rem;
+        }
+    }
+}
+
+.inverse {
+    display: flex;
+    padding: 1.25rem !important;
+    flex-direction: column-reverse !important;
+
+    & > span:first-child {
+        display: none;
+    }
+}
