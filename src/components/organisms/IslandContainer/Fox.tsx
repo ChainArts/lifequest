@@ -28,4 +28,5 @@ const Fox = (props: any) => {
 
 export default Fox;
 
-useGLTF.preload("/models/mobs/chicken_balloon.glb");
+useGLTF.preload("/models/mobs/fox.glb");
+useLoader.preload(TextureLoader, "/shadow.png");
