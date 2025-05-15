@@ -3,6 +3,11 @@
     grid-template-columns: 0.4fr 0.6fr;
     grid-gap: 0.5rem;
 
+    .linear-progress {
+        --progress-bg: var(--_card-color-light);
+        background: var(--text-invert);
+    }
+
     .habit-stats__icon {
         display: flex;
         flex-direction: column;
@@ -37,9 +42,4 @@
             align-items: center;
         }
     }
-}
-
-.linear-progress {
-    --progress-bg: var(--_card-color-light);
-    background: var(--text-invert);
 }
