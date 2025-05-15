@@ -9,8 +9,10 @@ import { useNavigate } from "react-router-dom";
 import FloatingObject from "../../../lib/FloatingObject";
 import IslandMenu from "../IslandMenu/IslandMenu";
 import { AnimatePresence } from "motion/react";
+import { useIsland } from "../../../lib/IslandContext";
 import Island from "./Island";
 import Chicken from "./Chicken";
+import Fox from "./Fox";
 
 const IslandContainer = ({ location }: { location: string }) => {
     const navigate = useNavigate();
@@ -20,17 +22,26 @@ const IslandContainer = ({ location }: { location: string }) => {
     const camRef = useRef<any>(null);
     const [dpr, setDpr] = useState(1);
 
-    const chickens = useMemo(() => {
-        const chickenArray = [];
-        for (let i = 0; i < 10; i++) {
-            chickenArray.push(
-                <FloatingObject key={i} amplitude={0.5} frequency={Math.random() * 2 + 0.5}>
-                    <Chicken key={i} position={[Math.random() * 15 - 3, Math.random() * 5, Math.random() * 15 - 8]} />
-                </FloatingObject>
-            );
-        }
-        return chickenArray;
-    }, []);
+    const { zones } = useIsland();
+
+    const animals = useMemo(() => {
+        return zones.flatMap((zone) =>
+            zone.slots.map((slot) => {
+                const pos: [number, number, number] = [slot.position.x, slot.position.y, slot.position.z];
+                // random rotation on Z axis only
+                const rot: [number, number, number] = [0, Math.random() * Math.PI * 2, 0];
+
+                if (slot.animal === "chicken") {
+                    return (
+                        <FloatingObject key={slot.id} amplitude={0.5} frequency={Math.random() * 2 + 0.5}>
+                            <Chicken position={pos} rotation={rot} />
+                        </FloatingObject>
+                    );
+                }
+                return <Fox key={slot.id} position={pos} rotation={rot} />;
+            })
+        );
+    }, [zones]);
 
     const handleIsActive = () => {
         navigate("/island");
@@ -60,7 +71,7 @@ const IslandContainer = ({ location }: { location: string }) => {
                 <PerspectiveCamera ref={camRef} makeDefault position={[40, 15, 0]} fov={50} />
                 <CameraLerp location={location} camRef={camRef} />
                 <ClampCamera controlsRef={controlsRef} minZ={minZ} maxZ={maxZ} />
-                {isActive && <MapControls ref={controlsRef} enableRotate={false} enableDamping dampingFactor={0.05} minDistance={15} maxDistance={50} zoomSpeed={3} screenSpacePanning={false} />}
+                {isActive && <MapControls ref={controlsRef}  enableDamping dampingFactor={0.05} minDistance={15} maxDistance={50} zoomSpeed={3} screenSpacePanning={false} />}
                 <EffectComposer>
                     <SMAA />
                     <Vignette eskil={false} offset={0.1} darkness={0.5} />
@@ -76,7 +87,8 @@ const IslandContainer = ({ location }: { location: string }) => {
                 <pointLight position={[-30, 30, 30]} decay={0} intensity={6} color={"#ffeebb"} shadow-mapSize-width={2048} shadow-mapSize-height={2048} castShadow />
                 <Island position={[0, 0, 0]} scale={20} />
                 <Island position={[-10, 5, -10]} scale={20} />
-                {chickens.map((chicken) => chicken)}
+                <Island position={[-10, 2, 12]} scale={20} />
+                {animals}
             </Canvas>
             <AnimatePresence mode="wait">{isActive && <IslandMenu />}</AnimatePresence>
         </section>

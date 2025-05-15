@@ -13,6 +13,7 @@ import { UserProvider } from "./lib/UserContext";
 import UserBar from "./components/organisms/UserBar/UserBar";
 import { PopOverProvider } from "./lib/PopOverContext";
 import { ToastContainer, cssTransition } from "react-toastify";
+import { IslandProvider } from "./lib/IslandContext";
 
 const ToastTransition = cssTransition({
     enter: "Toastify_fadeIn",
@@ -27,7 +28,9 @@ function App() {
                 <ToastContainer position="top-center" autoClose={5000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" transition={ToastTransition} />
                 <UserBar />
                 <PopOverProvider>
-                    <IslandContainer location={location.pathname} />
+                    <IslandProvider>
+                        <IslandContainer location={location.pathname} />
+                    </IslandProvider>
                     <AnimatePresence mode="wait">
                         <Routes location={location} key={location.pathname}>
                             <Route path="/" element={<Home />} />
