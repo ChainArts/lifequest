@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { PiPawPrintFill, PiShoppingCartFill } from "react-icons/pi";
-import { HiX, HiChevronLeft, HiChevronRight } from "react-icons/hi";
+import { HiX, HiChevronLeft, HiChevronRight} from "react-icons/hi";
+import { FaCheck } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
 import "./IslandMenu.scss";
 import chickenThumbnail from "/src/assets/thumbnails/chicken.png";
@@ -102,23 +103,33 @@ const IslandMenu = () => {
                 {openPlaceMenu && (
                     <motion.div variants={islandMenuOverlayVariants} initial="initial" animate="animate" exit="exit" className="island-menu__place-menu">
                         <div className="island-menu__header">
-                            <HiChevronLeft className="island-menu__nav" onClick={prevZone} />
-                            <h2>{zone.name}</h2>
-                            <HiChevronRight className="island-menu__nav" onClick={nextZone} />
+                            <div className="island-menu__counter">
+                                <span className="island-menu__counter--placed">{placed.length}</span>
+                                <span className="island-menu__counter--separator">/</span>
+                                <span className="island-menu__counter--total-free">{placed.length + available.length}</span>
+                            </div>
+                            <div className="island-menu__title">
+                                <div className="island-menu__nav" onClick={prevZone} >
+                                    <HiChevronLeft />
+                                </div>
+                                <div className="island-menu__title-text">
+                                    <span>{zone.name}</span>
+                                </div>
+                                <div className="island-menu__nav" onClick={nextZone}>
+                                    <HiChevronRight />
+                                </div>
+                            </div>
                             <HiX className="island-menu__close" onClick={handleCloseMenu} />
+                            
                         </div>
-
-                        <h3>Currently on the island</h3>
                         <motion.ul className="island-menu__list" variants={itemListVariants}>
                             {placed.map((slot) => (
                                 <motion.li key={slot.id} variants={itemVariants} className="island-menu__item" onClick={() => toggleSlotEnabled(zone.id, slot.id)}>
                                     <img src={animalThumbnails[slot.animal]} alt={slot.animal} />
+                                    <FaCheck className="island-menu__tick" />
                                 </motion.li>
+                                
                             ))}
-                        </motion.ul>
-
-                        <h3>Available</h3>
-                        <motion.ul className="island-menu__list" variants={itemListVariants}>
                             {available.map((slot) => (
                                 <motion.li key={slot.id} variants={itemVariants} className="island-menu__item" onClick={() => toggleSlotEnabled(zone.id, slot.id)}>
                                     <img src={animalThumbnails[slot.animal]} alt={slot.animal} />
