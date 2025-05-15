@@ -14,7 +14,7 @@ const HabitGraph = ({ id }: { id: string }) => {
     const { fetchHabitLogData } = useHabits();
     const [mode, setMode] = useState(14);
     const containerRef = useRef<HTMLDivElement>(null);
-    const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 });
+    const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 100 });
 
     useLayoutEffect(() => {
         const container = containerRef.current;
