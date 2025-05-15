@@ -1,32 +1,37 @@
-import { useGLTF } from "@react-three/drei";
-import { useMemo } from "react";
-import { TextureLoader } from "three";
+import { useRef } from "react";
+import { Clone, useGLTF, useAnimations } from "@react-three/drei";
+import * as THREE from "three";
 import { useLoader } from "@react-three/fiber";
 
-const Fox = (props: any) => {
-    const originalScene = useGLTF("/models/mobs/fox.glb").scene;
-    const clonedScene = useMemo(() => originalScene.clone(true), [originalScene]);
+export default function Fox(props: any) {
+  const cloneRef = useRef<THREE.Group>(null);
+  const { scene, animations } = useGLTF("/models/mobs/fox_rig.glb");
+  const { actions } = useAnimations(animations, cloneRef);
+  const shadowTexture = useLoader(THREE.TextureLoader, "/shadow.png");
 
-    // Load the shadow texture
-    const shadowTexture = useLoader(TextureLoader, "/shadow.png");
+  // click handler to wag exactly twice
+  const handleClick = () => {
+    const wag = actions["Wag"];
+    if (wag) {
+      wag.reset();
+      wag.setLoop(THREE.LoopRepeat, 2);
+      wag.play();
+    }
+  };
 
-    clonedScene.scale.set(0.3, 0.3, 0.3);
+  return (
+    <group {...props} dispose={null} onClick={handleClick}>
+      {/* deep-clone so each instance has its own skeleton + bones */}
+      <Clone object={scene} ref={cloneRef} />
 
-    return (
-        <group {...props}>
-            {/* Fox model */}
-            <primitive object={clonedScene} />
+      {/* optional drop‐shadow */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.1, 0]}>
+        <planeGeometry args={[3, 6]} />
+        <meshBasicMaterial map={shadowTexture} transparent opacity={0.75} />
+      </mesh>
+    </group>
+  );
+}
 
-            {/* Fake shadow */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
-                <planeGeometry args={[1.5, 2]} />
-                <meshBasicMaterial map={shadowTexture} transparent={true} opacity={0.75} />
-            </mesh>
-        </group>
-    );
-};
-
-export default Fox;
-
-useGLTF.preload("/models/mobs/fox.glb");
-useLoader.preload(TextureLoader, "/shadow.png");
+useGLTF.preload("/models/mobs/fox_rig.glb");
+useLoader.preload(THREE.TextureLoader, "/shadow.png");

@@ -38,7 +38,7 @@ const IslandContainer = ({ location }: { location: string }) => {
                         </FloatingObject>
                     );
                 }
-                return <Fox key={slot.id} position={pos} rotation={rot} />;
+                return <Fox key={slot.id} position={pos} rotation={rot} scale={[0.3, 0.3, 0.3]} />;
             })
         );
     }, [zones]);
