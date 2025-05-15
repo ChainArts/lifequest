@@ -3,7 +3,7 @@ import Card from "../../molecules/Card/Card";
 import "./HabitGraph.scss";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import { format } from "date-fns";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useHabits } from "../../../lib/HabitsContext";
 import { Sheet } from "react-modal-sheet";
 import { MdOutlineAutoGraph } from "react-icons/md";
@@ -13,6 +13,20 @@ const HabitGraph = ({ id }: { id: string }) => {
     const [data, setData] = useState<{ date: string; data: number | null }[]>([]);
     const { fetchHabitLogData } = useHabits();
     const [mode, setMode] = useState(14);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 });
+
+    useLayoutEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+        const btn = container.querySelector("button.active");
+        if (btn) {
+            setSliderStyle({
+                left: btn.offsetLeft,
+                width: btn.offsetWidth,
+            });
+        }
+    }, [mode]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -61,15 +75,16 @@ const HabitGraph = ({ id }: { id: string }) => {
                 <button onClick={() => setOpen(true)}>show history</button>
             </div>
             <Card className="habit-graph__card">
-                <div className="graph-modes">
-                    <button className={`fst--card-title${mode === 14 ? " active" : ""}`} onClick={() => setMode(14)}>
+                <div ref={containerRef} className="graph-modes">
+                    <div className="slider" style={sliderStyle} />
+
+                    <button className={mode === 14 ? "active" : ""} onClick={() => setMode(14)}>
                         2 weeks
                     </button>
-                    <button className={`fst--card-title${mode === 30 ? " active" : ""}`} onClick={() => setMode(30)}>
+                    <button className={mode === 30 ? "active" : ""} onClick={() => setMode(30)}>
                         30 days
                     </button>
-
-                    <button className={`fst--card-title${mode === 90 ? " active" : ""}`} onClick={() => setMode(90)}>
+                    <button className={mode === 90 ? "active" : ""} onClick={() => setMode(90)}>
                         3 months
                     </button>
                 </div>

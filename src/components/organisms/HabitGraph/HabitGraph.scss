@@ -22,6 +22,7 @@
 }
 
 .graph-modes {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -30,14 +31,30 @@
     background-color: var(--background-layer-sec);
     overflow: hidden;
 
-    button {
-        padding: 0.5rem 1rem;
-        background-color: transparent;
-        transition: background-color 0.2s ease-in;
+    .slider {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        background-color: var(--purple-dark);
+        border-radius: inherit;
+        transition: left 0.3s ease, width 0.3s ease;
+        z-index: 0;
     }
 
-    .active {
-        background-color: var(--purple-dark);
-        color: var(--text-invert);
+    button {
+        position: relative;
+        z-index: 1;
+        padding: 0.5rem 1rem;
+        background-color: transparent;
+        color: var(--text);
+        border: none;
+        min-width: 100px;
+        cursor: pointer;
+        transition: color 0.3s ease;
+
+        &.active {
+            color: var(--text-invert);
+        }
     }
 }
