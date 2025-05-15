@@ -1,7 +1,7 @@
 import { Canvas } from "@react-three/fiber";
 import { Environment, MapControls, PerformanceMonitor, PerspectiveCamera } from "@react-three/drei";
 import "./IslandContainer.scss";
-import { EffectComposer, SMAA, Vignette } from "@react-three/postprocessing";
+import { EffectComposer, SMAA, Vignette, HueSaturation } from "@react-three/postprocessing";
 import CameraLerp from "./CameraLerp";
 import ClampCamera from "./ClampCamera";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -58,6 +58,7 @@ const IslandContainer = ({ location }: { location: string }) => {
                 <EffectComposer>
                     <SMAA />
                     <Vignette eskil={false} offset={0.1} darkness={0.5} />
+                    <HueSaturation saturation={0.1} />
                 </EffectComposer>
                 <PerformanceMonitor
                     onChange={({ factor }) => {
