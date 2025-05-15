@@ -5,8 +5,8 @@ import Card from "../../molecules/Card/Card";
 import { HabitCardProps } from "../../molecules/HabitCard/HabitCard";
 import "./HabitStats.scss";
 
-const HabitStats = ({ icon, habit_xp, title, color, current_streak, highest_streak }: HabitCardProps) => {
-    const colorLight = color + "AA";
+const HabitStats = ({ icon, habit_xp, title, color, current_streak }: HabitCardProps) => {
+    const colorLight = color + "88";
     const levelData = calculateLevel(habit_xp);
     return (
         <div className="habit-stats">
