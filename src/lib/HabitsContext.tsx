@@ -4,6 +4,10 @@ import { invoke } from "@tauri-apps/api/core";
 import { HabitCardProps } from "../components/molecules/HabitCard/HabitCard";
 import { calulateStreakXP } from "./XP";
 export type HabitLogData = Array<{ date: string; data: number }>;
+export type HabitLogCompleted = Array<{
+    date: string;
+    completed: boolean;
+}>;
 
 export type ActiveHabitProps = Omit<HabitCardProps, "id"> & {
     id: string;
@@ -22,6 +26,7 @@ type HabitsContextType = {
     habitCount: number;
 
     fetchHabitLogData: (id: string, days: number) => Promise<HabitLogData | null>;
+    getHabitCompleted: (habitLogId: string, startDay: string, endDay: string) => Promise<HabitLogCompleted | null>;
     // today’s slice
     todayHabits: ActiveHabitProps[];
     dailyXp: number;
@@ -62,6 +67,16 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
             return data;
         } catch (e) {
             console.error("Failed to fetch habit log data", e);
+            return null;
+        }
+    };
+
+    const getHabitCompleted = async (habitLogId: string, startDay: string, endDay: string) => {
+        try {
+            const completed = (await invoke("get_habit_log_completed_range", { id: habitLogId, startDay, endDay })) as HabitLogCompleted;
+            return completed;
+        } catch (e) {
+            console.error("Failed to fetch habit completed", e);
             return null;
         }
     };
@@ -167,6 +182,7 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
                 refreshHabitById,
                 habitCount,
                 fetchHabitLogData,
+                getHabitCompleted,
             }}
         >
             {children}

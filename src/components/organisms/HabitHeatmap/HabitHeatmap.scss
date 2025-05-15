@@ -1,4 +1,62 @@
-.habit-heatmap span{
+.habit-heatmap span {
     display: flex;
     justify-content: center;
+}
+
+.habit-calendar__card {
+    padding: 0;
+}
+
+.completed {
+    background-color: var(--purple-dark) !important;
+}
+.MuiDateCalendar-root {
+    padding: 0 var(--gap) !important;
+    margin: 0 auto !important;
+    width: 100% !important;
+    max-width: 400px !important;
+
+    .MuiPickersCalendarHeader-root {
+        color: var(--text) !important;
+    }
+
+    .MuiDayCalendar-weekContainer {
+        display: grid !important;
+        grid-template-columns: repeat(7, 1fr) !important;
+        padding: 0 0.25rem !important;
+
+        .MuiButtonBase-root {
+            color: var(--text) !important;
+            padding-top: 0.125rem !important;
+        }
+    }
+
+    .MuiBadge-badge {
+        transform: translate(3px, -4px) !important;
+        font-size: 0.5rem !important;
+    }
+
+    .MuiDayCalendar-header {
+        display: grid !important;
+        grid-template-columns: repeat(7, 1fr) !important;
+        padding: 0 0.25rem !important;
+
+        border-bottom: 1px solid var(--progress-bg-round) !important;
+        border-top: 1px solid var(--progress-bg-round) !important;
+        span {
+            color: var(--text-sec) !important;
+            padding-top: 0.125rem !important;
+        }
+    }
+
+    .MuiPickersDay-today {
+        border: 1px solid var(--text-sec) !important;
+    }
+
+    .MuiPickersArrowSwitcher-root {
+        & svg {
+            color: var(--text) !important;
+            fill: var(--text) !important;
+        }
+    }
 }

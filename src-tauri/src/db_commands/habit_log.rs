@@ -238,3 +238,25 @@ pub async fn get_habit_log_data(id: String, days: Number) -> surrealdb::Result<s
     let entries: Vec<serde_json::Value> = res.take(0)?;
     Ok(serde_json::json!(entries))
 }
+
+#[tauri::command]
+pub async fn get_habit_log_completed_range(
+    id: String,
+    start_day: String,
+    end_day: String,
+) -> surrealdb::Result<serde_json::Value> {
+    let mut res = LOCAL_DB
+        .query(
+            "SELECT date, completed 
+             FROM habit_log 
+             WHERE date >= $start_day AND date <= $end_day AND habit_id = $habit_id 
+             ORDER BY date ASC",
+        )
+        .bind(("start_day", start_day))
+        .bind(("end_day", end_day))
+        .bind(("habit_id", format!("habit:{}", id)))
+        .await?;
+
+    let entries: Vec<serde_json::Value> = res.take(0)?;
+    Ok(serde_json::json!(entries))
+}
