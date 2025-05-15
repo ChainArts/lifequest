@@ -1,28 +1,39 @@
-import { useRef, useEffect } from "react";
-import { Clone, useGLTF, useAnimations } from "@react-three/drei";
+import { useRef, useEffect, useMemo } from "react";
+import { useGLTF, useAnimations, useTexture } from "@react-three/drei";
+import { SkeletonUtils } from "three-stdlib";
 import * as THREE from "three";
-import { useLoader } from "@react-three/fiber";
 import { gsap } from "gsap";
 
 export default function Duck(props: any) {
     const cloneRef = useRef<THREE.Group>(null);
     const { scene, animations } = useGLTF("/models/mobs/duck.glb");
-    const { actions } = useAnimations(animations, cloneRef);
-    const shadowTexture = useLoader(THREE.TextureLoader, "/shadow.png");
 
-    // your circle parameters
+    // 1. Deep-clone the scene (so each duck has its own Skeleton & bind matrices)
+    //    and bake any scale BEFORE we ever bind animations.
+    const duckScene = useMemo(() => {
+        const clone = SkeletonUtils.clone(scene);
+        // if you ever pass a scale prop, apply it here:
+        if (props.scale) {
+            clone.scale.set(props.scale[0], props.scale[1], props.scale[2]);
+        }
+        return clone;
+    }, [scene, props.scale]);
+
+    // 2. Hook up animations to *that* clone
+    const { actions } = useAnimations(animations, cloneRef);
+
+    // your circle params
     const radius = 0.5;
     const loops = 2;
     const circleDur = 4;
     const outDur = 0.5;
 
-    // store the duck's base “forward” rotation
+    // capture the duck's “forward” facing so we can restore it
     const initialRot = useRef(0);
     useEffect(() => {
         const r = cloneRef.current!;
-        // capture whatever it started looking at
         initialRot.current = r.rotation.y;
-        // immediately place it at (radius, 0) on XZ and face tangent
+        // put it on the rim, facing tangent
         r.position.set(radius, 0, 0);
         r.rotation.y = initialRot.current + Math.PI / 2;
     }, [radius]);
@@ -30,26 +41,19 @@ export default function Duck(props: any) {
     const handleClick = () => {
         const duck = cloneRef.current!;
         const walk = actions["walkcycle_1"]!;
+        walk.reset().setLoop(THREE.LoopRepeat, Infinity).play();
 
-        // spin the walk loop _forever_
-        walk.reset();
-        walk.setLoop(THREE.LoopRepeat, Infinity);
-        walk.play();
-
-        // dummy angle to drive the loop
+        // animate it around a circle with GSAP
         const angle = { value: 0 };
-
         const tl = gsap.timeline({
             onComplete: () => {
-                // stop the walk
                 walk.stop();
-                // snap back (in case of any drift)
                 duck.position.set(radius, 0, 0);
                 duck.rotation.y = initialRot.current + Math.PI / 2;
             },
         });
 
-        // 1) Circle loops
+        // 1) go around the circle
         tl.to(angle, {
             value: Math.PI * 2 * loops,
             duration: circleDur,
@@ -58,35 +62,37 @@ export default function Duck(props: any) {
                 const θ = angle.value;
                 duck.position.x = Math.cos(θ) * radius;
                 duck.position.z = Math.sin(θ) * radius;
-                // always face tangent: heading = θ + π/2
                 duck.rotation.y = initialRot.current - θ + Math.PI;
             },
         })
-
-            // 2) Lerp OUT back to the starting rim point
+            // 2) lerp back out to the start point
             .to(duck.position, { x: radius, z: 0, duration: outDur, ease: "power1.inOut" }, ">-0.1")
             .to(
                 duck.rotation,
                 {
+                    y: () => initialRot.current + Math.PI / 2,
                     duration: outDur,
                     ease: "power1.inOut",
-                    y: () => initialRot.current + Math.PI / 2,
                 },
                 "<"
             );
     };
 
+    const shadowTexture = useTexture("/shadow.png");
+
     return (
         <group {...props} dispose={null} onClick={handleClick}>
-            <Clone object={scene} ref={cloneRef}>
+            {/* our deep-cloned skinned model */}
+            <primitive object={duckScene} ref={cloneRef}>
+                {/* same shadow plane you had before */}
                 <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
                     <planeGeometry args={[1, 1]} />
                     <meshBasicMaterial map={shadowTexture} transparent opacity={0.75} />
                 </mesh>
-            </Clone>
+            </primitive>
         </group>
     );
 }
 
 useGLTF.preload("/models/mobs/duck.glb");
-useLoader.preload(THREE.TextureLoader, "/shadow.png");
+useTexture.preload("/shadow.png");

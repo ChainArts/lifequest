@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { PiPawPrintFill, PiShoppingCartFill } from "react-icons/pi";
-import { HiX } from "react-icons/hi";
+import { HiX, HiChevronLeft, HiChevronRight } from "react-icons/hi";
 import { AnimatePresence, motion } from "framer-motion";
 import "./IslandMenu.scss";
-import { useState } from "react";
 import chickenThumbnail from "/src/assets/thumbnails/chicken.png";
+import foxThumbnail from "/src/assets/thumbnails/fox.png";
+import duckThumbnail from "/src/assets/thumbnails/duck.png";
+import { useIsland } from "../../../lib/IslandContext";
 
 const containerVariants = {
     initial: {},
@@ -49,28 +52,38 @@ const IslandMenu = () => {
     const [openPlaceMenu, setOpenPlaceMenu] = useState(false);
     const [openShopMenu, setOpenShopMenu] = useState(false);
 
+    // NEW: track which zone (0,1,2) is active
+    const [currentZoneIndex, setCurrentZoneIndex] = useState(0);
+
+    const { zones, toggleSlotEnabled } = useIsland();
+    const zoneCount = zones.length;
+    const zone = zones[currentZoneIndex] || { id: "", name: "", slots: [] };
+
+    const animalThumbnails = {
+        chicken: chickenThumbnail,
+        fox: foxThumbnail,
+        duck: duckThumbnail,
+    };
+
+    // only flatten slots of the active zone:
+    const placed = zone.slots.filter((s) => s.enabled);
+    const available = zone.slots.filter((s) => !s.enabled);
+
+    const prevZone = () => setCurrentZoneIndex((i) => (i - 1 + zoneCount) % zoneCount);
+    const nextZone = () => setCurrentZoneIndex((i) => (i + 1) % zoneCount);
+
     const handlePlaceMenu = () => {
-        setOpenPlaceMenu(!openPlaceMenu);
+        setOpenPlaceMenu((v) => !v);
         setOpenShopMenu(false);
     };
     const handleShopMenu = () => {
-        setOpenShopMenu(!openShopMenu);
+        setOpenShopMenu((v) => !v);
         setOpenPlaceMenu(false);
     };
-
     const handleCloseMenu = () => {
         setOpenPlaceMenu(false);
         setOpenShopMenu(false);
     };
-
-    const placeItems = [
-        {
-            id: "chicken",
-            name: "Chicken",
-            thumbnail: chickenThumbnail,
-        }
-    ];
-
     return (
         <motion.div className="island-menu">
             <AnimatePresence mode="wait">
@@ -88,34 +101,27 @@ const IslandMenu = () => {
             <AnimatePresence mode="wait">
                 {openPlaceMenu && (
                     <motion.div variants={islandMenuOverlayVariants} initial="initial" animate="animate" exit="exit" className="island-menu__place-menu">
-                        <h2>Place</h2>
-                        <span className="island-menu__close" onClick={handleCloseMenu}>
-                            <HiX />
-                        </span>
+                        <div className="island-menu__header">
+                            <HiChevronLeft className="island-menu__nav" onClick={prevZone} />
+                            <h2>{zone.name}</h2>
+                            <HiChevronRight className="island-menu__nav" onClick={nextZone} />
+                            <HiX className="island-menu__close" onClick={handleCloseMenu} />
+                        </div>
+
                         <h3>Currently on the island</h3>
                         <motion.ul className="island-menu__list" variants={itemListVariants}>
-                            {placeItems.map((item) => (
-                                <motion.li variants={itemVariants} key={item.id} className="island-menu__item">
-                                    <img src={item.thumbnail} alt={item.name} />
+                            {placed.map((slot) => (
+                                <motion.li key={slot.id} variants={itemVariants} className="island-menu__item" onClick={() => toggleSlotEnabled(zone.id, slot.id)}>
+                                    <img src={animalThumbnails[slot.animal]} alt={slot.animal} />
                                 </motion.li>
                             ))}
                         </motion.ul>
+
                         <h3>Available</h3>
                         <motion.ul className="island-menu__list" variants={itemListVariants}>
-                            {/* Similar to above but grouped with a counter for the same item */}
-                            {Object.values(
-                                placeItems.reduce((acc, item) => {
-                                    if (!acc[item.id]) {
-                                        acc[item.id] = { ...item, count: 1 };
-                                    } else {
-                                        acc[item.id].count += 1;
-                                    }
-                                    return acc;
-                                }, {} as Record<string, { id: string; name: string; thumbnail: string; count: number }>)
-                            ).map((groupedItem) => (
-                                <motion.li variants={itemVariants} key={groupedItem.id} className="island-menu__item">
-                                    <img src={groupedItem.thumbnail} alt={groupedItem.name} />
-                                    {groupedItem.count > 1 && <span className="item-counter">{groupedItem.count}</span>}
+                            {available.map((slot) => (
+                                <motion.li key={slot.id} variants={itemVariants} className="island-menu__item" onClick={() => toggleSlotEnabled(zone.id, slot.id)}>
+                                    <img src={animalThumbnails[slot.animal]} alt={slot.animal} />
                                 </motion.li>
                             ))}
                         </motion.ul>

@@ -1,4 +1,4 @@
-import { createContext, useContext, ReactNode } from "react";
+import { createContext, useContext, ReactNode, useState } from "react";
 
 export type AnimalType = "chicken" | "fox" | "duck";
 
@@ -17,9 +17,10 @@ export interface Zone {
 
 export interface IslandContextType {
     zones: Zone[];
+    toggleSlotEnabled: (zoneId: string, slotId: string) => void;
 }
 
-const IslandContext = createContext<IslandContextType>({ zones: [] });
+const IslandContext = createContext<IslandContextType>({ zones: [], toggleSlotEnabled: () => {} });
 
 const predefinedZones: Zone[] = [
     {
@@ -47,7 +48,6 @@ const predefinedZones: Zone[] = [
             { id: "slot-2-5", position: { x: -10.56, y: 3.96, z: -6.44 }, animal: "fox", enabled: true },
             { id: "slot-2-6", position: { x: -7.1, y: 3.47, z: -7.7 }, animal: "duck", enabled: true },
             { id: "slot-2-7", position: { x: -6.1, y: 3.47, z: -10.14 }, animal: "duck", enabled: true },
-
         ],
     },
 
@@ -67,7 +67,22 @@ const predefinedZones: Zone[] = [
 ];
 
 export const IslandProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    return <IslandContext.Provider value={{ zones: predefinedZones }}>{children}</IslandContext.Provider>;
+    const [zones, setZones] = useState<Zone[]>(predefinedZones);
+
+    const toggleSlotEnabled = (zoneId: string, slotId: string) => {
+        setZones((z) =>
+            z.map((zone) =>
+                zone.id !== zoneId
+                    ? zone
+                    : {
+                          ...zone,
+                          slots: zone.slots.map((s) => (s.id === slotId ? { ...s, enabled: !s.enabled } : s)),
+                      }
+            )
+        );
+    };
+
+    return <IslandContext.Provider value={{ zones, toggleSlotEnabled }}>{children}</IslandContext.Provider>;
 };
 
 export const useIsland = (): IslandContextType => {

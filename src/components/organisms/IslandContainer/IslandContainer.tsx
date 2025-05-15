@@ -6,14 +6,11 @@ import CameraLerp from "./CameraLerp";
 import ClampCamera from "./ClampCamera";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import FloatingObject from "../../../lib/FloatingObject";
 import IslandMenu from "../IslandMenu/IslandMenu";
 import { AnimatePresence } from "motion/react";
 import { useIsland } from "../../../lib/IslandContext";
 import Island from "./Island";
-import Chicken from "./Chicken";
-import Fox from "./Fox";
-import Duck from "./Duck";
+import Animal from "./Animal";
 
 const IslandContainer = ({ location }: { location: string }) => {
     const navigate = useNavigate();
@@ -26,32 +23,7 @@ const IslandContainer = ({ location }: { location: string }) => {
 
     const { zones } = useIsland();
 
-    const animals = useMemo(() => {
-        return zones.flatMap((zone) =>
-            zone.slots.map((slot) => {
-                const pos: [number, number, number] = [slot.position.x, slot.position.y, slot.position.z];
-                // random rotation on Z axis only
-                const rot: [number, number, number] = [0, Math.random() * Math.PI * 2, 0];
-
-                if (slot.enabled) {
-                    if (slot.animal === "chicken") {
-                        return (
-                            <FloatingObject key={slot.id} amplitude={0.5} frequency={Math.random() * 2 + 0.5}>
-                                <Chicken position={pos} rotation={rot} />
-                            </FloatingObject>
-                        );
-                    }
-                    else if (slot.animal === "duck") {
-                        return (
-                            <Duck key={slot.id} position={pos} rotation={rot} />
-                        );
-                    }
-                return <Fox key={slot.id} position={pos} rotation={rot} scale={[0.3, 0.3, 0.3]} />
-            }
-            
-            })
-        );
-    }, [zones]);
+    const animals = useMemo(() => zones.flatMap((zone) => zone.slots.map((slot) => <Animal key={slot.id} id={slot.id} type={slot.animal} position={[slot.position.x, slot.position.y, slot.position.z]} enabled={slot.enabled} />)), [zones]);
 
     const handleIsActive = () => {
         navigate("/island");
@@ -80,9 +52,9 @@ const IslandContainer = ({ location }: { location: string }) => {
             >
                 {/* <Stats /> */}
                 <PerspectiveCamera ref={camRef} makeDefault position={[-20, -20, -80]} fov={50} />
-                <CameraLerp location={location} camRef={camRef} lerpSpeed={lerpSpeed}/>
+                <CameraLerp location={location} camRef={camRef} lerpSpeed={lerpSpeed} />
                 <ClampCamera controlsRef={controlsRef} minZ={minZ} maxZ={maxZ} />
-                {isActive && <MapControls ref={controlsRef}  enableDamping dampingFactor={0.05} minDistance={15} maxDistance={50} zoomSpeed={3} screenSpacePanning={false} />}
+                {isActive && <MapControls ref={controlsRef} enableDamping dampingFactor={0.05} minDistance={15} maxDistance={50} zoomSpeed={3} screenSpacePanning={false} />}
                 <EffectComposer>
                     <SMAA />
                     <Vignette eskil={false} offset={0.1} darkness={0.5} />
