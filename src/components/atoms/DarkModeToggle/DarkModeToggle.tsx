@@ -1,5 +1,5 @@
 // DarkModeToggle.jsx
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { ThemeContext } from "../../../lib/ThemeContext";
 import "./DarkModeToggle.scss";
 
