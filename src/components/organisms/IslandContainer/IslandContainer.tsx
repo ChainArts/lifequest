@@ -1,64 +1,16 @@
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, MapControls, PerformanceMonitor, PerspectiveCamera, useGLTF } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+import { Environment, MapControls, PerformanceMonitor, PerspectiveCamera } from "@react-three/drei";
 import "./IslandContainer.scss";
-import { EffectComposer, SMAA, Vignette } from "@react-three/postprocessing";
-import * as THREE from "three";
+import { EffectComposer, SMAA, Vignette, HueSaturation } from "@react-three/postprocessing";
+import CameraLerp from "./CameraLerp";
+import ClampCamera from "./ClampCamera";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import FloatingObject from "../../../lib/FloatingObject";
 import IslandMenu from "../IslandMenu/IslandMenu";
 import { AnimatePresence } from "motion/react";
-
-interface IslandProps {
-    position: [number, number, number];
-    scale: number;
-}
-
-const Island = (props: IslandProps) => {
-    const { scene } = useGLTF("/models/island.glb");
-    scene.scale.set(props.scale, props.scale, props.scale);
-    // add a shadow to the island
-    scene.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-            child.receiveShadow = true;
-            child.castShadow = true;
-        }
-    });
-    return <primitive object={scene} {...props} />;
-};
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Chicken = (props: any) => {
-    const originalScene = useGLTF("/models/mobs/chicken_balloon.glb").scene;
-    const clonedScene = useMemo(() => originalScene.clone(true), [originalScene]);
-
-    clonedScene.scale.set(0.3, 0.3, 0.3);
-    return <primitive object={clonedScene} {...props} />;
-};
-
-const ClampCamera = ({ controlsRef, minZ, maxZ }: { controlsRef: React.RefObject<any>; minZ: number; maxZ: number }) => {
-    useFrame(() => {
-        if (controlsRef.current) {
-            const camera = controlsRef.current.object;
-            camera.position.z = Math.max(minZ, Math.min(maxZ, camera.position.z));
-            controlsRef.current.target.z = Math.max(minZ, Math.min(maxZ, controlsRef.current.target.z));
-            controlsRef.current.update();
-        }
-    });
-    return null;
-};
-
-const CameraLerp = ({ location, camRef }: { location: string; camRef: React.RefObject<any> }) => {
-    // Define the target position once
-    const targetPosition = new THREE.Vector3(40, 10, 0);
-    useFrame(() => {
-        if (camRef.current && location !== "/island") {
-            // Lerp toward the targetPosition with an interpolation factor (e.g., 0.1)
-            camRef.current.position.lerp(targetPosition, 0.1);
-        }
-    });
-    return null;
-};
+import { useIsland } from "../../../lib/IslandContext";
+import Island from "./Island";
+import Animal from "./Animal";
 
 const IslandContainer = ({ location }: { location: string }) => {
     const navigate = useNavigate();
@@ -67,22 +19,15 @@ const IslandContainer = ({ location }: { location: string }) => {
     const [isActive, setIsActive] = useState(location === "/island");
     const camRef = useRef<any>(null);
     const [dpr, setDpr] = useState(1);
+    const [lerpSpeed, setLerpSpeed] = useState(0.005);
 
-    const chickens = useMemo(() => {
-        const chickenArray = [];
-        for (let i = 0; i < 10; i++) {
-            chickenArray.push(
-                <FloatingObject key={i} amplitude={0.5} frequency={Math.random() * 2 + 0.5}>
-                    <Chicken key={i} position={[Math.random() * 15 - 3, Math.random() * 5, Math.random() * 15 - 8]} />
-                </FloatingObject>
-            );
-        }
-        return chickenArray;
-    }, []);
+    const { zones } = useIsland();
+
+    const animals = useMemo(() => zones.flatMap((zone) => zone.slots.map((slot) => <Animal key={slot.id} id={slot.id} type={slot.animal} position={[slot.position.x, slot.position.y, slot.position.z]} enabled={slot.enabled} />)), [zones]);
 
     const handleIsActive = () => {
-        setIsActive(!isActive);
         navigate("/island");
+        setLerpSpeed(0.01);
     };
 
     useEffect(() => {
@@ -90,8 +35,8 @@ const IslandContainer = ({ location }: { location: string }) => {
     }, [location]);
 
     // Define your boundaries
-    const minZ = -10,
-        maxZ = 10;
+    const minZ = -50,
+        maxZ = 50;
 
     return (
         <section className={`island-container ${isActive ? "island-container--active" : ""}`} onClick={!isActive ? () => handleIsActive() : undefined}>
@@ -106,12 +51,14 @@ const IslandContainer = ({ location }: { location: string }) => {
                 }}
             >
                 {/* <Stats /> */}
-                <PerspectiveCamera ref={camRef} makeDefault position={[40, 10, 0]} fov={50} />
+                <PerspectiveCamera ref={camRef} makeDefault position={[-20, -20, -80]} fov={50} />
+                <CameraLerp location={location} camRef={camRef} lerpSpeed={lerpSpeed} />
                 <ClampCamera controlsRef={controlsRef} minZ={minZ} maxZ={maxZ} />
-                <MapControls ref={controlsRef} enabled={isActive} enableRotate={false} enableDamping dampingFactor={0.05} minDistance={15} maxDistance={50} zoomSpeed={3} />
+                {isActive && <MapControls ref={controlsRef} enableDamping dampingFactor={0.05} minDistance={15} maxDistance={50} zoomSpeed={3} screenSpacePanning={false} />}
                 <EffectComposer>
                     <SMAA />
                     <Vignette eskil={false} offset={0.1} darkness={0.5} />
+                    <HueSaturation saturation={0.1} />
                 </EffectComposer>
                 <PerformanceMonitor
                     onChange={({ factor }) => {
@@ -121,10 +68,11 @@ const IslandContainer = ({ location }: { location: string }) => {
                     onDecline={() => degrade(true)}
                 />
                 <Environment near={0.01} far={300} frames={degraded ? 1 : Infinity} resolution={512} backgroundRotation={[0, 0, 0]} files="/models/skybox.hdr" background backgroundIntensity={1.5} environmentIntensity={1.25} backgroundBlurriness={0.05} />
-                <pointLight position={[-10, 15, 20]} decay={0} intensity={6} color={"#ffeebb"} shadow-mapSize-width={2048} shadow-mapSize-height={2048} castShadow />
+                <pointLight position={[-30, 30, 30]} decay={0} intensity={6} color={"#ffeebb"} shadow-mapSize-width={2048} shadow-mapSize-height={2048} castShadow />
                 <Island position={[0, 0, 0]} scale={20} />
-                {chickens.map((chicken) => chicken)}
-                <CameraLerp location={location} camRef={camRef} />
+                <Island position={[-10, 5, -10]} scale={20} />
+                <Island position={[-10, 2, 12]} scale={20} rotation={[0, Math.PI / 2, 0]} />
+                {animals}
             </Canvas>
             <AnimatePresence mode="wait">{isActive && <IslandMenu />}</AnimatePresence>
         </section>
@@ -132,6 +80,3 @@ const IslandContainer = ({ location }: { location: string }) => {
 };
 
 export default IslandContainer;
-
-useGLTF.preload("/models/island.glb");
-useGLTF.preload("/models/mobs/chicken_balloon.glb");

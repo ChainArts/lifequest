@@ -18,6 +18,58 @@
     }
 }
 
+.island-menu__header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.25rem;
+
+    & .island-menu__title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.8625rem;
+        & .island-menu__title-text {
+            display: grid;
+            place-items: center;
+            min-width: 20ch;
+            height: 1.75rem;
+            background-color: var(--purple-dark);
+            border-radius: 2rem;
+            & span {
+                font-weight: 500;
+                letter-spacing: 0.075rem;
+                color: var(--text-invert);
+            }
+        }
+
+        & .island-menu__nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--text);
+            position: relative;
+
+            &::before {
+                z-index: -1;
+                position: absolute;
+                content: '';
+                width: 1.5rem;
+                height: 1.5rem;
+                background-color: var(--purple-dark);
+                border-radius: 50%;
+            }
+        }
+    }
+
+    .island-menu__counter{
+        position: absolute;
+        top: 2rem;
+        left: 1.25rem;
+        font-size: 0.75rem;
+    }
+}
+
 .island-menu__button {
     pointer-events: all;
     display: flex;
@@ -33,10 +85,10 @@
     cursor: pointer;
 }
 
-.island-menu__place-menu, .island-menu__shop-menu {
+.island-menu__place-menu,
+.island-menu__shop-menu {
     pointer-events: all;
     width: 100%;
-    height: 60%;
     display: flex;
     flex-direction: column;
     margin-top: auto;
@@ -44,56 +96,47 @@
     backdrop-filter: blur(10px);
     border-radius: 1rem;
     padding: 1rem;
-    gap: 1rem;
+    gap: 0.5rem;
     border: 1px solid var(--background-base);
     position: relative;
 
-    & h2 {
-        margin-bottom: 2rem;
-    }
-
     & .island-menu__list {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(4rem, 0.2fr));
-        grid-template-rows: repeat(auto-fit, minmax(4rem, 1fr));
-        gap: 0.5rem;
-        margin-bottom: 0.5rem;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        gap: 0.2rem;
+        margin-bottom: 0.2rem;
 
-        & .island-menu__item{
+        & .island-menu__item {
             position: relative;
             height: 100%;
             aspect-ratio: 1;
-            background-color: var(--background-base-trans);
+            background-color: var(--background-base);
             backdrop-filter: blur(10px);
-            border-radius: 0.5rem;
+            border-radius: 0.25rem;
             padding: 0.2rem;
-            border: 1px solid var(--background-base);
+
+            .island-menu__tick {
+                position: absolute;
+                bottom: 0.25rem;
+                right: 0.25rem;
+                width: 0.8625rem;
+                height: 0.8625rem;
+                padding: 0.1rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 0.75rem;
+                background-color: var(--purple-dark);
+            }
 
             & img {
                 aspect-ratio: 1;
                 width: 100%;
                 height: 100%;
-                border-radius: 0.5rem;
+                border-radius: 0.25rem;
                 object-fit: cover;
             }
-
-            & span {
-                position: absolute;
-                bottom: -0.5rem;
-                right: 0rem;
-                width: 1.5rem;
-                height: 1.5rem;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 50%;
-                background-color: var(--purple-dark);
-                color: var(--text-invert);
-                font-size: 0.75rem;
-                font-weight: 600;
-            }
         }
-
     }
 }
 
@@ -101,6 +144,7 @@
     position: absolute;
     top: 1rem;
     right: 1rem;
+    padding: 0.25rem;
     width: 2rem;
     height: 2rem;
     display: flex;
@@ -109,7 +153,6 @@
     border-radius: 50%;
     background-color: var(--background-base);
     color: var(--error);
-    font-size: 1.25rem;
     transition: all 0.3s var(--ease);
     cursor: pointer;
 }
