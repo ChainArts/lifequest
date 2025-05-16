@@ -52,3 +52,18 @@ pub struct User {
     pub coins: Number,
     pub last_streak: String,
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Slot {
+    pub id: String,
+    pub position: serde_json::Value,
+    pub animal: String,
+    pub enabled: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Zone {
+    pub zone_id: String,
+    pub name: String,
+    pub slots: Vec<Slot>,
+}

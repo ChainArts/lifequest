@@ -35,6 +35,9 @@ pub fn run() {
                     .await
                     .unwrap();
                 println!("✅ Local DB v{:?}", db::LOCAL_DB.version().await.unwrap());
+                // 4. Uncomment this to seed the database
+                db_commands::seed::seed_zones_and_slots().await.unwrap();
+                println!("✅ Seeded zones and slots");
             });
             Ok(())
         })
@@ -60,6 +63,8 @@ pub fn run() {
             db_commands::reset_data,
             db_commands::get_habit_log_data,
             db_commands::get_habit_log_completed_range,
+            db_commands::get_zones,
+            db_commands::toggle_slot,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -58,7 +58,7 @@ const IslandMenu = () => {
 
     const { zones, toggleSlotEnabled } = useIsland();
     const zoneCount = zones.length;
-    const zone = zones[currentZoneIndex] || { id: "", name: "", slots: [] };
+    const zone = zones[currentZoneIndex] || { zone: "", name: "", slots: [] };
 
     const animalThumbnails = {
         chicken: chickenThumbnail,
@@ -124,14 +124,14 @@ const IslandMenu = () => {
                         </div>
                         <motion.ul className="island-menu__list" variants={itemListVariants}>
                             {placed.map((slot) => (
-                                <motion.li key={slot.id} variants={itemVariants} className="island-menu__item" onClick={() => toggleSlotEnabled(zone.id, slot.id)}>
+                                <motion.li key={slot.id} variants={itemVariants} className="island-menu__item" onClick={() => toggleSlotEnabled(zone.zone_id, slot.id)}>
                                     <img src={animalThumbnails[slot.animal]} alt={slot.animal} />
                                     <FaCheck className="island-menu__tick" />
                                 </motion.li>
                                 
                             ))}
                             {available.map((slot) => (
-                                <motion.li key={slot.id} variants={itemVariants} className="island-menu__item" onClick={() => toggleSlotEnabled(zone.id, slot.id)}>
+                                <motion.li key={slot.id} variants={itemVariants} className="island-menu__item" onClick={() => { toggleSlotEnabled(zone.zone_id, slot.id); console.log(zone.zone_id, slot.id); }}>
                                     <img src={animalThumbnails[slot.animal]} alt={slot.animal} />
                                 </motion.li>
                             ))}
