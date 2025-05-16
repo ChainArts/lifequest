@@ -19,7 +19,7 @@ const IslandContainer = ({ location }: { location: string }) => {
     const [isActive, setIsActive] = useState(location === "/island");
     const camRef = useRef<any>(null);
     const [dpr, setDpr] = useState(1);
-    const [lerpSpeed, setLerpSpeed] = useState(0.005);
+    const [lerpSpeed, setLerpSpeed] = useState(0.04);
 
     const { zones } = useIsland();
 
@@ -27,7 +27,7 @@ const IslandContainer = ({ location }: { location: string }) => {
 
     const handleIsActive = () => {
         navigate("/island");
-        setLerpSpeed(0.01);
+        setLerpSpeed(0.05);
     };
 
     useEffect(() => {

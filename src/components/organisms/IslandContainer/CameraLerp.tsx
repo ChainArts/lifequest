@@ -9,14 +9,19 @@ const CameraLerp = ({ location, camRef, lerpSpeed }: { location: string; camRef:
     const epsilon = 0.01;
     const targetLookAt = new THREE.Vector3(0, 0, 0);
 
-    useFrame(() => {
+    useFrame((_, delta) => {
         const cam = camRef.current;
         if (!cam || location === "/island") return;
 
-        // 1) lerp position & zoom
-        cam.position.lerp(initialPosition, lerpSpeed);
-        cam.zoom = THREE.MathUtils.lerp(cam.zoom, targetZoom, lerpSpeed);
-        cam.lookAt(cam.position.clone().lerp(targetLookAt, lerpSpeed));
+        // Calculate framerate-independent lerp factor
+        // Multiply by delta (seconds since last frame) to make it time-based
+        const frameLerpFactor = lerpSpeed * delta * 60; // Normalize to 60fps
+        const clampedLerpFactor = Math.min(frameLerpFactor, 1); // Ensure factor doesn't exceed 1
+
+        // 1) lerp position & zoom with framerate-independent factor
+        cam.position.lerp(initialPosition, clampedLerpFactor);
+        cam.zoom = THREE.MathUtils.lerp(cam.zoom, targetZoom, clampedLerpFactor);
+        cam.lookAt(cam.position.clone().lerp(targetLookAt, clampedLerpFactor));
         cam.updateProjectionMatrix();
 
         // 2) if we're within epsilon, snap exactly to initial
