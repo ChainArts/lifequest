@@ -216,7 +216,6 @@ pub async fn seed_zones_and_slots() -> surrealdb::Result<()> {
         // Check if the zone already exists
         let query = "SELECT * FROM zone WHERE zone_id = $zone_id";
         let zone_id = zone.zone_id.clone();
-        println!("Checking for existing zone with ID: {}", zone_id);
         let mut res = LOCAL_DB
             .query(query)
             .bind(("zone_id", zone_id))

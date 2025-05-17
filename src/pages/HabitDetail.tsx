@@ -18,6 +18,8 @@ import { usePopOver } from "../lib/PopOverContext";
 
 const HabitDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
+    const { getStreak } = useHabits();
+    const [streak, setStreak] = useState(0);
     const navigate = useNavigate();
     const { getHabitById, refreshHabitById, refreshHabits, refreshToday, refreshXp } = useHabits();
     const { openPopOver, closePopOver } = usePopOver();
@@ -32,8 +34,15 @@ const HabitDetail: React.FC = () => {
         setHabit(data);
     };
 
+    const getStreakData = async () => {
+        if (!id) return;
+        const streak = await getStreak(id);
+        setStreak(streak);
+    };
+
     useEffect(() => {
         loadHabit();
+        getStreakData();
     }, [id]);
 
     // after saving, force refetch everything
@@ -95,7 +104,7 @@ const HabitDetail: React.FC = () => {
                         </div>
                     </div>
 
-                    <HabitStats {...habit} />
+                    <HabitStats {...habit} current_streak={streak} />
                 </motion.section>
                 <motion.section variants={sectionVariants} className="container">
                     <HabitSettings setOpen={setOpen} goal={habit.goal} unit={habit.unit} week_days={habit.week_days} tracking={habit.tracking} color={habit.color} />

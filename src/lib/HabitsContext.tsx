@@ -27,6 +27,7 @@ type HabitsContextType = {
 
     fetchHabitLogData: (id: string, days: number) => Promise<HabitLogData | null>;
     getHabitCompleted: (habitLogId: string, startDay: string, endDay: string) => Promise<HabitLogCompleted | null>;
+    getStreak: (id: string) => Promise<number>;
     // today’s slice
     todayHabits: ActiveHabitProps[];
     dailyXp: number;
@@ -59,6 +60,19 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
             return detailCache[id];
         }
         return await refreshHabitById(id);
+    };
+
+    const getStreak = async (id: string) => {
+        try {
+            const streak = (await invoke("get_habit_streak", { id })) as number;
+            const wasCompleted = (await invoke("get_habit_log_completed", { id })) as boolean;
+            const today = wasCompleted ? 1 : 0;
+            console.log("today", today);
+            return streak + today;
+        } catch (e) {
+            console.error("Failed to fetch streak", e);
+            return 0;
+        }
     };
 
     const fetchHabitLogData = async (id: string, days: number) => {
@@ -120,7 +134,8 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
 
     const updateHabitProgress = async (habitLogId: string, add?: number, currentStreak?: number, goal?: number, data?: number) => {
         // 0) get previous “completed” state
-        const wasCompleted = (await invoke("get_habit_log_completed", { id: habitLogId })) as boolean;
+        const isNewCompletion = (await invoke("get_xp_for_habit", { id: habitLogId })) as boolean;
+
         // 1) bump local state
         let newDone = 0;
         setTodayHabits((prev) =>
@@ -133,14 +148,12 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
 
         // 2) build payload
         const completed = newDone === goal;
-        const isNewCompletion = completed && !wasCompleted;
         const exp = isNewCompletion ? calulateStreakXP(currentStreak ?? 0) : 0;
 
         // only include exp/completed when we're newly completing
-        const payload: any = { id: habitLogId, progress: newDone, data: data };
+        const payload: any = { id: habitLogId, progress: newDone, data: data, completed: completed };
         if (isNewCompletion) {
             payload.exp = exp;
-            payload.completed = true;
         }
 
         // 3) call backend
@@ -183,6 +196,7 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
                 habitCount,
                 fetchHabitLogData,
                 getHabitCompleted,
+                getStreak,
             }}
         >
             {children}

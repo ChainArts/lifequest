@@ -7,6 +7,8 @@ import FluentEmoji from "../../../lib/FluentEmoji";
 import { motion } from "motion/react";
 import { sectionVariants as cardVariants } from "../../atoms/PageTransition/PageTransition";
 import { calculateLevel } from "../../../lib/XP";
+import { useEffect, useState } from "react";
+import { useHabits } from "../../../lib/HabitsContext";
 
 export interface HabitCardProps {
     id: { id: { String: string }; tb: string };
@@ -24,6 +26,8 @@ export interface HabitCardProps {
 }
 
 const HabitCard = ({ id, title, goal, unit, week_days, icon, color, current_streak, habit_xp }: HabitCardProps) => {
+    const { getStreak } = useHabits();
+    const [streak, setStreak] = useState(current_streak);
     const activeDays = week_days.map((day) => (day ? "1" : "0")).join("");
     //calculate lighter shade of color
     const colorLight = color + "DD";
@@ -32,6 +36,15 @@ const HabitCard = ({ id, title, goal, unit, week_days, icon, color, current_stre
     //convert activeDays to array of boolean
     const activeDaysArray = activeDays.split("").map((day) => (day === "1" ? true : false));
     const days = ["M", "T", "W", "T", "F", "S", "S"];
+
+    useEffect(() => {
+        const fetchStreak = async () => {
+            const streak = await getStreak(id.id.String);
+
+            setStreak(streak);
+        };
+        fetchStreak();
+    }, []);
 
     return (
         <motion.div variants={cardVariants}>
@@ -58,7 +71,7 @@ const HabitCard = ({ id, title, goal, unit, week_days, icon, color, current_stre
                             </div>
 
                             <span className="fst--upper-heading">
-                                <AiFillFire /> {current_streak}
+                                <AiFillFire /> {streak}
                             </span>
                         </div>
                         <div className="habit-card__progress">
@@ -71,7 +84,7 @@ const HabitCard = ({ id, title, goal, unit, week_days, icon, color, current_stre
                                     ))}
                                 </div>
                                 <div>
-                                    <span className="fst--upper-heading">LVL</span>
+                                    <span className="fst--upper-heading">LVL </span>
                                     <span className="habit-card__level">{levelData.level}</span>
                                 </div>
                             </div>

@@ -65,6 +65,8 @@ pub fn run() {
             db_commands::get_habit_log_completed_range,
             db_commands::get_zones,
             db_commands::toggle_slot,
+            db_commands::get_habit_streak,
+            db_commands::get_xp_for_habit,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

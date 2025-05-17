@@ -37,8 +37,6 @@ const ProfileSettings = () => {
         }
     };
 
-    if (!user) return null;
-
     return (
         <>
             <Headline level={2} style="section">
@@ -47,7 +45,7 @@ const ProfileSettings = () => {
             <div className="stats-teaser__grid">
                 <Card className=" inverse stats-teaser__streak">
                     <span className="stats-teaser__streak-title"></span>
-                    <span className="fst--big-number">{calculateLevel(user.exp).level}</span>
+                    <span className="fst--big-number">{user ? calculateLevel(user.exp).level : 0}</span>
                     <span className="stats-teaser__streak-title">Level</span>
                 </Card>
                 <div className="stats-teaser__list">

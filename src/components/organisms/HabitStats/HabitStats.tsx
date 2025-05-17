@@ -1,4 +1,6 @@
+import { use, useEffect, useState } from "react";
 import FluentEmoji from "../../../lib/FluentEmoji";
+import { useHabits } from "../../../lib/HabitsContext";
 import { calculateLevel } from "../../../lib/XP";
 import LinearProgress from "../../atoms/LinearProgress/LinearProgress";
 import Card from "../../molecules/Card/Card";
@@ -8,6 +10,7 @@ import "./HabitStats.scss";
 const HabitStats = ({ icon, habit_xp, title, color, current_streak }: HabitCardProps) => {
     const colorLight = color + "88";
     const levelData = calculateLevel(habit_xp);
+
     return (
         <div className="habit-stats">
             <Card
