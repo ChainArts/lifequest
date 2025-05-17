@@ -9,7 +9,6 @@ interface NumberInputProps {
 }
 
 const NumberInput = ({ id, setFieldValue, value, maxValue }: NumberInputProps) => {
-    console.log("NumberInput", { id, value, maxValue });
     return (
         <div className="number-increase-decrease">
             <button

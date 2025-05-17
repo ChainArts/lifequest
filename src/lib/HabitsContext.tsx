@@ -134,7 +134,8 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
 
     const updateHabitProgress = async (habitLogId: string, add?: number, currentStreak?: number, goal?: number, data?: number) => {
         // 0) get previous “completed” state
-        const isNewCompletion = (await invoke("get_xp_for_habit", { id: habitLogId })) as boolean;
+        const isNewCompletion = (await invoke("is_new_completion", { id: habitLogId })) as boolean;
+        console.log("isNewCompletion", isNewCompletion);
 
         // 1) bump local state
         let newDone = 0;

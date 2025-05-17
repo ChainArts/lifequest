@@ -13,13 +13,12 @@ pub async fn get_xp_for_today() -> surrealdb::Result<serde_json::Value> {
         .await?;
     // Directly extract the total as an Option<i64>
     let total: Option<i64> = res.take(0)?;
-    println!("Total XP for today: {:?}", total.unwrap_or(0));
     // Return the number, using 0 as a default if total is None
     Ok(json!(total.unwrap_or(0)))
 }
 
 #[tauri::command]
-pub async fn get_xp_for_habit(id: String) -> surrealdb::Result<bool> {
+pub async fn is_new_completion(id: String) -> surrealdb::Result<bool> {
     let today_str = Local::now().format("%Y-%m-%d").to_string();
     let mut exp_res = LOCAL_DB
         .query(
@@ -34,9 +33,13 @@ pub async fn get_xp_for_habit(id: String) -> surrealdb::Result<bool> {
         .await?;
 
     let exp: Option<i64> = exp_res.take(0)?;
-    let has_xp = exp.is_some();
-    println!("Has XP for habit {}: {:?}", id, has_xp);
-    Ok(has_xp)
+    // check if the XP is 0, if so return true else false
+    if let Some(exp) = exp {
+        if exp == 0 {
+            return Ok(true);
+        }
+    }
+    Ok(false)
 }
 
 #[tauri::command]
@@ -176,8 +179,6 @@ pub async fn update_habit_log(
     if let Some(data) = data {
         update_data["data"] = json!(data);
     }
-    println!("Updating habit log with id: {:?}", id);
-    println!("Update data: {:?}", update_data);
 
     let today_str = Local::now().format("%Y-%m-%d").to_string();
     let _res = LOCAL_DB
@@ -327,16 +328,13 @@ pub async fn get_habit_streak(id: String) -> surrealdb::Result<serde_json::Value
     let current_streak = habit.current_streak.as_i64().unwrap_or(0);
     if streak != current_streak {
         habit.current_streak = serde_json::Number::from(streak);
-        println!("Current streak updated: {}", habit.current_streak);
 
         let highest_streak = habit.highest_streak.as_i64().unwrap_or(0);
         if streak > highest_streak {
             habit.highest_streak = serde_json::Number::from(streak);
-            println!("Highest streak updated: {}", habit.highest_streak);
         }
 
         // Persist the updated habit back to the DB
-        println!("Updating habit with new streak values: {:?}", habit);
         let _res: Option<schema::Habit> = LOCAL_DB
             .update(("habit", habit_id))
             .merge(json!(habit.clone()))  // use the updated struct here
