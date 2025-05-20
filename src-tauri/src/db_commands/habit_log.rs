@@ -227,6 +227,11 @@ pub async fn check_all_yesterday_completed() -> surrealdb::Result<bool> {
         .bind(("date", yesterday_str))
         .await?;
     let completed: Vec<bool> = res.take(0)?;
+    println!("Completed: {:?}", completed);
+    // completed is empty -> return false
+    if completed.is_empty() {
+        return Ok(false);
+    }
     Ok(completed.iter().all(|&c| c))
 }
 
