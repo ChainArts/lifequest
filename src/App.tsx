@@ -14,6 +14,7 @@ import UserBar from "./components/organisms/UserBar/UserBar";
 import { PopOverProvider } from "./lib/PopOverContext";
 import { ToastContainer, cssTransition } from "react-toastify";
 import { IslandProvider } from "./lib/IslandContext";
+import ScrollToTop from "./components/atoms/ScrollToTop/ScrollToTop";
 
 const ToastTransition = cssTransition({
     enter: "Toastify_fadeIn",
@@ -31,6 +32,7 @@ function App() {
                     <IslandProvider>
                         <IslandContainer location={location.pathname} />
                     </IslandProvider>
+                    <ScrollToTop />
                     <AnimatePresence mode="wait">
                         <Routes location={location} key={location.pathname}>
                             <Route path="/" element={<Home />} />
