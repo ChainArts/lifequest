@@ -1,6 +1,6 @@
 use crate::db::LOCAL_DB;
 use crate::db_commands::schema::{Habit, HabitLog};
-use chrono::{Duration, Local, NaiveDate};
+use chrono::{Duration, Local};
 use rand::Rng;
 use serde_json::{json, Number};
 use surrealdb::Result;
@@ -23,8 +23,9 @@ pub async fn seed_walking_data() -> Result<()> {
             last_completed: None,
         }))
         .await?;
-    
-    let start_date: NaiveDate = Local::now().date_naive();
+
+    let today = Local::now().date_naive();
+    let start_date = today - Duration::days(1);
 
     for days_ago in (0..30).rev() {
         let (progress_val, exp_val, calories) = {

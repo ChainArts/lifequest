@@ -132,16 +132,14 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
         }
     };
 
-    const updateHabitProgress = async (habitLogId: string, add?: number, currentStreak?: number, goal?: number, data?: number) => {
-        // 0) get previous “completed” state
-        const isNewCompletion = (await invoke("is_new_completion", { id: habitLogId })) as boolean;
-        console.log("isNewCompletion", isNewCompletion);
-
+    const updateHabitProgress = async (habitId: string, add?: number, currentStreak?: number, goal?: number, data?: number) => {
         // 1) bump local state
         let newDone = 0;
+        let isNewCompletion = false;
+        let exp = 0;
         setTodayHabits((prev) =>
             prev.map((h) => {
-                if (h.id !== habitLogId) return h;
+                if (h.id !== habitId) return h;
                 newDone = Math.min(h.done + (add ?? 0), h.goal);
                 return { ...h, done: newDone };
             })
@@ -149,10 +147,13 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
 
         // 2) build payload
         const completed = newDone === goal;
-        const exp = isNewCompletion ? calulateStreakXP(currentStreak ?? 0) : 0;
+        if (completed) {
+            isNewCompletion = (await invoke("is_new_completion", { id: habitId })) as boolean;
+            console.log("isNewCompletion", isNewCompletion);
+            exp = calulateStreakXP(currentStreak ?? 0);
+        }
 
-        // only include exp/completed when we're newly completing
-        const payload: any = { id: habitLogId, progress: newDone, data: data, completed: completed };
+        const payload: any = { id: habitId, progress: newDone, data: data, completed: completed };
         if (isNewCompletion) {
             payload.exp = exp;
         }
@@ -161,12 +162,12 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
 
         try {
             if (isNewCompletion) {
-                await invoke("increase_habit_xp", { id: habitLogId, exp });
-                await refreshXp();
-                await refreshHabits();
+                await invoke("increase_habit_xp", { id: habitId, exp });
             }
             // this now only ever updates `progress` (and newly‐earned XP/completed if applicable)
             await invoke("update_habit_log", payload);
+            await refreshXp();
+            await refreshHabits();
         } catch (e) {
             console.error("Failed to sync habit:", e);
         }
