@@ -7,10 +7,12 @@ import Card from "../../molecules/Card/Card";
 import "./ProfileSettings.scss";
 import { invoke } from "@tauri-apps/api/core";
 import { usePopOver } from "../../../lib/PopOverContext";
+import { useNavigate } from "react-router-dom";
 
 const ProfileSettings = () => {
     const { user } = useUser();
     const { openPopOver, closePopOver } = usePopOver();
+    const navigate = useNavigate();
 
     const openDelete = () => {
         openPopOver(
@@ -30,8 +32,10 @@ const ProfileSettings = () => {
     };
 
     const reset_profile = async () => {
-            await invoke("reset_data");
-            window.location.reload();
+        await invoke("reset_data").then(() => {
+            closePopOver();
+            navigate("/");
+        });
     };
 
     return (
