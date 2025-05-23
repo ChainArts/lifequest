@@ -34,7 +34,11 @@ const ProfileSettings = () => {
     const reset_profile = async () => {
         await invoke("reset_data").then(() => {
             closePopOver();
-            navigate("/");
+            setTimeout(() => {
+                localStorage.clear();
+                navigate("/");
+                window.location.reload();
+            }, 500);
         });
     };
 

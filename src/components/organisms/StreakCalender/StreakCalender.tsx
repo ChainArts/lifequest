@@ -1,5 +1,3 @@
-import { useHabits } from "../../../lib/HabitsContext";
-import { useUser } from "../../../lib/UserContext";
 import StreakDay from "../../atoms/StreakDay/StreakDay";
 import "./StreakCalender.scss";
 
@@ -12,8 +10,8 @@ const StreakCalender = ({ streak, todayCompleted }: StreakCalenderProps) => {
     const today = new Date().getDay(); // 0 = Sunday, …, 6 = Saturday
     const days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 
-    console.log("todayCompleted", todayCompleted);
-    console.log("streak", streak);
+    // console.log("todayCompleted", todayCompleted);
+    // console.log("streak", streak);
 
     // convert JS Sunday=0 → index 6, Monday=1 → 0, … Saturday=6 → 5
     const dayIndex = (today + 6) % 7;

@@ -1,6 +1,4 @@
-import { use, useEffect, useState } from "react";
 import FluentEmoji from "../../../lib/FluentEmoji";
-import { useHabits } from "../../../lib/HabitsContext";
 import { calculateLevel } from "../../../lib/XP";
 import LinearProgress from "../../atoms/LinearProgress/LinearProgress";
 import Card from "../../molecules/Card/Card";
