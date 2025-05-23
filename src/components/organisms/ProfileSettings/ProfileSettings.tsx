@@ -30,11 +30,8 @@ const ProfileSettings = () => {
     };
 
     const reset_profile = async () => {
-        const confirm = window.confirm("Are you sure you want to reset your profile? This action cannot be undone.");
-        if (confirm) {
             await invoke("reset_data");
             window.location.reload();
-        }
     };
 
     return (
