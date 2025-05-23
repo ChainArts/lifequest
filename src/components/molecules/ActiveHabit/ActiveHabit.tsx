@@ -32,8 +32,6 @@ const ActiveHabit = ({ habit, updateXP }: { habit: ActiveHabitProps; updateXP: (
 
     const handleAdd = async () => {
         const gotXp = (await updateHabitProgress(id, 1, current_streak, goal)) as boolean;
-        console.log("gotXp", gotXp);
-
         if (gotXp) {
             const earned = calulateStreakXP(current_streak);
             await incrementStreak();
@@ -43,10 +41,10 @@ const ActiveHabit = ({ habit, updateXP }: { habit: ActiveHabitProps; updateXP: (
         const newCircles = [{ id: `${timestamp}` }];
         setCircles((prev) => [...prev, ...newCircles]);
         updateXP();
-
-        if (tracking && data && done + 1 === goal) {
+        
+        if (tracking && done + 1 === goal) {
             console.log("open popover");
-            openPopOver("Add Tracking Data", <AddTrackingData id={id} initialValue={data} name={title} />);
+            openPopOver("Add Tracking Data", <AddTrackingData id={id} initialValue={data ?? 0} name={title} />);
         }
     };
 
