@@ -30,24 +30,15 @@ const HabitDetail: React.FC = () => {
     const loadHabit = async (force = false) => {
         if (!id) return;
         const data = await getHabitById(id, force);
-        setHabit(data);
-    };
-
-    const getStreakData = async () => {
-        if (!id) return;
         const streak = await getStreak(id);
-        setHabit((prev) => {
-            if (!prev) return null;
-            return {
-                ...prev,
-                current_streak: streak,
-            };
+        setHabit({
+            ...data,
+            current_streak: streak,
         });
     };
 
     useEffect(() => {
         loadHabit();
-        getStreakData();
     }, [id]);
 
     // after saving, force refetch everything
@@ -108,8 +99,7 @@ const HabitDetail: React.FC = () => {
                             <HiOutlineTrash />
                         </div>
                     </div>
-
-                    <HabitStats {...habit}/>
+                    <HabitStats {...habit} />
                 </motion.section>
                 <motion.section variants={sectionVariants} className="container">
                     <HabitSettings setOpen={setOpen} goal={habit.goal} unit={habit.unit} week_days={habit.week_days} tracking={habit.tracking} color={habit.color} />
@@ -127,6 +117,7 @@ const HabitDetail: React.FC = () => {
                 </motion.section>
             </motion.main>
             <ActionButton onClick={() => setOpen(true)} icon={<HiPencil />} />
+            Edit
         </>
     );
 };
