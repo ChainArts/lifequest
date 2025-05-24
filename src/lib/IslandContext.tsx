@@ -62,7 +62,7 @@ export const IslandProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             const shopItems: ShopItem[] = [
                 { id: "chicken", animal: "chicken" as AnimalType, price: 50, owned: 0 },
                 { id: "fox", animal: "fox" as AnimalType, price: 150, owned: 0 },
-                { id: "duck", animal: "duck" as AnimalType, price: 100, owned: 0 },
+                { id: "duck", animal: "duck" as AnimalType, price: 200, owned: 0 },
             ].map((item) => {
                 const inventoryItem = inventory.find((inv) => inv.animal_type === item.animal);
                 return {
