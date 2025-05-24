@@ -100,13 +100,13 @@
     border: 1px solid var(--background-base);
     position: relative;
 
-    & .island-menu__list {
+    & .island-menu__list, .island-shop__items {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
         gap: 0.2rem;
         margin-bottom: 0.2rem;
 
-        & .island-menu__item {
+        & .island-menu__item, .island-shop__item {
             position: relative;
             height: 100%;
             aspect-ratio: 1;
