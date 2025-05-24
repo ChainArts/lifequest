@@ -1,5 +1,5 @@
 // src/pages/HabitDetail.tsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { useParams, useNavigate } from "react-router-dom";
 import { invoke } from "@tauri-apps/api/core";
@@ -16,7 +16,7 @@ import { HiPencil } from "react-icons/hi";
 import { HiOutlineTrash } from "react-icons/hi2";
 import { usePopOver } from "../lib/PopOverContext";
 
-const HabitDetail: React.FC = () => {
+const HabitDetail = () => {
     const { id } = useParams<{ id: string }>();
     const { getStreak } = useHabits();
     const navigate = useNavigate();
@@ -85,36 +85,38 @@ const HabitDetail: React.FC = () => {
         );
     };
 
-    if (!habit) return <div>Loading habit details...</div>;
-
     return (
         <>
             <motion.main initial="initial" animate="in" exit="out" variants={pageVariants}>
-                <motion.section variants={sectionVariants} className="container">
-                    <div className="link-header">
-                        <div className="link primary" onClick={() => navigate("/habits")}>
-                            Back
-                        </div>
-                        <div className="link delete" onClick={openDelete}>
-                            <HiOutlineTrash />
-                        </div>
-                    </div>
-                    <HabitStats {...habit} />
-                </motion.section>
-                <motion.section variants={sectionVariants} className="container">
-                    <HabitSettings setOpen={setOpen} goal={habit.goal} unit={habit.unit} week_days={habit.week_days} tracking={habit.tracking} color={habit.color} />
-                </motion.section>
-                <motion.section variants={sectionVariants} className="container">
-                    {id && <HabitHeatmap id={id} />}
-                </motion.section>
-                <motion.section variants={sectionVariants} className="container">
-                    {habit.tracking && id && <HabitGraph id={id} />}
-                </motion.section>
-                <motion.section variants={sectionVariants} className="container">
-                    <section className="container">
-                        <HabitForm setOpen={setOpen} isOpen={isOpen} mode="edit" initialValues={habit} id={id} onSubmitSuccess={handleEditSuccess} />
-                    </section>
-                </motion.section>
+                {habit && (
+                    <>
+                        <motion.section variants={sectionVariants} className="container">
+                            <div className="link-header">
+                                <div className="link primary" onClick={() => navigate("/habits")}>
+                                    Back
+                                </div>
+                                <div className="link delete" onClick={openDelete}>
+                                    <HiOutlineTrash />
+                                </div>
+                            </div>
+                            <HabitStats {...habit} />
+                        </motion.section>
+                        <motion.section variants={sectionVariants} className="container">
+                            <HabitSettings setOpen={setOpen} goal={habit.goal} unit={habit.unit} week_days={habit.week_days} tracking={habit.tracking} color={habit.color} />
+                        </motion.section>
+                        <motion.section variants={sectionVariants} className="container">
+                            {id && <HabitHeatmap id={id} />}
+                        </motion.section>
+                        <motion.section variants={sectionVariants} className="container">
+                            {habit.tracking && id && <HabitGraph id={id} />}
+                        </motion.section>
+                        <motion.section variants={sectionVariants} className="container">
+                            <section className="container">
+                                <HabitForm setOpen={setOpen} isOpen={isOpen} mode="edit" initialValues={habit} id={id} onSubmitSuccess={handleEditSuccess} />
+                            </section>
+                        </motion.section>
+                    </>
+                )}
             </motion.main>
             <ActionButton onClick={() => setOpen(true)} icon={<HiPencil />} />
             Edit

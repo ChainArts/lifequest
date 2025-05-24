@@ -43,7 +43,6 @@ const ActiveHabit = ({ habit, updateXP }: { habit: ActiveHabitProps; updateXP: (
         updateXP();
         
         if (tracking && done + 1 === goal) {
-            console.log("open popover");
             openPopOver("Add Tracking Data", <AddTrackingData id={id} initialValue={data ?? 0} name={title} />);
         }
     };

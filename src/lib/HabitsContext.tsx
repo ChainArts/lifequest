@@ -149,18 +149,27 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
         const completed = newDone === goal;
         if (completed) {
             isNewCompletion = (await invoke("is_new_completion", { id: habitId })) as boolean;
-            console.log("isNewCompletion", isNewCompletion);
             exp = calulateStreakXP(currentStreak ?? 0);
         }
 
-        const payload: any = { id: habitId, progress: newDone, data: data, completed: completed };
+        const payload: any = {
+            id: habitId,
+            progress: newDone,
+            data: data,
+            completed: add === undefined ? undefined : completed,
+        };
         if (isNewCompletion) {
             payload.exp = exp;
+        }
+
+        if (add! <= 0) {
+            payload.completed = false;
         }
 
         // 3) call backend
 
         try {
+            console.log("Updating habit progress", payload);
             if (isNewCompletion) {
                 await invoke("increase_habit_xp", { id: habitId, exp });
             }
