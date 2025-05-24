@@ -39,11 +39,8 @@ const IslandShop = () => {
     };
 
     return (
-        <div className="island-shop">
-            <div className="island-shop__coins">
-                <span>💰 {user?.coins || 0}</span>
-            </div>
-
+        <>
+            <span>💰 {user?.coins || 0}</span>
             <motion.div className="island-shop__items">
                 {shopItems.map((item) => {
                     const availableSlots = getAvailableSlots(item.animal);
@@ -73,7 +70,7 @@ const IslandShop = () => {
                     );
                 })}
             </motion.div>
-        </div>
+        </>
     );
 };
 
