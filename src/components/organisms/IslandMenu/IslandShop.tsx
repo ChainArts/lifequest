@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import chickenThumbnail from "/src/assets/thumbnails/chicken.png";
 import foxThumbnail from "/src/assets/thumbnails/fox.png";
 import duckThumbnail from "/src/assets/thumbnails/duck.png";
+import { RiCopperCoinFill } from "react-icons/ri";
 // import "./IslandShop.scss";
 
 const itemVariants = {
@@ -39,38 +40,32 @@ const IslandShop = () => {
     };
 
     return (
-        <>
-            <span>💰 {user?.coins || 0}</span>
-            <motion.div className="island-shop__items">
-                {shopItems.map((item) => {
-                    const availableSlots = getAvailableSlots(item.animal);
-                    const canAfford = (user?.coins || 0) >= item.price;
+        <motion.div className="island-shop__items">
+            {shopItems.map((item) => {
+                const availableSlots = getAvailableSlots(item.animal);
+                const canAfford = (user?.coins || 0) >= item.price;
 
-                    return (
-                        <motion.div key={item.id} variants={itemVariants} className={`island-shop__item ${!canAfford ? "island-shop__item--disabled" : ""}`}>
-                            <div className="island-shop__item-image">
-                                <img src={animalThumbnails[item.animal]} alt={item.animal} />
+                return (
+                    <motion.div key={item.id} variants={itemVariants} className={`island-shop__item ${!canAfford ? "island-shop__item--disabled" : ""}`}>
+                        <div className="island-shop__item-info">
+                            <h4>{item.animal.charAt(0).toUpperCase() + item.animal.slice(1)}</h4>
+                            <div className="island-shop__item-stats">
+                                <span className="island-shop__owned">{item.owned}</span>
+                                <span>/</span>
+                                <span className="island-shop__available">{availableSlots}</span>
                             </div>
+                        </div>
+                        <div className="island-shop__item-image">
+                            <img src={animalThumbnails[item.animal]} alt={item.animal} />
+                        </div>
 
-                            <div className="island-shop__item-info">
-                                <h4>{item.animal.charAt(0).toUpperCase() + item.animal.slice(1)}</h4>
-                                <div className="island-shop__item-stats">
-                                    <span className="island-shop__owned">Owned: {item.owned}</span>
-                                    <span className="island-shop__available">Available: {availableSlots}</span>
-                                </div>
-                            </div>
-
-                            <div className="island-shop__item-purchase">
-                                <span className="island-shop__price">💰 {item.price}</span>
-                                <button className="island-shop__buy-btn" onClick={() => handlePurchase(item.animal, item.price)} disabled={!canAfford}>
-                                    Buy
-                                </button>
-                            </div>
-                        </motion.div>
-                    );
-                })}
-            </motion.div>
-        </>
+                        <button className="island-shop__buy-btn" onClick={() => handlePurchase(item.animal, item.price)} disabled={!canAfford}>
+                            <span className="island-shop__price"><RiCopperCoinFill/> {item.price}</span>
+                        </button>
+                    </motion.div>
+                );
+            })}
+        </motion.div>
     );
 };
 
