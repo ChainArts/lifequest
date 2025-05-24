@@ -67,6 +67,9 @@ pub fn run() {
             db_commands::toggle_slot,
             db_commands::get_habit_streak,
             db_commands::is_new_completion,
+            db_commands::get_animal_inventory,
+            db_commands::buy_animal,
+            db_commands::get_animal_count,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

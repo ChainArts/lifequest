@@ -115,102 +115,102 @@ pub async fn seed_zones_and_slots() -> surrealdb::Result<()> {
                 },
             ],
         },
-        Zone {
-            zone_id: "zone-2".to_string(),
-            name: "Island 2".to_string(),
-            slots: vec![
-                Slot {
-                    id: "slot-2-1".to_string(),
-                    position: json!({ "x": -9.27, "y": 3.41, "z": -12.1 }),
-                    animal: "fox".to_string(),
-                    enabled: false,
-                },
-                Slot {
-                    id: "slot-2-2".to_string(),
-                    position: json!({ "x": -9.0, "y": 9.2, "z": -6.0 }),
-                    animal: "chicken".to_string(),
-                    enabled: false,
-                },
-                Slot {
-                    id: "slot-2-3".to_string(),
-                    position: json!({ "x": -8.1, "y": 3.47, "z": -13.14 }),
-                    animal: "fox".to_string(),
-                    enabled: false,
-                },
-                Slot {
-                    id: "slot-2-4".to_string(),
-                    position: json!({ "x": -11.5, "y": 9.2, "z": -13.8 }),
-                    animal: "chicken".to_string(),
-                    enabled: false,
-                },
-                Slot {
-                    id: "slot-2-5".to_string(),
-                    position: json!({ "x": -10.56, "y": 3.96, "z": -6.44 }),
-                    animal: "fox".to_string(),
-                    enabled: false,
-                },
-                Slot {
-                    id: "slot-2-6".to_string(),
-                    position: json!({ "x": -7.1, "y": 3.47, "z": -7.7 }),
-                    animal: "duck".to_string(),
-                    enabled: false,
-                },
-                Slot {
-                    id: "slot-2-7".to_string(),
-                    position: json!({ "x": -6.1, "y": 3.47, "z": -10.14 }),
-                    animal: "duck".to_string(),
-                    enabled: false,
-                },
-            ],
-        },
-        Zone {
-            zone_id: "zone-3".to_string(),
-            name: "Island 3".to_string(),
-            slots: vec![
-                Slot {
-                    id: "slot-3-1".to_string(),
-                    position: json!({ "x": -7.3, "y": 6.2, "z": 8.5 }),
-                    animal: "chicken".to_string(),
-                    enabled: false,
-                },
-                Slot {
-                    id: "slot-3-2".to_string(),
-                    position: json!({ "x": -8.5, "y": 0.35, "z": 8.8 }),
-                    animal: "fox".to_string(),
-                    enabled: false,
-                },
-                Slot {
-                    id: "slot-3-3".to_string(),
-                    position: json!({ "x": -10.5, "y": 2.5, "z": 11.0 }),
-                    animal: "chicken".to_string(),
-                    enabled: false,
-                },
-                Slot {
-                    id: "slot-3-4".to_string(),
-                    position: json!({ "x": -7.14, "y": 0.31, "z": 11.65 }),
-                    animal: "fox".to_string(),
-                    enabled: false,
-                },
-                Slot {
-                    id: "slot-3-5".to_string(),
-                    position: json!({ "x": -6.0, "y": 1.2, "z": 14.0 }),
-                    animal: "chicken".to_string(),
-                    enabled: false,
-                },
-                Slot {
-                    id: "slot-3-6".to_string(),
-                    position: json!({ "x": -10.5, "y": 0.31, "z": 12.0 }),
-                    animal: "duck".to_string(),
-                    enabled: false,
-                },
-                Slot {
-                    id: "slot-3-7".to_string(),
-                    position: json!({ "x": -11.14, "y": 0.61, "z": 8.5 }),
-                    animal: "duck".to_string(),
-                    enabled: false,
-                },
-            ],
-        },
+        // Zone {
+        //     zone_id: "zone-2".to_string(),
+        //     name: "Island 2".to_string(),
+        //     slots: vec![
+        //         Slot {
+        //             id: "slot-2-1".to_string(),
+        //             position: json!({ "x": -9.27, "y": 3.41, "z": -12.1 }),
+        //             animal: "fox".to_string(),
+        //             enabled: false,
+        //         },
+        //         Slot {
+        //             id: "slot-2-2".to_string(),
+        //             position: json!({ "x": -9.0, "y": 9.2, "z": -6.0 }),
+        //             animal: "chicken".to_string(),
+        //             enabled: false,
+        //         },
+        //         Slot {
+        //             id: "slot-2-3".to_string(),
+        //             position: json!({ "x": -8.1, "y": 3.47, "z": -13.14 }),
+        //             animal: "fox".to_string(),
+        //             enabled: false,
+        //         },
+        //         Slot {
+        //             id: "slot-2-4".to_string(),
+        //             position: json!({ "x": -11.5, "y": 9.2, "z": -13.8 }),
+        //             animal: "chicken".to_string(),
+        //             enabled: false,
+        //         },
+        //         Slot {
+        //             id: "slot-2-5".to_string(),
+        //             position: json!({ "x": -10.56, "y": 3.96, "z": -6.44 }),
+        //             animal: "fox".to_string(),
+        //             enabled: false,
+        //         },
+        //         Slot {
+        //             id: "slot-2-6".to_string(),
+        //             position: json!({ "x": -7.1, "y": 3.47, "z": -7.7 }),
+        //             animal: "duck".to_string(),
+        //             enabled: false,
+        //         },
+        //         Slot {
+        //             id: "slot-2-7".to_string(),
+        //             position: json!({ "x": -6.1, "y": 3.47, "z": -10.14 }),
+        //             animal: "duck".to_string(),
+        //             enabled: false,
+        //         },
+        //     ],
+        // },
+        // Zone {
+        //     zone_id: "zone-3".to_string(),
+        //     name: "Island 3".to_string(),
+        //     slots: vec![
+        //         Slot {
+        //             id: "slot-3-1".to_string(),
+        //             position: json!({ "x": -7.3, "y": 6.2, "z": 8.5 }),
+        //             animal: "chicken".to_string(),
+        //             enabled: false,
+        //         },
+        //         Slot {
+        //             id: "slot-3-2".to_string(),
+        //             position: json!({ "x": -8.5, "y": 0.35, "z": 8.8 }),
+        //             animal: "fox".to_string(),
+        //             enabled: false,
+        //         },
+        //         Slot {
+        //             id: "slot-3-3".to_string(),
+        //             position: json!({ "x": -10.5, "y": 2.5, "z": 11.0 }),
+        //             animal: "chicken".to_string(),
+        //             enabled: false,
+        //         },
+        //         Slot {
+        //             id: "slot-3-4".to_string(),
+        //             position: json!({ "x": -7.14, "y": 0.31, "z": 11.65 }),
+        //             animal: "fox".to_string(),
+        //             enabled: false,
+        //         },
+        //         Slot {
+        //             id: "slot-3-5".to_string(),
+        //             position: json!({ "x": -6.0, "y": 1.2, "z": 14.0 }),
+        //             animal: "chicken".to_string(),
+        //             enabled: false,
+        //         },
+        //         Slot {
+        //             id: "slot-3-6".to_string(),
+        //             position: json!({ "x": -10.5, "y": 0.31, "z": 12.0 }),
+        //             animal: "duck".to_string(),
+        //             enabled: false,
+        //         },
+        //         Slot {
+        //             id: "slot-3-7".to_string(),
+        //             position: json!({ "x": -11.14, "y": 0.61, "z": 8.5 }),
+        //             animal: "duck".to_string(),
+        //             enabled: false,
+        //         },
+            // ],
+        // },
     ];
 
     for zone in predefined_zones {

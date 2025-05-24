@@ -70,8 +70,8 @@ const IslandContainer = ({ location }: { location: string }) => {
                 <Environment near={0.01} far={300} frames={degraded ? 1 : Infinity} resolution={512} backgroundRotation={[0, 0, 0]} files="/models/skybox.hdr" background backgroundIntensity={1.5} environmentIntensity={1.25} backgroundBlurriness={0.05} />
                 <pointLight position={[-30, 30, 30]} decay={0} intensity={6} color={"#ffeebb"} shadow-mapSize-width={2048} shadow-mapSize-height={2048} castShadow />
                 <Island position={[0, 0, 0]} scale={20} />
-                <Island position={[-10, 5, -10]} scale={20} />
-                <Island position={[-10, 2, 12]} scale={20} rotation={[0, Math.PI / 2, 0]} />
+                {/* <Island position={[-10, 5, -10]} scale={20} />
+                <Island position={[-10, 2, 12]} scale={20} rotation={[0, Math.PI / 2, 0]} /> */}
                 {animals}
             </Canvas>
             <AnimatePresence mode="wait">{isActive && <IslandMenu />}</AnimatePresence>

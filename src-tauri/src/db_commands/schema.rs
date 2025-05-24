@@ -67,3 +67,10 @@ pub struct Zone {
     pub name: String,
     pub slots: Vec<Slot>,
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct AnimalInventory {
+    pub id: Option<Thing>,
+    pub animal_type: String,
+    pub owned: i32,
+}

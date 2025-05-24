@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { PiPawPrintFill, PiShoppingCartFill } from "react-icons/pi";
-import { HiX, HiChevronLeft, HiChevronRight} from "react-icons/hi";
+import { HiX, HiChevronLeft, HiChevronRight } from "react-icons/hi";
 import { FaCheck } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
 import "./IslandMenu.scss";
@@ -8,13 +8,14 @@ import chickenThumbnail from "/src/assets/thumbnails/chicken.png";
 import foxThumbnail from "/src/assets/thumbnails/fox.png";
 import duckThumbnail from "/src/assets/thumbnails/duck.png";
 import { useIsland } from "../../../lib/IslandContext";
+import IslandShop from "./IslandShop";
 
 const containerVariants = {
     initial: {},
     animate: {
         transition: {
             staggerChildren: 0.1,
-            delayChildren: 0.5,
+            delayChildren: 0,
         },
     },
     exit: {
@@ -56,7 +57,7 @@ const IslandMenu = () => {
     // NEW: track which zone (0,1,2) is active
     const [currentZoneIndex, setCurrentZoneIndex] = useState(0);
 
-    const { zones, toggleSlotEnabled } = useIsland();
+    const { zones, toggleSlotEnabled, getAvailableSlots } = useIsland();
     const zoneCount = zones.length;
     const zone = zones[currentZoneIndex] || { zone: "", name: "", slots: [] };
 
@@ -85,6 +86,11 @@ const IslandMenu = () => {
         setOpenPlaceMenu(false);
         setOpenShopMenu(false);
     };
+
+    const canEnableSlot = (slot: any) => {
+        return getAvailableSlots(slot.animal) > 0;
+    };
+
     return (
         <motion.div className="island-menu">
             <AnimatePresence mode="wait">
@@ -109,18 +115,21 @@ const IslandMenu = () => {
                                 <span className="island-menu__counter--total-free">{placed.length + available.length}</span>
                             </div>
                             <div className="island-menu__title">
-                                <div className="island-menu__nav" onClick={prevZone} >
-                                    <HiChevronLeft />
-                                </div>
+                                {zoneCount > 1 && (
+                                    <div className="island-menu__nav" onClick={prevZone}>
+                                        <HiChevronLeft />
+                                    </div>
+                                )}
                                 <div className="island-menu__title-text">
                                     <span>{zone.name}</span>
                                 </div>
-                                <div className="island-menu__nav" onClick={nextZone}>
-                                    <HiChevronRight />
-                                </div>
+                                {zoneCount > 1 && (
+                                    <div className="island-menu__nav" onClick={nextZone}>
+                                        <HiChevronRight />
+                                    </div>
+                                )}
                             </div>
                             <HiX className="island-menu__close" onClick={handleCloseMenu} />
-                            
                         </div>
                         <motion.ul className="island-menu__list" variants={itemListVariants}>
                             {placed.map((slot) => (
@@ -128,10 +137,19 @@ const IslandMenu = () => {
                                     <img src={animalThumbnails[slot.animal]} alt={slot.animal} />
                                     <FaCheck className="island-menu__tick" />
                                 </motion.li>
-                                
                             ))}
                             {available.map((slot) => (
-                                <motion.li key={slot.id} variants={itemVariants} className="island-menu__item" onClick={() => { toggleSlotEnabled(zone.zone_id, slot.id); console.log(zone.zone_id, slot.id); }}>
+                                <motion.li
+                                    key={slot.id}
+                                    variants={itemVariants}
+                                    className={`island-menu__item ${!canEnableSlot(slot) ? "island-menu__item--disabled" : ""}`}
+                                    onClick={() => {
+                                        if (canEnableSlot(slot)) {
+                                            toggleSlotEnabled(zone.zone_id, slot.id);
+                                            console.log(zone.zone_id, slot.id);
+                                        }
+                                    }}
+                                >
                                     <img src={animalThumbnails[slot.animal]} alt={slot.animal} />
                                 </motion.li>
                             ))}
@@ -142,10 +160,15 @@ const IslandMenu = () => {
             <AnimatePresence mode="wait">
                 {openShopMenu && (
                     <motion.div variants={islandMenuOverlayVariants} initial="initial" animate="animate" exit="exit" className="island-menu__shop-menu">
-                        <h2>Shop</h2>
-                        <span className="island-menu__close" onClick={handleCloseMenu}>
-                            <HiX />
-                        </span>
+                        <div className="island-menu__header">
+                            <div className="island-menu__title">
+                                <div className="island-menu__title-text">
+                                    <span>Shop</span>
+                                </div>
+                            </div>
+                            <HiX className="island-menu__close" onClick={handleCloseMenu} />
+                        </div>
+                        <IslandShop />
                     </motion.div>
                 )}
             </AnimatePresence>
