@@ -15,7 +15,7 @@ const itemVariants = {
 };
 
 const IslandShop = () => {
-    const { shopItems, buyAnimal, getAvailableSlots, refreshInventory } = useIsland();
+    const { shopItems, buyAnimal, getMaxSlots, refreshInventory } = useIsland();
     const { user, refreshUser } = useUser();
 
     const animalThumbnails = {
@@ -27,6 +27,15 @@ const IslandShop = () => {
     const handlePurchase = async (animalType: any, price: number) => {
         if (!user || user.coins < price) {
             toast.error("Not enough coins!");
+            return;
+        }
+
+        // Check if we can purchase more of this animal type
+        const maxSlots = getMaxSlots(animalType);
+        const currentOwned = shopItems.find((item) => item.animal === animalType)?.owned || 0;
+
+        if (currentOwned >= maxSlots) {
+            toast.error("You already own the maximum number of this animal!");
             return;
         }
 
@@ -43,25 +52,32 @@ const IslandShop = () => {
     return (
         <motion.div className="island-shop__items">
             {shopItems.map((item) => {
-                const availableSlots = getAvailableSlots(item.animal);
+                const maxSlots = getMaxSlots(item.animal);
                 const canAfford = (user?.coins || 0) >= item.price;
+                const atMaxCapacity = item.owned >= maxSlots;
 
                 return (
-                    <motion.div key={item.id} variants={itemVariants} className={`island-shop__item ${!canAfford ? "island-shop__item--disabled" : ""}`}>
+                    <motion.div key={item.id} variants={itemVariants} className={`island-shop__item ${!canAfford || atMaxCapacity ? "island-shop__item--disabled" : ""}`}>
                         <div className="island-shop__item-info">
                             <h4>{item.animal.charAt(0).toUpperCase() + item.animal.slice(1)}</h4>
                             <div className="island-shop__item-stats">
                                 <span className="island-shop__owned">{item.owned}</span>
                                 <span>/</span>
-                                <span className="island-shop__available">{availableSlots}</span>
+                                <span className="island-shop__max">{maxSlots}</span>
                             </div>
                         </div>
                         <div className="island-shop__item-image">
                             <img src={animalThumbnails[item.animal]} alt={item.animal} />
                         </div>
 
-                        <button className="island-shop__buy-btn" onClick={() => handlePurchase(item.animal, item.price)} disabled={!canAfford}>
-                            <span className="island-shop__price"><RiCopperCoinFill/> {item.price}</span>
+                        <button className="island-shop__buy-btn" onClick={() => handlePurchase(item.animal, item.price)} disabled={!canAfford || atMaxCapacity}>
+                            {atMaxCapacity ? (
+                                <span>Max Owned</span>
+                            ) : (
+                                <span className="island-shop__price">
+                                    <RiCopperCoinFill /> {item.price}
+                                </span>
+                            )}
                         </button>
                     </motion.div>
                 );

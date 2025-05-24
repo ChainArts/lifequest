@@ -29,6 +29,7 @@ export interface IslandContextType {
     toggleSlotEnabled: (zone: string, slotId: string) => void;
     buyAnimal: (animalType: AnimalType) => Promise<boolean>;
     getAvailableSlots: (animalType: AnimalType) => number;
+    getMaxSlots: (animalType: AnimalType) => number;
     refreshInventory: () => Promise<void>;
 }
 
@@ -38,6 +39,7 @@ const IslandContext = createContext<IslandContextType>({
     toggleSlotEnabled: () => {},
     buyAnimal: async () => false,
     getAvailableSlots: () => 0,
+    getMaxSlots: () => 0,
     refreshInventory: async () => {},
 });
 
@@ -116,6 +118,11 @@ export const IslandProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         }
     };
 
+    const getMaxSlots = (animalType: AnimalType): number => {
+        return zones.flatMap((z) => z.slots).filter((s) => s.animal === animalType).length;
+    };
+
+    // Get currently available slots (owned - used)
     const getAvailableSlots = (animalType: AnimalType): number => {
         const ownedCount = shopItems.find((item) => item.animal === animalType)?.owned || 0;
         const usedCount = zones.flatMap((z) => z.slots).filter((s) => s.animal === animalType && s.enabled).length;
@@ -131,6 +138,7 @@ export const IslandProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                 buyAnimal,
                 getAvailableSlots,
                 refreshInventory,
+                getMaxSlots,
             }}
         >
             {children}
