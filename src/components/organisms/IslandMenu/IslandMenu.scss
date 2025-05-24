@@ -139,6 +139,16 @@
                 object-fit: cover;
             }
         }
+
+        & .island-menu__item--disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+
+            img {
+                filter: grayscale(1);
+            }
+        }
     }
 
     & .island-shop__items {
@@ -178,7 +188,6 @@
                 background-color: var(--purple-dark);
                 padding: 0.2rem 0.4rem;
                 border-radius: 1rem;
-
             }
 
             & .island-shop__buy-btn {

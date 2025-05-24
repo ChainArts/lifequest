@@ -15,8 +15,8 @@ const itemVariants = {
 };
 
 const IslandShop = () => {
-    const { shopItems, buyAnimal, getAvailableSlots } = useIsland();
-    const { user, updateUser } = useUser();
+    const { shopItems, buyAnimal, getAvailableSlots, refreshInventory } = useIsland();
+    const { user, refreshUser } = useUser();
 
     const animalThumbnails = {
         chicken: chickenThumbnail,
@@ -32,7 +32,8 @@ const IslandShop = () => {
 
         const success = await buyAnimal(animalType);
         if (success) {
-            await updateUser({ coins: -price }, "add");
+            await refreshUser(); // Refresh user data to update coins
+            await refreshInventory(); // Refresh inventory
             toast.success(`${animalType} purchased!`);
         } else {
             toast.error("Purchase failed!");
