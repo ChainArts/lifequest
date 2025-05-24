@@ -27,6 +27,7 @@ type HabitsContextType = {
 
     fetchHabitLogData: (id: string, days: number) => Promise<HabitLogData | null>;
     getHabitCompleted: (habitLogId: string, startDay: string, endDay: string) => Promise<HabitLogCompleted | null>;
+    getStreak: (id: string) => Promise<number>;
     // today’s slice
     todayHabits: ActiveHabitProps[];
     dailyXp: number;
@@ -59,6 +60,19 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
             return detailCache[id];
         }
         return await refreshHabitById(id);
+    };
+
+    const getStreak = async (id: string) => {
+        try {
+            const streak = (await invoke("get_habit_streak", { id })) as number;
+            const wasCompleted = (await invoke("get_habit_log_completed", { id })) as boolean;
+            const today = wasCompleted ? 1 : 0;
+            console.log("today", today);
+            return streak + today;
+        } catch (e) {
+            console.error("Failed to fetch streak", e);
+            return 0;
+        }
     };
 
     const fetchHabitLogData = async (id: string, days: number) => {
@@ -118,14 +132,14 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
         }
     };
 
-    const updateHabitProgress = async (habitLogId: string, add?: number, currentStreak?: number, goal?: number, data?: number) => {
-        // 0) get previous “completed” state
-        const wasCompleted = (await invoke("get_habit_log_completed", { id: habitLogId })) as boolean;
+    const updateHabitProgress = async (habitId: string, add?: number, currentStreak?: number, goal?: number, data?: number) => {
         // 1) bump local state
         let newDone = 0;
+        let isNewCompletion = false;
+        let exp = 0;
         setTodayHabits((prev) =>
             prev.map((h) => {
-                if (h.id !== habitLogId) return h;
+                if (h.id !== habitId) return h;
                 newDone = Math.min(h.done + (add ?? 0), h.goal);
                 return { ...h, done: newDone };
             })
@@ -133,26 +147,36 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
 
         // 2) build payload
         const completed = newDone === goal;
-        const isNewCompletion = completed && !wasCompleted;
-        const exp = isNewCompletion ? calulateStreakXP(currentStreak ?? 0) : 0;
+        if (completed) {
+            isNewCompletion = (await invoke("is_new_completion", { id: habitId })) as boolean;
+            exp = calulateStreakXP(currentStreak ?? 0);
+        }
 
-        // only include exp/completed when we're newly completing
-        const payload: any = { id: habitLogId, progress: newDone, data: data };
+        const payload: any = {
+            id: habitId,
+            progress: newDone,
+            data: data,
+            completed: add === undefined ? undefined : completed,
+        };
         if (isNewCompletion) {
             payload.exp = exp;
-            payload.completed = true;
+        }
+
+        if (add! <= 0) {
+            payload.completed = false;
         }
 
         // 3) call backend
 
         try {
+            console.log("Updating habit progress", payload);
             if (isNewCompletion) {
-                await invoke("increase_habit_xp", { id: habitLogId, exp });
-                await refreshXp();
-                await refreshHabits();
+                await invoke("increase_habit_xp", { id: habitId, exp });
             }
             // this now only ever updates `progress` (and newly‐earned XP/completed if applicable)
             await invoke("update_habit_log", payload);
+            await refreshXp();
+            await refreshHabits();
         } catch (e) {
             console.error("Failed to sync habit:", e);
         }
@@ -183,6 +207,7 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
                 habitCount,
                 fetchHabitLogData,
                 getHabitCompleted,
+                getStreak,
             }}
         >
             {children}

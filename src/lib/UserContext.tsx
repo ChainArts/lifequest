@@ -82,7 +82,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                     payload.level = levelDelta;
                     payload.coins = 100; // reward 100 coins per level-up
                     toast.success(<ToastLevelUp level={newLvl} />);
-                    
                 }
             } else {
                 // full replace
@@ -98,7 +97,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         if (updates.highest_streak !== undefined) {
             payload.higheststreak = updates.highest_streak;
         }
-        
 
         // 3) invoke and refresh
         try {
@@ -144,9 +142,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         (async () => {
-            await refreshUser();
-            await checkStreak();
-            await refreshUser();
+            await refreshUser().then(() => {
+                checkStreak().then(() => {
+                    refreshUser();
+                });
+            }).catch((err) => {
+                console.error("failed to fetch user data:", err);
+            });
         })();
     }, []);
 

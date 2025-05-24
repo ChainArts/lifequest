@@ -3,6 +3,7 @@ use serde_json::{json, Number};
 use crate::{db::LOCAL_DB, db_commands::schema};
 
 
+
 #[tauri::command]
 pub async fn get_xp_for_today() -> surrealdb::Result<serde_json::Value> {
     let today_str = Local::now().format("%Y-%m-%d").to_string();
@@ -12,9 +13,33 @@ pub async fn get_xp_for_today() -> surrealdb::Result<serde_json::Value> {
         .await?;
     // Directly extract the total as an Option<i64>
     let total: Option<i64> = res.take(0)?;
-    println!("Total XP for today: {:?}", total.unwrap_or(0));
     // Return the number, using 0 as a default if total is None
     Ok(json!(total.unwrap_or(0)))
+}
+
+#[tauri::command]
+pub async fn is_new_completion(id: String) -> surrealdb::Result<bool> {
+    let today_str = Local::now().format("%Y-%m-%d").to_string();
+    let mut exp_res = LOCAL_DB
+        .query(
+            "SELECT VALUE exp
+             FROM habit_log
+             WHERE date = $date
+               AND habit_id = $habit_id
+             LIMIT 1",
+        )
+        .bind(("date", today_str))
+        .bind(("habit_id", format!("habit:{}", id)))
+        .await?;
+
+    let exp: Option<i64> = exp_res.take(0)?;
+    // check if the XP is 0, if so return true else false
+    if let Some(exp) = exp {
+        if exp == 0 {
+            return Ok(true);
+        }
+    }
+    Ok(false)
 }
 
 #[tauri::command]
@@ -154,8 +179,6 @@ pub async fn update_habit_log(
     if let Some(data) = data {
         update_data["data"] = json!(data);
     }
-    println!("Updating habit log with id: {:?}", id);
-    println!("Update data: {:?}", update_data);
 
     let today_str = Local::now().format("%Y-%m-%d").to_string();
     let _res = LOCAL_DB
@@ -164,12 +187,12 @@ pub async fn update_habit_log(
         .bind(("update_data", update_data))
         .bind(("habit_id", format!("habit:{}", id)))
         .await?;
+
     Ok(())
 }
 
 #[tauri::command]
 pub async fn get_habit_log_completed(id: String) -> surrealdb::Result<bool> {
-    println!("Fetching completed status for habit log with id: {:?}", id);
     let today_str = Local::now().format("%Y-%m-%d").to_string();
     let mut res = LOCAL_DB
         .query("SELECT VALUE completed FROM habit_log WHERE habit_id = $habit_id AND date = $date")
@@ -177,7 +200,6 @@ pub async fn get_habit_log_completed(id: String) -> surrealdb::Result<bool> {
         .bind(("date", today_str))
         .await?;
     let completed: Option<bool> = res.take(0)?;
-    println!("Completed status: {:?}", completed);
     Ok(completed.unwrap_or(false))
 }
 
@@ -189,6 +211,9 @@ pub async fn check_all_today_completed() -> surrealdb::Result<bool> {
         .bind(("date", today_str))
         .await?;
     let completed: Vec<bool> = res.take(0)?;
+    if completed.is_empty() {
+        return Ok(false);
+    }
     Ok(completed.iter().all(|&c| c))
 }
 
@@ -205,6 +230,11 @@ pub async fn check_all_yesterday_completed() -> surrealdb::Result<bool> {
         .bind(("date", yesterday_str))
         .await?;
     let completed: Vec<bool> = res.take(0)?;
+    println!("Completed: {:?}", completed);
+    // completed is empty -> return false
+    if completed.is_empty() {
+        return Ok(false);
+    }
     Ok(completed.iter().all(|&c| c))
 }
 
@@ -259,4 +289,64 @@ pub async fn get_habit_log_completed_range(
 
     let entries: Vec<serde_json::Value> = res.take(0)?;
     Ok(serde_json::json!(entries))
+}
+
+#[tauri::command]
+pub async fn get_habit_streak(id: String) -> surrealdb::Result<serde_json::Value> {
+    let today_str = Local::now().format("%Y-%m-%d").to_string();
+    let habit_id = id.clone();
+
+    // 1) Load the habit record
+    let habit_res: Option<schema::Habit> = LOCAL_DB.select(("habit", id)).await?;
+    let mut habit = habit_res.unwrap();
+
+    // 2) Fetch the last N entries, where N = current_streak + 1
+    let lookback = habit
+        .current_streak
+        .as_i64()
+        .unwrap_or(0)
+        .saturating_add(1) as usize;
+
+    let mut last_entries_res = LOCAL_DB
+        .query(
+            "SELECT * FROM habit_log
+             WHERE habit_id = $habit_id
+               AND date != $date
+             ORDER BY date DESC
+             LIMIT $limit"
+        )
+        .bind(("habit_id", format!("habit:{}", habit_id)))
+        .bind(("date", today_str.clone()))
+        .bind(("limit", lookback))
+        .await?;
+
+    let last_entries: Vec<schema::HabitLog> = last_entries_res.take(0)?;
+
+    // 3) Count how many of those are completed (streak continuation)
+    let mut streak = 0;
+    for entry in last_entries {
+        if entry.completed {
+            streak += 1;
+        } else {
+            break;
+        }
+    }
+
+    // 4) If the computed streak exceeds the stored current_streak, update both streak fields
+    let current_streak = habit.current_streak.as_i64().unwrap_or(0);
+    if streak != current_streak {
+        habit.current_streak = serde_json::Number::from(streak);
+
+        let highest_streak = habit.highest_streak.as_i64().unwrap_or(0);
+        if streak > highest_streak {
+            habit.highest_streak = serde_json::Number::from(streak);
+        }
+
+        // Persist the updated habit back to the DB
+        let _res: Option<schema::Habit> = LOCAL_DB
+            .update(("habit", habit_id))
+            .merge(json!(habit.clone()))  // use the updated struct here
+            .await?;   
+    }
+    Ok(json!(streak))
 }

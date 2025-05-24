@@ -7,10 +7,12 @@ import Card from "../../molecules/Card/Card";
 import "./ProfileSettings.scss";
 import { invoke } from "@tauri-apps/api/core";
 import { usePopOver } from "../../../lib/PopOverContext";
+import { useNavigate } from "react-router-dom";
 
 const ProfileSettings = () => {
     const { user } = useUser();
     const { openPopOver, closePopOver } = usePopOver();
+    const navigate = useNavigate();
 
     const openDelete = () => {
         openPopOver(
@@ -30,14 +32,15 @@ const ProfileSettings = () => {
     };
 
     const reset_profile = async () => {
-        const confirm = window.confirm("Are you sure you want to reset your profile? This action cannot be undone.");
-        if (confirm) {
-            await invoke("reset_data");
-            window.location.reload();
-        }
+        await invoke("reset_data").then(() => {
+            closePopOver();
+            setTimeout(() => {
+                localStorage.clear();
+                navigate("/");
+                window.location.reload();
+            }, 500);
+        });
     };
-
-    if (!user) return null;
 
     return (
         <>
@@ -47,7 +50,7 @@ const ProfileSettings = () => {
             <div className="stats-teaser__grid">
                 <Card className=" inverse stats-teaser__streak">
                     <span className="stats-teaser__streak-title"></span>
-                    <span className="fst--big-number">{calculateLevel(user.exp).level}</span>
+                    <span className="fst--big-number">{user ? calculateLevel(user.exp).level : 0}</span>
                     <span className="stats-teaser__streak-title">Level</span>
                 </Card>
                 <div className="stats-teaser__list">

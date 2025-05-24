@@ -19,6 +19,9 @@ const Home = () => {
         return Math.round(percent * 100);
     };
 
+    // check if all habits are completed
+    const allCompleted = todayHabits.every((h) => h.done >= h.goal);
+
     return (
         <motion.main initial="initial" animate="in" exit="out" variants={pageVariants}>
             <motion.section variants={sectionVariants}>
@@ -26,7 +29,7 @@ const Home = () => {
             </motion.section>
 
             <motion.section variants={sectionVariants}>
-                <StreakCalender streak={user ? user.current_streak : 0} />
+                <StreakCalender streak={user ? user.current_streak : 0} todayCompleted={allCompleted} />
             </motion.section>
 
             <motion.section variants={sectionVariants}>

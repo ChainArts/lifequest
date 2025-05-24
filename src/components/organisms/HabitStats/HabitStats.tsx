@@ -8,6 +8,7 @@ import "./HabitStats.scss";
 const HabitStats = ({ icon, habit_xp, title, color, current_streak }: HabitCardProps) => {
     const colorLight = color + "88";
     const levelData = calculateLevel(habit_xp);
+
     return (
         <div className="habit-stats">
             <Card

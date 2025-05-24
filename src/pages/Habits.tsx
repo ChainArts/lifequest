@@ -25,7 +25,10 @@ const Habits = () => {
                         setOpen={setIsHabitFormOpen}
                         isOpen={isHabitFormOpen}
                         mode="create"
-                        onSubmitSuccess={() => { refreshHabits(); refreshToday(); }}
+                        onSubmitSuccess={() => {
+                            refreshHabits();
+                            refreshToday();
+                        }}
                     />
                 </section>
             </motion.main>

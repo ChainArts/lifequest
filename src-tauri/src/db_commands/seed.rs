@@ -1,6 +1,6 @@
 use crate::db::LOCAL_DB;
 use crate::db_commands::schema::{Habit, HabitLog};
-use chrono::{Duration, NaiveDate};
+use chrono::{Duration, Local};
 use rand::Rng;
 use serde_json::{json, Number};
 use surrealdb::Result;
@@ -24,7 +24,8 @@ pub async fn seed_walking_data() -> Result<()> {
         }))
         .await?;
 
-    let start_date = NaiveDate::from_ymd_opt(2025, 5, 13).unwrap();
+    let today = Local::now().date_naive();
+    let start_date = today - Duration::days(1);
 
     for days_ago in (0..30).rev() {
         let (progress_val, exp_val, calories) = {
@@ -216,7 +217,6 @@ pub async fn seed_zones_and_slots() -> surrealdb::Result<()> {
         // Check if the zone already exists
         let query = "SELECT * FROM zone WHERE zone_id = $zone_id";
         let zone_id = zone.zone_id.clone();
-        println!("Checking for existing zone with ID: {}", zone_id);
         let mut res = LOCAL_DB
             .query(query)
             .bind(("zone_id", zone_id))

@@ -87,6 +87,11 @@
     text-decoration: none;
     margin: 0;
     padding: 0;
+    font-family: var(--font-family);
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 li {
@@ -117,6 +122,7 @@ main {
     width: 100%;
     margin-top: 38dvh;
     background-color: var(--background-base);
+    z-index: 2;
     @media screen and (min-width: 800px) {
         background-color: var(--background-base-trans);
         backdrop-filter: blur(10px);
