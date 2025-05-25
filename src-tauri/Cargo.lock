@@ -13,6 +13,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "LifeQuest"
+version = "1.0.0"
+dependencies = [
+ "chrono",
+ "dotenv",
+ "rand 0.9.1",
+ "serde",
+ "serde_json",
+ "surrealdb",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-haptics",
+ "tauri-plugin-opener",
+ "tokio",
+ "winapi",
+]
+
+[[package]]
 name = "addr"
 version = "0.15.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2956,24 +2974,6 @@ dependencies = [
  "cc",
  "pkg-config",
  "vcpkg",
-]
-
-[[package]]
-name = "lifequest"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "dotenv",
- "rand 0.9.1",
- "serde",
- "serde_json",
- "surrealdb",
- "tauri",
- "tauri-build",
- "tauri-plugin-haptics",
- "tauri-plugin-opener",
- "tokio",
- "winapi",
 ]
 
 [[package]]

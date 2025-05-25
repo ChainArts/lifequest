@@ -33,9 +33,8 @@ const ActiveHabit = ({ habit, updateXP }: { habit: ActiveHabitProps; updateXP: (
 
     const handleAdd = async () => {
         try {
-            await impactFeedback("rigid");
+            await impactFeedback("soft");
         } catch (error) {
-            // Haptics not supported on this platform
             console.log("Haptics not supported");
         }
         const gotXp = (await updateHabitProgress(id, 1, current_streak, goal)) as boolean;
@@ -43,6 +42,12 @@ const ActiveHabit = ({ habit, updateXP }: { habit: ActiveHabitProps; updateXP: (
             const earned = calulateStreakXP(current_streak);
             await incrementStreak();
             await updateUser({ exp: earned }, "add");
+            try {
+            await impactFeedback("heavy");
+        } catch (error) {
+            
+            console.log("Haptics not supported");
+        }
         }
         const timestamp = Date.now();
         const newCircles = [{ id: `${timestamp}` }];
