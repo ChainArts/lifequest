@@ -1,6 +1,6 @@
 .island-menu {
     position: absolute;
-    top: 0;
+    inset: 0;
     width: 100%;
     height: calc(100svh - var(--navbar-height));
     padding: 1rem 0.5rem;
@@ -88,17 +88,18 @@
 .island-menu__place-menu,
 .island-menu__shop-menu {
     pointer-events: all;
-    width: 100%;
+    position: absolute;
+    bottom: 4rem;
+    left: 0.5rem;
+    width: calc(100% - 1rem);
     display: flex;
     flex-direction: column;
-    margin-top: auto;
     background-color: var(--background-base-trans);
     backdrop-filter: blur(10px);
     border-radius: 1rem;
     padding: 1rem;
     gap: 0.5rem;
     border: 1px solid var(--background-base);
-    position: relative;
 
     & .island-menu__list,
     .island-shop__items {
@@ -225,17 +226,16 @@
 
 .island-menu__close {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
-    padding: 0.25rem;
+    top: calc(100% + 0.5rem);
+    right: 50%;
+    transform: translateX(50%);
+    padding: 0.35rem;
     width: 2rem;
     height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    place-items: center;
     border-radius: 50%;
     background-color: var(--background-base);
     color: var(--error);
-    transition: all 0.3s var(--ease);
     cursor: pointer;
 }

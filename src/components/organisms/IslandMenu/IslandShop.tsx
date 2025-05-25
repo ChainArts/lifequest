@@ -7,12 +7,7 @@ import foxThumbnail from "/src/assets/thumbnails/fox.png";
 import duckThumbnail from "/src/assets/thumbnails/duck.png";
 import { RiCopperCoinFill } from "react-icons/ri";
 // import "./IslandShop.scss";
-
-const itemVariants = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.3 } },
-    exit: { opacity: 0, y: -20, transition: { duration: 0.3 } },
-};
+import { itemListVariants, itemVariants } from "./IslandMenu";
 
 const IslandShop = () => {
     const { shopItems, buyAnimal, getMaxSlots, refreshInventory } = useIsland();
@@ -50,14 +45,14 @@ const IslandShop = () => {
     };
 
     return (
-        <motion.div className="island-shop__items">
+        <motion.ul className="island-shop__items" variants={itemListVariants} initial="initial" animate="animate" exit="exit">
             {shopItems.map((item) => {
                 const maxSlots = getMaxSlots(item.animal);
                 const canAfford = (user?.coins || 0) >= item.price;
                 const atMaxCapacity = item.owned >= maxSlots;
 
                 return (
-                    <motion.div key={item.id} variants={itemVariants} className={`island-shop__item ${!canAfford || atMaxCapacity ? "island-shop__item--disabled" : ""}`}>
+                    <motion.li key={item.id} variants={itemVariants} className={`island-shop__item ${!canAfford || atMaxCapacity ? "island-shop__item--disabled" : ""}`}>
                         <div className="island-shop__item-info">
                             <h4>{item.animal.charAt(0).toUpperCase() + item.animal.slice(1)}</h4>
                             <div className="island-shop__item-stats">
@@ -79,10 +74,10 @@ const IslandShop = () => {
                                 </span>
                             )}
                         </button>
-                    </motion.div>
+                    </motion.li>
                 );
             })}
-        </motion.div>
+        </motion.ul>
     );
 };
 

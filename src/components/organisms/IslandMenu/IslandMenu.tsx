@@ -2,7 +2,7 @@ import { useState } from "react";
 import { PiPawPrintFill, PiShoppingCartFill } from "react-icons/pi";
 import { HiX, HiChevronLeft, HiChevronRight } from "react-icons/hi";
 import { FaCheck } from "react-icons/fa";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import "./IslandMenu.scss";
 import chickenThumbnail from "/src/assets/thumbnails/chicken.png";
 import foxThumbnail from "/src/assets/thumbnails/fox.png";
@@ -38,13 +38,13 @@ const islandMenuOverlayVariants = {
     exit: { y: 500, transition: { duration: 0.3, ease: [0.14, 0.8, 0.4, 1] } },
 };
 
-const itemListVariants = {
+export const itemListVariants = {
     initial: {},
     animate: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
     exit: { transition: { staggerChildren: 0.1, staggerDirection: -1 } },
 };
 
-const itemVariants = {
+export const itemVariants = {
     initial: { opacity: 0, y: 5 },
     animate: { opacity: 1, y: 0, transition: { duration: 1, ease: [0.14, 0.8, 0.4, 1] } },
     exit: { opacity: 0, y: -5, transition: { duration: 1, ease: [0.14, 0.8, 0.4, 1] } },
@@ -129,7 +129,6 @@ const IslandMenu = () => {
                                     </div>
                                 )}
                             </div>
-                            <HiX className="island-menu__close" onClick={handleCloseMenu} />
                         </div>
                         <motion.ul className="island-menu__list" variants={itemListVariants}>
                             {placed.map((slot) => (
@@ -146,7 +145,6 @@ const IslandMenu = () => {
                                     onClick={() => {
                                         if (canEnableSlot(slot)) {
                                             toggleSlotEnabled(zone.zone_id, slot.id);
-                                            console.log(zone.zone_id, slot.id);
                                         }
                                     }}
                                 >
@@ -154,6 +152,7 @@ const IslandMenu = () => {
                                 </motion.li>
                             ))}
                         </motion.ul>
+                        <HiX className="island-menu__close" onClick={handleCloseMenu} />
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -166,9 +165,9 @@ const IslandMenu = () => {
                                     <span>Shop</span>
                                 </div>
                             </div>
-                            <HiX className="island-menu__close" onClick={handleCloseMenu} />
                         </div>
                         <IslandShop />
+                        <HiX className="island-menu__close" onClick={handleCloseMenu} />
                     </motion.div>
                 )}
             </AnimatePresence>
