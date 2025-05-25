@@ -125,7 +125,7 @@ const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess, fetchHabits
                                             setAddActiveHabitOpen(true);
                                         }}
                                     >
-                                        Add Habit for today
+                                        Include Habit
                                     </Button>
                                     <AddActiveHabit addActiveHabitOpen={addActiveHabitOpen} setAddActiveHabitOpen={setAddActiveHabitOpen} habits={habits} fetchHabits={fetchHabits} />
                                 </Sheet.Scroller>
