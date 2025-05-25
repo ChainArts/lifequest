@@ -1,6 +1,6 @@
 use crate::{
     db::LOCAL_DB,
-    db_commands::{schema, seed::seed_walking_data},
+    db_commands::{schema, seed::{seed_walking_data, seed_zones_and_slots}},
 };
 use chrono::Local;
 use serde_json::{json, Number};
@@ -156,6 +156,9 @@ pub async fn reset_data() -> surrealdb::Result<()> {
     let _res: Vec<schema::HabitLog> = LOCAL_DB.delete("habit_log").await?;
     // Reset user data
     let _res: Vec<schema::User> = LOCAL_DB.delete("user").await?;
+    let _res: Vec<schema::AnimalInventory> = LOCAL_DB.delete("animal_inventory").await?;
+    let _res: Vec<schema::Zone> = LOCAL_DB.delete("zone").await?;
     seed_walking_data().await?;
+    seed_zones_and_slots().await?;
     Ok(())
 }

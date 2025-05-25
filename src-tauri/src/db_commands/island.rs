@@ -70,7 +70,7 @@ pub async fn get_animal_inventory() -> surrealdb::Result<serde_json::Value> {
             schema::AnimalInventory {
                 id: None,
                 animal_type: "chicken".to_string(),
-                owned: 1,
+                owned: 0,
             },
             schema::AnimalInventory {
                 id: None,
