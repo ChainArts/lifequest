@@ -203,6 +203,11 @@
                 transition: all 0.3s var(--ease);
                 cursor: pointer;
 
+                &.island-shop__buy-btn--max {
+                    background-color: var(--success);
+                    line-height: 1;
+                }
+
                 & .island-shop__price {
                     display: flex;
                     align-items: center;

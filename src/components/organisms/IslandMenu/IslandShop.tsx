@@ -66,7 +66,7 @@ const IslandShop = () => {
                             <img src={animalThumbnails[item.animal]} alt={item.animal} />
                         </div>
 
-                        <button className="island-shop__buy-btn" onClick={() => handlePurchase(item.animal, item.price)} disabled={!canAfford || atMaxCapacity}>
+                        <button className={`island-shop__buy-btn ${atMaxCapacity && "island-shop__buy-btn--max"}`} onClick={() => handlePurchase(item.animal, item.price)} disabled={!canAfford || atMaxCapacity}>
                             {atMaxCapacity ? (
                                 <span><FaCheck/></span>
                             ) : (
