@@ -9,6 +9,7 @@ import { calulateStreakXP } from "../../../lib/XP";
 import { useUser} from "../../../lib/UserContext";
 import { usePopOver } from "../../../lib/PopOverContext";
 import AddTrackingData from "../../organisms/DailyHabitsEdit/AddTrackingData";
+import { impactFeedback } from "@tauri-apps/plugin-haptics";
 
 export type ActiveHabitProps = {
     id: string;
@@ -31,6 +32,12 @@ const ActiveHabit = ({ habit, updateXP }: { habit: ActiveHabitProps; updateXP: (
     const { openPopOver } = usePopOver();
 
     const handleAdd = async () => {
+        try {
+            await impactFeedback("rigid");
+        } catch (error) {
+            // Haptics not supported on this platform
+            console.log("Haptics not supported");
+        }
         const gotXp = (await updateHabitProgress(id, 1, current_streak, goal)) as boolean;
         if (gotXp) {
             const earned = calulateStreakXP(current_streak);
