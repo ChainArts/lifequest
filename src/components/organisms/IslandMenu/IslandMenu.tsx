@@ -33,9 +33,9 @@ const islandMenuButtonVariants = {
 };
 
 const islandMenuOverlayVariants = {
-    initial: { y: 500 },
-    animate: { y: 0, transition: { staggerChildren: 0.2, delay: 0.1, duration: 0.3, ease: [0.14, 0.8, 0.4, 1] } },
-    exit: { y: 500, transition: { duration: 0.3, ease: [0.14, 0.8, 0.4, 1] } },
+    initial: { y: 500, x: "-50%" },
+    animate: { y: 0, x: "-50%", transition: { staggerChildren: 0.2, delay: 0.1, duration: 0.3, ease: [0.14, 0.8, 0.4, 1] } },
+    exit: { y: 500, x: "-50%", transition: { duration: 0.3, ease: [0.14, 0.8, 0.4, 1] } },
 };
 
 export const itemListVariants = {

@@ -8,6 +8,7 @@ import duckThumbnail from "/src/assets/thumbnails/duck.png";
 import { RiCopperCoinFill } from "react-icons/ri";
 // import "./IslandShop.scss";
 import { itemListVariants, itemVariants } from "./IslandMenu";
+import { FaCheck } from "react-icons/fa";
 
 const IslandShop = () => {
     const { shopItems, buyAnimal, getMaxSlots, refreshInventory } = useIsland();
@@ -67,7 +68,7 @@ const IslandShop = () => {
 
                         <button className="island-shop__buy-btn" onClick={() => handlePurchase(item.animal, item.price)} disabled={!canAfford || atMaxCapacity}>
                             {atMaxCapacity ? (
-                                <span>Max Owned</span>
+                                <span><FaCheck/></span>
                             ) : (
                                 <span className="island-shop__price">
                                     <RiCopperCoinFill /> {item.price}

@@ -90,7 +90,7 @@
     pointer-events: all;
     position: absolute;
     bottom: 4rem;
-    left: 0.5rem;
+    left: 50%;
     width: calc(100% - 1rem);
     display: flex;
     flex-direction: column;
@@ -100,6 +100,7 @@
     padding: 1rem;
     gap: 0.5rem;
     border: 1px solid var(--background-base);
+    max-width: 25rem;
 
     & .island-menu__list,
     .island-shop__items {

@@ -6,8 +6,9 @@ import { Sheet } from "react-modal-sheet";
 import { useState } from "react";
 import EmojiPicker, { Categories } from "emoji-picker-react";
 import { invoke } from "@tauri-apps/api/core";
-import { BiSolidUpArrow, BiSolidDownArrow, BiSolidRightArrow } from "react-icons/bi";
+import { BiSolidRightArrow } from "react-icons/bi";
 import InfoBlob from "../../atoms/InfoBlob/InfoBlob";
+import NumberInput from "../DailyHabitsEdit/NumberInput";
 
 const habitSchema = yup.object().shape({
     title: yup.string().required("name is required"),
@@ -122,7 +123,7 @@ const HabitForm = ({ id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }
                                     <div className="container form-container">
                                         <fieldset>
                                             <label htmlFor="title">Name Your Habit</label>
-                                            <Field className="single-input" id="title" name="title" type="text" placeholder="new habit" />
+                                            <Field className="single-input" id="title" name="title" type="text" placeholder="New Habit" />
                                             <ErrorMessage name="title" component="div" className="error" />
                                         </fieldset>
 
@@ -134,7 +135,8 @@ const HabitForm = ({ id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }
                                             <div className="form-box">
                                                 <label htmlFor="goal">
                                                     Quantity
-                                                    <Field id="goal" name="goal" type="number" inputMode="numeric" />
+                                                    <NumberInput id="goal" value={values.goal ?? 0} setFieldValue={setFieldValue} />
+                                                    {/* <Field id="goal" name="goal" type="number" inputMode="numeric" />
                                                     <div className="arrow-buttons">
                                                         <button type="button" onClick={() => setFieldValue("goal", Math.max(Number(values.goal) + 1, 1))}>
                                                             <BiSolidUpArrow />
@@ -142,7 +144,7 @@ const HabitForm = ({ id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }
                                                         <button type="button" onClick={() => setFieldValue("goal", Math.max(Number(values.goal) - 1, 1))}>
                                                             <BiSolidDownArrow />
                                                         </button>
-                                                    </div>
+                                                    </div> */}
                                                     <ErrorMessage name="goal" component="div" className="error" />
                                                 </label>
 
