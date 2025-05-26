@@ -2,9 +2,9 @@ import { motion } from "motion/react";
 import { useEffect } from "react";
 
 const islandPageVariants = {
-    initial: { y: "-3vh" },
-    animate: { y: "100vh" },
-    exit: { y: "-3vh" },
+    initial: { y: "-3vh", x: "-50%" },
+    animate: { y: "100vh", x: "-50%" },
+    exit: { y: "-3vh", x: "-50%" },
 };
 
 const Island = () => {

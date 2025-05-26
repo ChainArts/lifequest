@@ -1,10 +1,10 @@
 .action-button {
     position: fixed;
     z-index: 500;
-    top: 80svh;
+    top: 83dvh;
     right: 1rem;
-    height: 3.25rem;
-    width: 3.25rem;
+    height: 3.5rem;
+    width: 3.5rem;
 
     svg {
         fill: var(--text-invert);
@@ -20,5 +20,11 @@
         justify-content: center;
         align-items: center;
         box-shadow: var(--box-shadow);
+    }
+
+    @media screen and (min-width: 800px) {
+        right: calc(50% - 192px);
+        top: 85dvh;
+        
     }
 }

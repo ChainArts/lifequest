@@ -34,7 +34,7 @@ const IslandContainer = ({ location }: { location: string }) => {
         setIsActive(location === "/island");
     }, [location]);
 
-    // Define your boundaries
+    // Define boundaries
     const minZ = -50,
         maxZ = 50;
 
@@ -54,7 +54,7 @@ const IslandContainer = ({ location }: { location: string }) => {
                 <PerspectiveCamera ref={camRef} makeDefault position={[-20, -20, -80]} fov={50} />
                 <CameraLerp location={location} camRef={camRef} lerpSpeed={lerpSpeed} />
                 <ClampCamera controlsRef={controlsRef} minZ={minZ} maxZ={maxZ} />
-                {isActive && <MapControls ref={controlsRef} enableDamping dampingFactor={0.05} minDistance={15} maxDistance={50} zoomSpeed={3} screenSpacePanning={false} />}
+                {isActive && <MapControls ref={controlsRef} enableDamping dampingFactor={0.05} minDistance={15} maxDistance={50} zoomSpeed={1} screenSpacePanning={false} />}
                 <EffectComposer>
                     <SMAA />
                     <Vignette eskil={false} offset={0.1} darkness={0.5} />

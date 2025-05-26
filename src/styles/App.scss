@@ -32,7 +32,7 @@
     --blue-dark: #9bc1ff;
     --blue-light: #b9d3ff;
 
-    --shadow:  rgba(0, 0, 0, 0.25)
+    --shadow: rgba(0, 0, 0, 0.25);
     --box-shadow: 0px 2px 8px 0px var(--shadow);
     --ease: cubic-bezier(0.14, 0.8, 0.4, 1);
     --radius: 0.5rem;
@@ -117,35 +117,31 @@ body {
 
 main {
     position: relative;
-    padding-bottom: var(--navbar-height);
-    min-height: calc(62dvh - 2rem);
+    padding-bottom: calc(var(--navbar-height) + 4rem);
+    padding-top: 2rem;
+    min-height: 62dvh;
     height: 100%;
     width: 100%;
+    border-radius: 1rem 1rem 0 0;
     margin-top: 38dvh;
     background-color: var(--background-base);
     z-index: 2;
-    @media screen and (min-width: 800px) {
-        background-color: var(--background-base-trans);
-        backdrop-filter: blur(10px);
-        
-    }
+    left: 50%;
+    max-width: 800px;
+    
 
-    &::before {
-        content: "";
+    @media screen and (min-width: 800px) {
         position: absolute;
-        top: calc(-1rem + 1px);
-        left: 0;
-        right: 0;
-        z-index: 1;
-        background-color: var(--background-base);
-        border-radius: 2rem 2rem 0 0;
-        padding: 0.5rem 0;
-    }
-
-    @media screen and (min-width: 800px) {
-        max-width: 800px;
-        padding: 0 1rem;
-        margin: 30dvh auto 0 auto;
+        top: 38dvh;
+        height: fit-content;
+        bottom: calc(var(--navbar-height));
+        background-color: var(--background-base-trans);
+        backdrop-filter: blur(15px);
+        border: var(--background-base) 2px solid;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 3rem 1rem calc(var(--navbar-height) + 4rem) 1rem;
+        margin: 0 auto;
     }
     
 }
@@ -161,6 +157,13 @@ button, a {
     padding-top: 0.25rem;
     margin-bottom: 2rem;
     gap: 1rem;
+
+    @media screen and (min-width: 800px) {
+        padding: 0 1rem;
+        max-width: 800px;
+        margin: 0 auto;
+        
+    }
 }
 
 .react-modal-sheet-container {
