@@ -6,7 +6,7 @@ import LinearProgress from "../../atoms/LinearProgress/LinearProgress";
 import FluentEmoji from "../../../lib/FluentEmoji";
 import { useHabits } from "../../../lib/HabitsContext";
 import { calulateStreakXP } from "../../../lib/XP";
-import { useUser} from "../../../lib/UserContext";
+import { useUser } from "../../../lib/UserContext";
 import { usePopOver } from "../../../lib/PopOverContext";
 import AddTrackingData from "../../organisms/DailyHabitsEdit/AddTrackingData";
 import { impactFeedback } from "@tauri-apps/plugin-haptics";
@@ -43,17 +43,16 @@ const ActiveHabit = ({ habit, updateXP }: { habit: ActiveHabitProps; updateXP: (
             await incrementStreak();
             await updateUser({ exp: earned }, "add");
             try {
-            await impactFeedback("heavy");
-        } catch (error) {
-            
-            console.log("Haptics not supported");
-        }
+                await impactFeedback("heavy");
+            } catch (error) {
+                console.log("Haptics not supported");
+            }
         }
         const timestamp = Date.now();
         const newCircles = [{ id: `${timestamp}` }];
         setCircles((prev) => [...prev, ...newCircles]);
         updateXP();
-        
+
         if (tracking && done + 1 === goal) {
             openPopOver("Add Tracking Data", <AddTrackingData id={id} initialValue={data ?? 0} name={title} />);
         }
@@ -88,8 +87,14 @@ const ActiveHabit = ({ habit, updateXP }: { habit: ActiveHabitProps; updateXP: (
                         <span className="fst--card-title">{title}</span>
                     </div>
                     {!finished ? (
-                        <motion.div layout>
-                            <motion.button className="habit__add" onTap={handleAdd}>
+                        <motion.div>
+                            <motion.button
+                                className="habit__add"
+                                onTap={(event) => {
+                                    event?.preventDefault?.();
+                                    handleAdd();
+                                }}
+                                whileTap={{ scale: 0.9 }}>
                                 <HiPlus />
                                 {circles.map((circle) => (
                                     <motion.div

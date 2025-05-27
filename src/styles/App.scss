@@ -108,7 +108,7 @@ body {
     scrollbar-color: var(--background-layer-sec) transparent;
     scroll-behavior: smooth;
     scrollbar-width: thin;
-
+    overscroll-behavior: contain;
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;

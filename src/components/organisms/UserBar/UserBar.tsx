@@ -7,11 +7,12 @@ import { useNavigate } from "react-router-dom";
 
 const UserBar = () => {
     const { user } = useUser();
+    const navigate = useNavigate();
     if (!user) return null;
+
     const { current_streak, level, goal, done, coins } = user;
     const streakValue = current_streak;
     const formatedLevel = level < 10 ? `0${level}` : level;
-    const navigate = useNavigate();
 
     return (
         <div className="user-bar">
