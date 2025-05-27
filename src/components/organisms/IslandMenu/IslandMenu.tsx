@@ -54,7 +54,6 @@ const IslandMenu = () => {
     const [openPlaceMenu, setOpenPlaceMenu] = useState(false);
     const [openShopMenu, setOpenShopMenu] = useState(false);
 
-    // NEW: track which zone (0,1,2) is active
     const [currentZoneIndex, setCurrentZoneIndex] = useState(0);
 
     const { zones, toggleSlotEnabled, getAvailableSlots } = useIsland();

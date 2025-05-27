@@ -66,6 +66,7 @@ const IslandContainer = ({ location }: { location: string }) => {
                         setDpr(newDpr);
                     }}
                     onDecline={() => degrade(true)}
+                    flipflops={3}
                 />
                 <Environment near={0.01} far={300} frames={degraded ? 1 : Infinity} resolution={512} backgroundRotation={[0, 0, 0]} files="/models/skybox.hdr" background backgroundIntensity={1.5} environmentIntensity={1.25} backgroundBlurriness={0.05} />
                 <pointLight position={[-30, 30, 30]} decay={0} intensity={6} color={"#ffeebb"} shadow-mapSize-width={2048} shadow-mapSize-height={2048} castShadow />

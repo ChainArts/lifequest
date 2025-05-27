@@ -6,7 +6,6 @@ import chickenThumbnail from "/src/assets/thumbnails/chicken.png";
 import foxThumbnail from "/src/assets/thumbnails/fox.png";
 import duckThumbnail from "/src/assets/thumbnails/duck.png";
 import { RiCopperCoinFill } from "react-icons/ri";
-// import "./IslandShop.scss";
 import { itemListVariants, itemVariants } from "./IslandMenu";
 import { FaCheck } from "react-icons/fa";
 

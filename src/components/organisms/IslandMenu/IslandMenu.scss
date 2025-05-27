@@ -101,6 +101,8 @@
     gap: 0.5rem;
     border: 1px solid var(--background-base);
     max-width: 25rem;
+    will-change: transform, opacity;
+    transform: translateZ(0);
 
     & .island-menu__list,
     .island-shop__items {
@@ -115,7 +117,6 @@
             height: 100%;
             aspect-ratio: 1;
             background-color: var(--background-base);
-            backdrop-filter: blur(10px);
             border-radius: 0.25rem;
             padding: 0.2rem;
 
