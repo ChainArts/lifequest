@@ -108,7 +108,6 @@ body {
     scrollbar-color: var(--background-layer-sec) transparent;
     scroll-behavior: smooth;
     scrollbar-width: thin;
-    overscroll-behavior: contain;
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -167,6 +166,7 @@ a {
 
 .react-modal-sheet-container {
     background-color: var(--background-layer) !important;
+    max-width: 100dvw !important;
 }
 
 .react-modal-sheet-scroller {

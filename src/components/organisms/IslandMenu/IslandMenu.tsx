@@ -26,10 +26,16 @@ const containerVariants = {
     },
 };
 
+const menuVariants = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1, transition: { duration: 0.3, ease: [0.14, 0.8, 0.4, 1] } },
+    exit: { opacity: 0, transition: { duration: 0.3, ease: [0.14, 0.8, 0.4, 1] } },
+}
+
 const islandMenuButtonVariants = {
-    initial: { x: 200 },
-    animate: { x: 0, transition: { duration: 0.3, ease: [0.14, 0.8, 0.4, 1] } },
-    exit: { x: 200, transition: { duration: 0.3, ease: [0.14, 0.8, 0.4, 1] } },
+    initial: { opacity: 0, scale: 0 },
+    animate: { opacity: 1, scale: 1, transition: { duration: 0.3, ease: [0.14, 0.8, 0.4, 1] } },
+    exit: { opacity: 0, scale:0, transition: { duration: 0.3, ease: [0.14, 0.8, 0.4, 1] } },
 };
 
 const islandMenuOverlayVariants = {
@@ -91,7 +97,7 @@ const IslandMenu = () => {
     };
 
     return (
-        <motion.div className="island-menu">
+        <motion.div className="island-menu" variants={menuVariants} initial="initial" animate="animate" exit="exit">
             <AnimatePresence mode="wait">
                 {!openPlaceMenu && !openShopMenu && (
                     <motion.div className="island-menu__buttons" variants={containerVariants} initial="initial" animate="animate" exit="exit">
