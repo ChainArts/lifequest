@@ -3,16 +3,13 @@ const sectionTransition = { ease: [0.14, 0.8, 0.4, 1], staggerChildren: 0.1 };
 export const pageVariants = {
     initial: {
         y: "-3vh",
-        x: "-50%"
     },
     in: {
         y: 0,
-        x: "-50%",
         transition: pageTransition,
     },
     out: {
         y: "-3vh",
-        x: "-50%",
         transition: pageTransition,
     },
 };

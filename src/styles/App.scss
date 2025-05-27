@@ -111,6 +111,7 @@ body {
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
+    position: relative;
 }
 
 main {
@@ -124,21 +125,17 @@ main {
     margin-top: 38dvh;
     background-color: var(--background-base);
     z-index: 2;
-    left: 50%;
     max-width: 800px;
     will-change: transform;
     transform: translateZ(0);
 
     @media screen and (min-width: 800px) {
-        position: absolute;
         top: 38dvh;
         height: fit-content;
         bottom: calc(var(--navbar-height));
         background-color: var(--background-base-trans);
         backdrop-filter: blur(15px);
         border: var(--background-base) 2px solid;
-        left: 50%;
-        transform: translateX(-50%);
         padding: 3rem 1rem calc(var(--navbar-height) + 4rem) 1rem;
         margin: 0 auto;
     }
