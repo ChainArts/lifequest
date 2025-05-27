@@ -130,6 +130,7 @@
                 justify-content: center;
                 border-radius: 0.75rem;
                 background-color: var(--purple-dark);
+                color: var(--text-invert);
             }
 
             & img {
@@ -189,6 +190,7 @@
                 background-color: var(--purple-dark);
                 padding: 0.2rem 0.4rem;
                 border-radius: 1rem;
+                color: var(--text-invert);
             }
 
             & .island-shop__buy-btn {
