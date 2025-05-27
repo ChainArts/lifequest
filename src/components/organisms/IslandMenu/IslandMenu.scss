@@ -94,12 +94,10 @@
     width: calc(100% - 1rem);
     display: flex;
     flex-direction: column;
-    background-color: var(--background-base-trans);
-    backdrop-filter: blur(10px);
+    background-color: var(--background-base);
     border-radius: 1rem;
     padding: 1rem;
     gap: 0.5rem;
-    border: 1px solid var(--background-base);
     max-width: 25rem;
     will-change: transform, opacity;
     transform: translateZ(0);
@@ -116,7 +114,7 @@
             position: relative;
             height: 100%;
             aspect-ratio: 1;
-            background-color: var(--background-base);
+            background-color: var(--background-layer);
             border-radius: 0.25rem;
             padding: 0.2rem;
 

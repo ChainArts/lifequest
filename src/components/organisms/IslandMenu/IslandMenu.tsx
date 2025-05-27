@@ -95,10 +95,10 @@ const IslandMenu = () => {
             <AnimatePresence mode="wait">
                 {!openPlaceMenu && !openShopMenu && (
                     <motion.div className="island-menu__buttons" variants={containerVariants} initial="initial" animate="animate" exit="exit">
-                        <motion.span variants={islandMenuButtonVariants} className="island-menu__button" onClick={handleShopMenu}>
+                        <motion.span variants={islandMenuButtonVariants} className="island-menu__button" onClick={handleShopMenu} whileTap={{ scale: 0.9 }}>
                             <PiShoppingCartFill />
                         </motion.span>
-                        <motion.span variants={islandMenuButtonVariants} className="island-menu__button" onClick={handlePlaceMenu}>
+                        <motion.span variants={islandMenuButtonVariants} className="island-menu__button" onClick={handlePlaceMenu} whileTap={{ scale: 0.9 }}>
                             <PiPawPrintFill />
                         </motion.span>
                     </motion.div>
@@ -131,7 +131,7 @@ const IslandMenu = () => {
                         </div>
                         <motion.ul className="island-menu__list" variants={itemListVariants}>
                             {placed.map((slot) => (
-                                <motion.li key={slot.id} variants={itemVariants} className="island-menu__item" onClick={() => toggleSlotEnabled(zone.zone_id, slot.id)}>
+                                <motion.li key={slot.id} variants={itemVariants} className="island-menu__item" onClick={() => toggleSlotEnabled(zone.zone_id, slot.id)} whileTap={{ scale: 0.9 }}>
                                     <img src={animalThumbnails[slot.animal]} alt={slot.animal} />
                                     <FaCheck className="island-menu__tick" />
                                 </motion.li>

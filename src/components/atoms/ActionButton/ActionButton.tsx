@@ -67,7 +67,7 @@ const ActionButton = ({ children, onClick, icon }: ActionButtonProps) => {
     }, []);
 
     return (
-        <motion.div key={`action-btn-${location.pathname}`} className="action-button" variants={getActionButtonVariants(isLargeScreen)} initial="initial" animate="in" exit="out" onClick={onClick}>
+        <motion.div key={`action-btn-${location.pathname}`} className="action-button" variants={getActionButtonVariants(isLargeScreen)} initial="initial" animate="in" exit="out" onClick={onClick} whileTap={{ scale: 0.9 }}>
             {children}
             <button onClick={onClick}>{icon}</button>
         </motion.div>
