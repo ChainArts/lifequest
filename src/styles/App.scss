@@ -300,3 +300,26 @@ a {
 .Toastify_fadeIn {
     animation: Toastify__fadeIn 0.3s var(--ease) both;
 }
+
+.privacy-policy-content {
+    line-height: 1.8;
+
+    & p {
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+.privacy-policy-button {
+    background-color: var(--background-layer);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    position: relative;
+
+    & .privacy-policy-button__icon {
+        position: absolute;
+        right: 0.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+}
