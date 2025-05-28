@@ -1,5 +1,7 @@
 use crate::db::LOCAL_DB;
 use crate::db_commands::schema::{Habit, HabitLog};
+use crate::db_commands::schema::{Slot, Zone};
+
 use chrono::{Duration, Local};
 use rand::Rng;
 use serde_json::{json, Number};
@@ -10,12 +12,12 @@ pub async fn seed_walking_data() -> Result<()> {
     LOCAL_DB
         .insert::<Option<Habit>>(("habit", "walking"))
         .content(json!(Habit {
-            title: "walking".to_string(),
-            goal: Number::from(100),
-            unit: "minutes".to_string(),
+            title: "Walking".to_string(),
+            goal: Number::from(5),
+            unit: "km".to_string(),
             week_days: [true; 7],
             icon: "🚶".to_string(),
-            color: "#00FF00".to_string(),
+            color: "#8A9DE8".to_string(),
             tracking: true,
             habit_xp: Number::from(10),
             highest_streak: Number::from(0),
@@ -27,17 +29,13 @@ pub async fn seed_walking_data() -> Result<()> {
     let today = Local::now().date_naive();
     let start_date = today - Duration::days(1);
 
-    for days_ago in (0..30).rev() {
+    for days_ago in (0..45).rev() {
         let (progress_val, exp_val, calories) = {
             let mut rng = rand::rng();
             let completed = rng.random_bool(0.7);
-            let progress_val = if completed {
-                100
-            } else {
-                rng.random_range(0..100)
-            };
+            let progress_val = if completed { 5 } else { rng.random_range(0..5) };
             let exp_val = if completed { 10 } else { 0 };
-            let calories = (progress_val / 10) * 200;
+            let calories = progress_val * 200; // roughly 200 calories per km
             (progress_val, exp_val, calories)
         };
 
@@ -48,7 +46,7 @@ pub async fn seed_walking_data() -> Result<()> {
         let log = HabitLog {
             habit_id: "habit:walking".into(),
             date,
-            completed: progress_val == 100,
+            completed: progress_val == 5,
             exp: exp_val.into(),
             progress: progress_val.into(),
             data: Some(calories.into()),
@@ -62,8 +60,6 @@ pub async fn seed_walking_data() -> Result<()> {
 
     Ok(())
 }
-
-use crate::db_commands::schema::{Slot, Zone};
 
 pub async fn seed_zones_and_slots() -> surrealdb::Result<()> {
     let predefined_zones = vec![
@@ -209,7 +205,7 @@ pub async fn seed_zones_and_slots() -> surrealdb::Result<()> {
         //             animal: "duck".to_string(),
         //             enabled: false,
         //         },
-            // ],
+        // ],
         // },
     ];
 
@@ -217,10 +213,7 @@ pub async fn seed_zones_and_slots() -> surrealdb::Result<()> {
         // Check if the zone already exists
         let query = "SELECT * FROM zone WHERE zone_id = $zone_id";
         let zone_id = zone.zone_id.clone();
-        let mut res = LOCAL_DB
-            .query(query)
-            .bind(("zone_id", zone_id))
-            .await?;
+        let mut res = LOCAL_DB.query(query).bind(("zone_id", zone_id)).await?;
         let existing_zone: Option<Zone> = res.take(0)?;
 
         // If the zone doesn't exist, insert it
