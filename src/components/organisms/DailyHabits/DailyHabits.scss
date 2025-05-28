@@ -8,3 +8,17 @@
     font-size: 1.4rem;
     color: var(--blue-dark);
 }
+
+.daily-habits__add-new{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.25rem 0;
+    background: linear-gradient(45deg, var(--purple-dark), var(--blue-dark));
+    border-radius: var(--radius);
+
+    & svg {
+        fill: var(--text-invert);
+    }
+}

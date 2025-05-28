@@ -8,14 +8,10 @@ import { pageVariants, sectionVariants } from "../components/atoms/PageTransitio
 
 import { useHabits } from "../lib/HabitsContext";
 import { useUser } from "../lib/UserContext";
-import ActionButton from "../components/atoms/ActionButton/ActionButton";
-import { HiPlus } from "react-icons/hi";
-import { useNavigate } from "react-router-dom";
 
 const Home = () => {
     const { todayHabits, dailyXp, refreshToday, refreshXp } = useHabits();
     const { user } = useUser();
-    const navigate = useNavigate();
 
     const calculateProgress = () => {
         if (todayHabits.length === 0) return 0;
@@ -45,7 +41,6 @@ const Home = () => {
                     <StatsTeaser />
                 </motion.section>
             </motion.main>
-            <ActionButton onClick={() => navigate("/habits", { state: { create: true } })} icon={<HiPlus />} />
         </>
     );
 };

@@ -460,6 +460,10 @@ input {
     }
 }
 
+.emoji-picker__sheet{
+    z-index: 10000 !important;
+}
+
 #unit{
     background-color: var(--progress-bg-round);
 }

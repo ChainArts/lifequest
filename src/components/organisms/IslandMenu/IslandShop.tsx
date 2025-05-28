@@ -38,7 +38,7 @@ const IslandShop = () => {
         if (success) {
             await refreshUser(); // Refresh user data to update coins
             await refreshInventory(); // Refresh inventory
-            toast.success(`${animalType} purchased!`);
+            toast.success(`${animalType.charAt(0).toUpperCase()} purchased!`);
         } else {
             toast.error("Purchase failed!");
         }
@@ -52,7 +52,14 @@ const IslandShop = () => {
                 const atMaxCapacity = item.owned >= maxSlots;
 
                 return (
-                    <motion.li key={item.id} variants={itemVariants} className={`island-shop__item ${!canAfford || atMaxCapacity ? "island-shop__item--disabled" : ""}`}>
+                    <motion.button
+                        key={item.id}
+                        variants={itemVariants}
+                        className={`island-shop__item ${!canAfford || atMaxCapacity ? "island-shop__item--disabled" : ""}`}
+                        disabled={!canAfford || atMaxCapacity}
+                        onClick={() => handlePurchase(item.animal, item.price)}
+                        whileTap={{ scale: 0.95 }}
+                    >
                         <div className="island-shop__item-info">
                             <h4>{item.animal.charAt(0).toUpperCase() + item.animal.slice(1)}</h4>
                             <div className="island-shop__item-stats">
@@ -65,16 +72,18 @@ const IslandShop = () => {
                             <img src={animalThumbnails[item.animal]} alt={item.animal} />
                         </div>
 
-                        <button className={`island-shop__buy-btn ${atMaxCapacity && "island-shop__buy-btn--max"}`} onClick={() => handlePurchase(item.animal, item.price)} disabled={!canAfford || atMaxCapacity}>
+                        <div className={`island-shop__buy-btn ${atMaxCapacity && "island-shop__buy-btn--max"}`}>
                             {atMaxCapacity ? (
-                                <span><FaCheck/></span>
+                                <span>
+                                    <FaCheck />
+                                </span>
                             ) : (
                                 <span className="island-shop__price">
                                     <RiCopperCoinFill /> {item.price}
                                 </span>
                             )}
-                        </button>
-                    </motion.li>
+                        </div>
+                    </motion.button>
                 );
             })}
         </motion.ul>

@@ -6,7 +6,7 @@ import Card from "../../molecules/Card/Card";
 import { useState } from "react";
 import DailyHabitsEdit from "../DailyHabitsEdit/DailyHabitsEdit";
 import { useNavigate } from "react-router-dom";
-import { HiOutlineArrowNarrowRight } from "react-icons/hi";
+import { HiOutlineArrowNarrowRight, HiPlus } from "react-icons/hi";
 
 type DailyHabitsProps = {
     activeHabits: ActiveHabitProps[];
@@ -45,6 +45,9 @@ const DailyHabits = ({ activeHabits, updateXP, fetchHabits }: DailyHabitsProps) 
                         {activeHabits.map((habit, index) => (
                             <ActiveHabit key={index} habit={habit} updateXP={updateXP} />
                         ))}
+                        <div className="daily-habits__add-new" onClick={() => navigate("/habits", { state: { create: true } })}>
+                            <HiPlus />
+                        </div>
                     </div>
                 )}
             </IconContext.Provider>

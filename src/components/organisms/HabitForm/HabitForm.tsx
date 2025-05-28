@@ -136,21 +136,12 @@ const HabitForm = ({ id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }
                                                 <label htmlFor="goal">
                                                     Quantity
                                                     <NumberInput id="goal" value={values.goal ?? 0} setFieldValue={setFieldValue} />
-                                                    {/* <Field id="goal" name="goal" type="number" inputMode="numeric" />
-                                                    <div className="arrow-buttons">
-                                                        <button type="button" onClick={() => setFieldValue("goal", Math.max(Number(values.goal) + 1, 1))}>
-                                                            <BiSolidUpArrow />
-                                                        </button>
-                                                        <button type="button" onClick={() => setFieldValue("goal", Math.max(Number(values.goal) - 1, 1))}>
-                                                            <BiSolidDownArrow />
-                                                        </button>
-                                                    </div> */}
                                                     <ErrorMessage name="goal" component="div" className="error" />
                                                 </label>
 
                                                 <label htmlFor="unit">
                                                     Unit
-                                                    <Field id="unit" name="unit" type="text" placeholder="steps" />
+                                                    <Field id="unit" name="unit" type="text" placeholder="Steps" />
                                                 </label>
                                             </div>
                                         </fieldset>
@@ -248,7 +239,7 @@ const EmojiPickerComponent = ({ emojiPickerOpen, setEmojiPickerOpen }: EmojiPick
     const { setFieldValue } = useFormikContext();
 
     return (
-        <Sheet isOpen={emojiPickerOpen} onClose={() => setEmojiPickerOpen(false)} detent="content-height">
+        <Sheet isOpen={emojiPickerOpen} onClose={() => setEmojiPickerOpen(false)} className="emoji-picker__sheet" detent="content-height">
             <Sheet.Container>
                 <Sheet.Header />
                 <Sheet.Content>
