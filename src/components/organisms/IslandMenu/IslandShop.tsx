@@ -38,7 +38,7 @@ const IslandShop = () => {
         if (success) {
             await refreshUser(); // Refresh user data to update coins
             await refreshInventory(); // Refresh inventory
-            toast.success(`${animalType.charAt(0).toUpperCase()} purchased!`);
+            toast.success(`${animalType.charAt(0).toUpperCase() + animalType.slice(1)} purchased!`);
         } else {
             toast.error("Purchase failed!");
         }

@@ -45,7 +45,7 @@ const DailyHabits = ({ activeHabits, updateXP, fetchHabits }: DailyHabitsProps) 
                         {activeHabits.map((habit, index) => (
                             <ActiveHabit key={index} habit={habit} updateXP={updateXP} />
                         ))}
-                        <div className="daily-habits__add-new" onClick={() => navigate("/habits", { state: { create: true } })}>
+                        <div className="daily-habits__add-new" onClick={() => navigate("/habits", { state: { create: true } })} aria-label="Add new habit">
                             <HiPlus />
                         </div>
                     </div>

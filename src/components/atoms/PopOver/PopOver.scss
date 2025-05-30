@@ -53,6 +53,7 @@
         margin-top: 1rem;
         button {
             color: var(--text-invert);
+            font-weight: 600;
             border-radius: 50px;
             width: 100%;
             padding: 0.5rem 1rem;
@@ -65,7 +66,7 @@
 
             &.cancel {
                 background-color: transparent;
-                outline: 1px solid var(--purple-dark);
+                border: 2px solid var(--purple-dark);
                 color: var(--purple-dark);
             }
         }
