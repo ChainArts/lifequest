@@ -9,7 +9,7 @@ type StreakCalenderProps = {
 const StreakCalender = ({ streak, todayCompleted }: StreakCalenderProps) => {
     const today = new Date().getDay(); // 0 = Sunday, …, 6 = Saturday
     const days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
-    const visibleStreak = streak > 7 ? 7 : streak;
+    let visibleStreak = (streak === 1) ? 0 : (streak > 7 ? 7 : streak);
     const isFullPower = visibleStreak === 7;
 
     // console.log("todayCompleted", todayCompleted);
