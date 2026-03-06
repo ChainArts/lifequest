@@ -23,7 +23,7 @@
     "@tauri-apps/api": "^2.5.0",
     "@tauri-apps/plugin-haptics": "^2.2.4",
     "@tauri-apps/plugin-opener": "^2",
-    "@types/three": "^0.176.0",
+    "@types/three": "^0.183.1",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "emoji-picker-react": "^4.12.2",
@@ -34,12 +34,12 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
-    "react-modal-sheet": "^4.0.1",
+    "react-modal-sheet": "^5.3.1",
     "react-router-dom": "^7.5.1",
     "react-toastify": "^11.0.5",
-    "recharts": "^2.15.3",
+    "recharts": "^3.7.0",
     "sass": "^1.86.3",
-    "three": "^0.176.0",
+    "three": "^0.183.2",
     "three-stdlib": "^2.36.0",
     "yup": "^1.6.1"
   },
@@ -47,9 +47,9 @@
     "@tauri-apps/cli": "^2.5.0",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
-    "@vitejs/plugin-react": "^4.4.1",
+    "@vitejs/plugin-react": "^5.1.4",
     "concurrently": "^9.1.2",
-    "typescript": "~5.8.3",
-    "vite": "^6.3.2"
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
   }
 }
