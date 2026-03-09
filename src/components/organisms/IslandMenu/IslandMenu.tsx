@@ -2,7 +2,7 @@ import { useState } from "react";
 import { PiPawPrintFill, PiShoppingCartFill } from "react-icons/pi";
 import { HiX, HiChevronLeft, HiChevronRight } from "react-icons/hi";
 import { FaCheck } from "react-icons/fa";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, cubicBezier } from "motion/react";
 import "./IslandMenu.scss";
 import chickenThumbnail from "/src/assets/thumbnails/chicken.png";
 import foxThumbnail from "/src/assets/thumbnails/fox.png";
@@ -28,20 +28,20 @@ const containerVariants = {
 
 const menuVariants = {
     initial: { opacity: 0 },
-    animate: { opacity: 1, transition: { duration: 0.3, ease: [0.14, 0.8, 0.4, 1] } },
-    exit: { opacity: 0, transition: { duration: 0.3, ease: [0.14, 0.8, 0.4, 1] } },
+    animate: { opacity: 1, transition: { duration: 0.3, ease: cubicBezier(0.14, 0.8, 0.4, 1)}},
+    exit: { opacity: 0, transition: { duration: 0.3, ease: cubicBezier(0.14, 0.8, 0.4, 1) } },
 };
 
 const islandMenuButtonVariants = {
     initial: { opacity: 0, scale: 0 },
-    animate: { opacity: 1, scale: 1, transition: { duration: 0.3, ease: [0.14, 0.8, 0.4, 1] } },
-    exit: { opacity: 0, scale: 0, transition: { duration: 0.3, ease: [0.14, 0.8, 0.4, 1] } },
+    animate: { opacity: 1, scale: 1, transition: { duration: 0.3, ease: cubicBezier(0.14, 0.8, 0.4, 1) } },
+    exit: { opacity: 0, scale: 0, transition: { duration: 0.3, ease: cubicBezier(0.14, 0.8, 0.4, 1) } },
 };
 
 const islandMenuOverlayVariants = {
     initial: { y: 500, x: "-50%" },
-    animate: { y: 0, x: "-50%", transition: { staggerChildren: 0.2, delay: 0.1, duration: 0.3, ease: [0.14, 0.8, 0.4, 1] } },
-    exit: { y: 500, x: "-50%", transition: { duration: 0.3, ease: [0.14, 0.8, 0.4, 1] } },
+    animate: { y: 0, x: "-50%", transition: { staggerChildren: 0.2, delay: 0.1, duration: 0.3, ease: cubicBezier(0.14, 0.8, 0.4, 1) } },
+    exit: { y: 500, x: "-50%", transition: { duration: 0.3, ease: cubicBezier(0.14, 0.8, 0.4, 1) } },
 };
 
 export const itemListVariants = {
@@ -52,8 +52,8 @@ export const itemListVariants = {
 
 export const itemVariants = {
     initial: { opacity: 0, y: 5 },
-    animate: { opacity: 1, y: 0, transition: { duration: 1, ease: [0.14, 0.8, 0.4, 1] } },
-    exit: { opacity: 0, y: -5, transition: { duration: 1, ease: [0.14, 0.8, 0.4, 1] } },
+    animate: { opacity: 1, y: 0, transition: { duration: 1, ease: cubicBezier(0.14, 0.8, 0.4, 1) } },
+    exit: { opacity: 0, y: -5, transition: { duration: 1, ease: cubicBezier(0.14, 0.8, 0.4, 1) } },
 };
 
 const IslandMenu = () => {

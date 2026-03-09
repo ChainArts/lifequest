@@ -239,7 +239,7 @@ const EmojiPickerComponent = ({ emojiPickerOpen, setEmojiPickerOpen }: EmojiPick
     const { setFieldValue } = useFormikContext();
 
     return (
-        <Sheet isOpen={emojiPickerOpen} onClose={() => setEmojiPickerOpen(false)} className="emoji-picker__sheet" detent="content-height">
+        <Sheet isOpen={emojiPickerOpen} onClose={() => setEmojiPickerOpen(false)} className="emoji-picker__sheet" detent="content">
             <Sheet.Container>
                 <Sheet.Header />
                 <Sheet.Content>

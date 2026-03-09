@@ -1,9 +1,9 @@
 import { BsQuestionCircle } from "react-icons/bs";
 import "./InfoBlob.scss";
 import { useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, cubicBezier, type Variants } from "motion/react";
 
-const blobVariants = {
+const blobVariants: Variants = {
     initial: { opacity: 0, scale: 0.8 },
     animate: {
         opacity: 1,
@@ -21,12 +21,12 @@ const blobVariants = {
         scale: 0.8,
         transition: {
             duration: 0.3,
-            ease: [0.14, 0.8, 0.4, 1],
+            ease: cubicBezier(0.14, 0.8, 0.4, 1),
         },
     },
 };
 
-const blobArrowVariants = {
+const blobArrowVariants: Variants = {
     initial: { opacity: 0, y: -10, x: "-50%" },
     animate: {
         opacity: 1,
@@ -45,7 +45,7 @@ const blobArrowVariants = {
         x: "-50%",
         transition: {
             duration: 0.1,
-            ease: [0.14, 0.8, 0.4, 1],
+            ease: cubicBezier(0.14, 0.8, 0.4, 1),
         },
     },
 };
