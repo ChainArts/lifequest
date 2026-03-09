@@ -115,7 +115,7 @@ const HabitGraph = ({ id }: { id: string }) => {
                 <Sheet.Container>
                     <Sheet.Header />
                     <Sheet.Content>
-                        <Sheet.Scroller>
+                        <div className="sheet-scroller">
                             <div className="container">
                                 {data.map((d) => (
                                     <div key={d.date} className="habit-settings__item ">
@@ -124,7 +124,7 @@ const HabitGraph = ({ id }: { id: string }) => {
                                     </div>
                                 ))}
                             </div>
-                        </Sheet.Scroller>
+                        </div>
                     </Sheet.Content>
                 </Sheet.Container>
                 <Sheet.Backdrop onTap={() => setOpen(false)} />

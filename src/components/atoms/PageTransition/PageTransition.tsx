@@ -1,5 +1,7 @@
-const pageTransition = { duration: 0.5, ease: [0.14, 0.8, 0.4, 1], staggerChildren: 0.05 };
-const sectionTransition = { ease: [0.14, 0.8, 0.4, 1], staggerChildren: 0.1 };
+import { cubicBezier } from "motion/react";
+
+const pageTransition = { duration: 0.5, ease: cubicBezier(0.14, 0.8, 0.4, 1), staggerChildren: 0.05 };
+const sectionTransition = { ease: cubicBezier(0.14, 0.8, 0.4, 1), staggerChildren: 0.1 };
 export const pageVariants = {
     initial: {
         y: "-3vh",

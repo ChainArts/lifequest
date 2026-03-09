@@ -37,7 +37,7 @@ const Profile = () => {
                         </div>
                     </Sheet.Header>
                     <Sheet.Content>
-                        <Sheet.Scroller>
+                        <div className="sheet-scroller">
                             <div className="container privacy-policy-content">
                                 <h3>Privacy Policy</h3>
                                 <p>
@@ -81,7 +81,7 @@ const Profile = () => {
                                     If you have any questions or concerns about this policy, please contact us at: <a href="mailto:[info@lifequestgame.app]">[info@lifequestgame.app]</a>
                                 </p>
                             </div>
-                        </Sheet.Scroller>
+                        </div>
                     </Sheet.Content>
                 </Sheet.Container>
                 <Sheet.Backdrop onTap={() => setPrivacyPolicyOpen(false)}/>

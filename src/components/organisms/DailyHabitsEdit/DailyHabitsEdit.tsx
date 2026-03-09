@@ -91,7 +91,7 @@ const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess, fetchHabits
                                 </div>
                             </Sheet.Header>
                             <Sheet.Content>
-                                <Sheet.Scroller>
+                                <div className="sheet-scroller">
                                     <div className="container form-container">
                                         {habits.length !== 0 &&
                                             habits.map((habit) => (
@@ -128,7 +128,7 @@ const DailyHabitsEdit = ({ habits, setOpen, isOpen, onSubmitSuccess, fetchHabits
                                         Include Habit
                                     </Button>
                                     <AddActiveHabit addActiveHabitOpen={addActiveHabitOpen} setAddActiveHabitOpen={setAddActiveHabitOpen} habits={habits} fetchHabits={fetchHabits} />
-                                </Sheet.Scroller>
+                                </div>
                             </Sheet.Content>
                         </Sheet.Container>
                         <Sheet.Backdrop />

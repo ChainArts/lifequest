@@ -50,7 +50,7 @@ const AddActiveHabit = ({ habits, addActiveHabitOpen, setAddActiveHabitOpen, fet
             <Sheet.Container>
                 <Sheet.Header />
                 <Sheet.Content>
-                    <Sheet.Scroller>
+                    <div className="sheet-scroller">
                         {inactiveHabits.length === 0 ? (
                             <div className="container form-upper-heading">
                                 <Card className="secondary no-habits" onClick={() => navigate("/habits", { state: { create: true } })}>
@@ -73,7 +73,7 @@ const AddActiveHabit = ({ habits, addActiveHabitOpen, setAddActiveHabitOpen, fet
                                 </fieldset>
                             </div>
                         )}
-                    </Sheet.Scroller>
+                    </div>
                 </Sheet.Content>
             </Sheet.Container>
             <Sheet.Backdrop onTap={() => setAddActiveHabitOpen(false)} />

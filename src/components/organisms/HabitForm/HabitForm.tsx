@@ -119,7 +119,7 @@ const HabitForm = ({ id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }
                             </Sheet.Header>
 
                             <Sheet.Content>
-                                <Sheet.Scroller>
+                                <div className="sheet-scroller">
                                     <div className="container form-container">
                                         <fieldset>
                                             <label htmlFor="title">Name Your Habit</label>
@@ -219,7 +219,7 @@ const HabitForm = ({ id, setOpen, isOpen, mode, onSubmitSuccess, initialValues }
 
                                         <EmojiPickerComponent setEmojiPickerOpen={setEmojiPickerOpen} emojiPickerOpen={emojiPickerOpen} />
                                     </div>
-                                </Sheet.Scroller>
+                                </div>
                             </Sheet.Content>
                         </Sheet.Container>
                         <Sheet.Backdrop />
